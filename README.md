@@ -1,5 +1,30 @@
-# Vue 3 + Vite
+# Proyecto Mod Proc - 2225
+### Instalación
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+#### Pasos
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+1. Ejecute el siguiente comando en su terminal:
+```bash
+npm install
+```
+
+Esto instalará todas las dependencias utilizadas:
+- Axios
+- Concurrently
+- Cors
+- DaisyUI
+- Express
+- MySQL
+- NoDemon
+- pinia
+- Tailwind
+- Vue
+- Vite
+
+2. Para poder iniciar el proyecto, ejecute el siguiente comando:
+
+```bash
+npm run dev
+```
+
+Si desea personalizar los comandos, puede hacerlo al acceder al archivo [package.json](./package.json), la sección de ```scripts```.
