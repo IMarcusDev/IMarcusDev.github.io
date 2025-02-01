@@ -1,20 +1,20 @@
-# Use Node.js as base image
+# Usa la imagen base de Node.js
 FROM node:18
 
-# Set working directory
+# Establece el directorio de trabajo en el contenedor
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Copia el package.json y package-lock.json (si existe) al contenedor
 COPY package*.json ./
 
-# Install dependencies
+# Instala las dependencias de la aplicación
 RUN npm install
 
-# Copy the rest of the backend code
+# Copia todo el código del backend al contenedor
 COPY . .
 
-# Expose port 5000
+# Expone el puerto en el que la aplicación escucha (ajusta el puerto si es necesario)
 EXPOSE 5000
 
-# Run the backend server
+# Ejecuta el servidor
 CMD ["npm", "start"]
