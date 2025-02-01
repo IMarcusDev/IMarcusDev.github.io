@@ -1,20 +1,20 @@
 # Usa la imagen base de Node.js
 FROM node:18
 
-# Establecer el directorio de trabajo dentro del contenedor
+# Establece el directorio de trabajo en el contenedor
 WORKDIR /app
 
-# Copiar el package.json y package-lock.json del backend
-COPY src/backend/package*.json ./
+# Copia el package.json y package-lock.json (si existe) al contenedor
+COPY package*.json ./
 
-# Instalar las dependencias dentro del contenedor
+# Instala las dependencias de la aplicación
 RUN npm install
 
-# Copiar el resto del código del backend
-COPY src/backend ./
+# Copia todo el código del backend al contenedor
+COPY . .
 
-# Exponer el puerto 5000
+# Expone el puerto en el que la aplicación escucha (ajusta el puerto si es necesario)
 EXPOSE 5000
 
-# Ejecutar el servidor backend
+# Ejecuta el servidor
 CMD ["npm", "start"]

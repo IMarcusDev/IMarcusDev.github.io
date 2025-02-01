@@ -1,12 +1,11 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
-import pool from "./config/db.js";
-
-dotenv.config();
+import pool from "./config/db.js"; // Importar la configuración de la base de datos
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = 5000;
 
 // Middleware
 app.use(cors());
@@ -23,14 +22,11 @@ app.get("/api/status", async (req, res) => {
 });
 
 // Servir el frontend en producción
-import path from "path";
-import { fileURLToPath } from "url";
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../../frontend/dist"))); // ⚠️ Asegurar ruta correcta
+  app.use(express.static(path.join(__dirname, "../../frontend/dist")));
 
   app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));

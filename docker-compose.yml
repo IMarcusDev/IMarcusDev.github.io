@@ -48,7 +48,6 @@ services:
     volumes:
       - ./src/backend:/app
       - /app/node_modules
-
     networks:
       - consultorio_network
 
