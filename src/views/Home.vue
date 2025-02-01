@@ -117,7 +117,17 @@
         
         
         <footer>
-            <p>&copy; 2025 Mi Consultorio Dental. Todos los derechos reservados.</p>
+            <section class="infoFooter">
+                <section class="logoFooter">
+                    <h2>DentalMax</h2>
+                    <p> <i class="fa-solid fa-map-pin"></i> Moreno Bellido #200 y Av. Amazonas </p>
+                    <p> <i class="fa-solid fa-phone"></i> +593 998765412</p>
+                    <p><i class="fa-solid fa-envelope"></i><a href="mailto:dentalmax@gmai.com">dentalmax@gmai.com</a></p>
+                </section>
+                <section class="infoDerecha"> 
+                    &copy; DentalMax
+                </section>
+            </section>
         </footer>
 </template>
 
@@ -495,11 +505,70 @@ iframe {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-footer {
-    background-color: #357ABD;
-    color: white;
+footer{
+    padding: 40px 20px;
     text-align: center;
-    padding: 20px;
-    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #357ABD;
+    color: #f4f4f4;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.infoFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logoFooter, .infoDerecha {
+    flex: 1;
+    margin: 20px;
+}
+
+.fotoFooter {
+    width: 150px;
+    margin-bottom: 20px;
+    background-color: #f4e7d1;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+footer p {
+    font-size: 14px;
+    margin: 10px;
+    color: #d1d1d1;
+}
+
+footer h2 {
+    font-size: 24px;
+    color: #f4e7d1;
+    margin-bottom: 10px;
+}
+
+footer a {
+    color: #f4e7d1;
+    text-decoration: none;
+}
+
+footer .redesSociales {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+footer .icono {
+    margin: 0 10px;
+}
+
+footer .icono img {
+    width: 25px;
+    height: 25px;
+    border-radius: 10px;
+
+}
+
+footer .icono:hover img {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
 }
 </style>
