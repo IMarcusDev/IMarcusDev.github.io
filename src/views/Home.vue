@@ -27,9 +27,11 @@
                 </nav>
             </div>
             <div class="directCita">
-                <button type="button" id="btnQuickAgend">
-                    Agendar cita
-                </button>
+                <router-link to="/MenuPaciente">
+                    <button type="button" id="btnQuickAgend">
+                        Agendar cita
+                    </button>
+                </router-link>
             </div>
         </section>
     </header>    
