@@ -1,25 +1,38 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '@/views/Home.vue';  // Importa tu componente Home
-import AgendarCitaPaciente from '@/views/AgendarCitaPaciente.vue';
+import MenuPaciente from '@/views/MenuPaciente.vue';
 import Login from '@/views/Login.vue';
+import Home from '../views/Home.vue';
+import Historial from '@/components/Historial.vue';
+import AgendarCita from '../components/AgendarCita.vue';
 
 const routes = [
     {
-        path: '/',       // Ruta principal
-        name: 'Home',
-        component: Home,  // Componente a mostrar
+        path: '/',
+        name: 'Home',  
+        component: Home
     },
     {
-        path: '/agendar',
-        name: 'AgendarCitaPaciente',
-        component: AgendarCitaPaciente,
+        path: '/MenuPaciente',
+        name: 'MenuPaciente',  
+        component: MenuPaciente,
+        children: [
+            {
+                path: 'historial',  
+                name: 'Historial',
+                component: Historial,  
+            },
+            {
+                path: 'agendar',
+                name: 'Agendar',
+                component: AgendarCita,
+            }
+        ]
     },
     {
         path: '/login',
         name: 'Login',
-        component: Login,
-    }
-  // Aquí agregar más rutas para otras vistas
+        component: Login
+    },
 ];
 
 const router = createRouter({
