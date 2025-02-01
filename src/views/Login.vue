@@ -7,7 +7,9 @@
                 <h1>Crear una cuenta</h1>
                 <span>o usa tu correo electrónico para registrarte</span>
                 <input type="text" placeholder="Nombre">
+                <input type="number" placeholder="Edad ej. 19">
                 <input type="email" placeholder="Correo Electrónico">
+                <input type="text" placeholder="Nombre de usuario">
                 <input type="password" placeholder="Contraseña">
                 <button>Registrarse</button>
             </form>
@@ -16,7 +18,7 @@
             <form>
                 <h1>Iniciar Sesión</h1>
                 <span>o usa tu correo electrónico y contraseña</span>
-                <input type="email" placeholder="Correo Electrónico">
+                <input type="text" placeholder="Nombre de usuario">
                 <input type="password" placeholder="Contraseña">
                 <a href="#">¿Olvidaste tu contraseña?</a>
                 <button>Iniciar Sesión</button>
