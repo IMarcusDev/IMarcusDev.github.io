@@ -118,12 +118,12 @@ export default {
 
 <style scoped>
     .calendario {
-        width: 600px;
-        margin: 20px auto;
-        font-family: Arial, sans-serif;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        background-color: white;
+        padding: 20px;
         border-radius: 8px;
-        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        font-family: Arial, sans-serif;
     }
     .encabezado {
         display: flex;
@@ -132,6 +132,7 @@ export default {
         background-color: #007bff;
         color: white;
         padding: 10px;
+        border-radius: 8px 8px 0 0;
     }
     .encabezado button {
         background: none;
@@ -213,6 +214,15 @@ export default {
         background-color: #007bff;
         color: white;
     }
+
+    .detalles-dia h3{
+        color: black;
+    }
+
+    .detalles-dia td{
+        color: black;
+    }
+
     .detalles-dia td span {
         display: inline-block;
         margin: 5px;

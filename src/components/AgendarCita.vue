@@ -87,6 +87,7 @@ export default {
                 fecha: this.selectedDate,
                 turno: this.selectedTimeSlot
             };
+
             console.log(appointmentData);
         }
     }
