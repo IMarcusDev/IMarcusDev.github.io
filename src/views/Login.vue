@@ -4,9 +4,12 @@
     <div class="container" id="container">
         <div class="form-container sign-up">
             <form>
-                <h1>Crear una cuenta</h1>
+                <h2>Crear una cuenta</h2>
                 <span>o usa tu correo electrónico para registrarte</span>
-                <input type="text" placeholder="Nombre">
+                <input type="text" name="firstName" id="firstName" placeholder="Primer nombre">
+                <input type="text" name="secondName" id="secondName" placeholder="Segundo nombre">
+                <input type="text" name="firstSurName" id="firstSurName" placeholder="Primer apellido">
+                <input type="text" name="secondSurName" id="secondSurName" placeholder="segundo apellido">
                 <input type="number" placeholder="Edad ej. 19">
                 <input type="email" placeholder="Correo Electrónico">
                 <input type="text" placeholder="Nombre de usuario">
@@ -16,7 +19,7 @@
         </div>
         <div class="form-container sign-in">
             <form @submit.prevent="handleLogin">
-                <h1>Iniciar Sesión</h1>
+                <h2>Iniciar Sesión</h2>
                 <span>o usa tu correo electrónico y contraseña</span>
                 <input type="text" placeholder="Nombre de usuario">
                 <input type="password" placeholder="Contraseña">
@@ -115,6 +118,7 @@ body{
     position: absolute;
     overflow: hidden;
     width: 768px;
+    height: 600px;
     max-width: 100%;
     min-height: 480px;
     margin-left: calc(30% - 10px);
@@ -167,6 +171,10 @@ body{
     flex-direction: column;
     padding: 0 40px;
     height: 100%;
+}
+
+.container form h2{
+    color: black;
 }
 
 .container input{
