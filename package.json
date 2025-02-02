@@ -19,6 +19,7 @@
     "concurrently": "^9.1.2",
     "nodemon": "^3.1.9",
     "pinia": "^2.3.1",
+    "test": "file:",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
