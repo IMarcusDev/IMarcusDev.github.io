@@ -4,6 +4,8 @@ import Login from '@/views/Login.vue';
 import Home from '../views/Home.vue';
 import Historial from '@/components/Historial.vue';
 import AgendarCita from '../components/AgendarCita.vue';
+import HistorialMedico from '../components/HistorialMedico.vue';
+import MenuMedico from '../views/MenuMedico.vue';
 
 const routes = [
     {
@@ -17,13 +19,30 @@ const routes = [
         component: MenuPaciente,
         children: [
             {
-                path: 'historial',  
-                name: 'Historial',
+                path: 'historialPaciente',  
+                name: 'HistorialPaciente',
                 component: Historial,  
             },
             {
-                path: 'agendar',
-                name: 'Agendar',
+                path: 'agendarPaciente',
+                name: 'AgendarPaciente',
+                component: AgendarCita,
+            }
+        ]
+    },
+    {
+        path: '/MenuMedico',
+        name: 'MenuMedico',  
+        component: MenuMedico,
+        children: [
+            {
+                path: 'historialMedico',  
+                name: 'HistorialMedico',
+                component: HistorialMedico,  
+            },
+            {
+                path: 'agendarMedico',
+                name: 'AgendarMedico',
                 component: AgendarCita,
             }
         ]

@@ -124,7 +124,7 @@ export default {
         background-color: #f9f9f9;
         padding: 20px;
         border-radius: 0 8px 8px 0;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 8px rgba(163, 163, 163, 0.4);
     }
 
     .form-info {
@@ -150,6 +150,7 @@ export default {
         display: block;
         margin-bottom: 5px;
         font-weight: bold;
+        color: black;
     }
 
     .form-group input,
@@ -159,6 +160,7 @@ export default {
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(163, 163, 163, 0.4);
     }
 
     .form-group textarea {

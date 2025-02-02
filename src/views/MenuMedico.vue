@@ -6,14 +6,14 @@
                     <h2>DentalMax</h2>
                 </div>
                 <ul class="menu">
-                    <li><router-link to="/MenuPaciente/historialPaciente">Historial de citas</router-link></li>
-                    <li><router-link to="/MenuPaciente/agendarPaciente">Agendar cita</router-link></li>
+                    <li><router-link to="/MenuMedico/historialMedico">Historial de citas</router-link></li>
+                    <li><router-link to="/MenuMedico/agendarMedico">Agendar cita</router-link></li>
                 </ul>
 
-                <router-link to="/">
-                    <button class="btnCerrarSesion" @click="logout">Cerrar Sesion <ArrowRightStartOnRectangleIcon class="arrowIcon" /></button>
+                <router-link to="/" class="position">
+                    <button class="btnPrincipalPage"><ArrowLongLeftIcon class="arrowIcon" />Volver a la pagina principal</button>
                 </router-link>
-                
+                <button class="btnCerrarSesion">Cerrar Sesion <ArrowRightStartOnRectangleIcon class="arrowIcon" /></button>
             </div>
         </section>
 
@@ -27,11 +27,11 @@
 import { ArrowLongLeftIcon } from '@heroicons/vue/24/solid';
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/vue/24/solid';
 
+
 export default {
-    name: 'MenuPaciente',
+    name: 'MenuMedico',
     components: {
         ArrowLongLeftIcon,
-        ArrowRightStartOnRectangleIcon,
     },
     methods: {
         logout() {
@@ -42,6 +42,7 @@ export default {
 </script>
 
 <style scoped>
+
 .position{
     position: relative;
     bottom: 70%;
@@ -79,7 +80,7 @@ export default {
 }
 
 .menu-lateral {
-    height: 95vh;
+    height: 100vh;
     width: 250px;
     background-color: #2c3e50;
     color: #ecf0f1;

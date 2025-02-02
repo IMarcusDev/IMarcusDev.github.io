@@ -15,6 +15,7 @@
                             <th>Tipo de Cita</th>
                             <th>Número de Cédula</th>
                             <th>Estado</th>
+                            <th v-if="true">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -23,6 +24,9 @@
                             <td>{{ cita.tipoCita }}</td>
                             <td>{{ cita.cedula }}</td>
                             <td>{{ cita.estado }}</td>
+                            <td v-if="cita.estado === 'Por asistir'">
+                                <button @click="abrirModal(cita)">Cambiar estado</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -31,17 +35,31 @@
                 <p>No se encontraron citas.</p>
             </div>
         </div>
+        <div v-if="mostrarModal" class="modal">
+            <div class="modal-content">
+                <h3>Cambiar estado de la cita</h3>
+                <select v-model="nuevoEstado">
+                    <option value="completado">Completada</option>
+                    <option value="no asistio">No asistió</option>
+                </select>
+                <button @click="guardarEstado">Guardar</button>
+                <button @click="cerrarModal">Cancelar</button>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'Historial',
+    name: 'HistorialMedico',
     data() {
         return {
             busquedaCedula: '',
             busquedaFecha: '',
-            citas: []
+            citas: [],
+            mostrarModal: false,
+            citaSeleccionada: null,
+            nuevoEstado: ''
         };
     },
     methods: {
@@ -55,6 +73,22 @@ export default {
                 (this.busquedaCedula ? cita.cedula.includes(this.busquedaCedula) : true) &&
                 (this.busquedaFecha ? cita.fecha === this.busquedaFecha : true)
             );
+        },
+        abrirModal(cita) {
+            this.citaSeleccionada = cita;
+            this.nuevoEstado = cita.estado;
+            this.mostrarModal = true;
+        },
+        cerrarModal() {
+            this.mostrarModal = false;
+            this.citaSeleccionada = null;
+            this.nuevoEstado = '';
+        },
+        guardarEstado() {
+            if (this.citaSeleccionada) {
+                this.citaSeleccionada.estado = this.nuevoEstado;
+                this.cerrarModal();
+            }
         }
     }
 };
@@ -88,7 +122,6 @@ h2 {
     display: flex;
     flex-direction: column;
     align-items: center;
-
 }
 
 .busqueda {
@@ -160,5 +193,55 @@ h2 {
     color: #6c757d;
     font-size: 18px;
     margin-top: 20px;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+.modal-content h3 {
+    margin-bottom: 20px;
+}
+
+.modal-content select {
+    padding: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.modal-content button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 16px;
+    margin: 5px;
+}
+
+.modal-content button:hover {
+    background-color: #0056b3;
 }
 </style>

@@ -15,7 +15,7 @@
             </form>
         </div>
         <div class="form-container sign-in">
-            <form>
+            <form @submit.prevent="handleLogin">
                 <h1>Iniciar Sesión</h1>
                 <span>o usa tu correo electrónico y contraseña</span>
                 <input type="text" placeholder="Nombre de usuario">
@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import axios from '../api/axios';
+
 export default {
     name: 'Login',
     mounted() {
@@ -56,6 +58,30 @@ export default {
         loginBtn.addEventListener('click', () => {
             container.classList.remove("active");
         });
+    },
+    methods: {
+        async handleLogin() {
+            const username = this.$el.querySelector('input[placeholder="Nombre de usuario"]').value;
+            const password = this.$el.querySelector('input[placeholder="Contraseña"]').value;
+
+            try {
+                const response = await axios.post('/login', { username, password });
+                const userType = response.data.userType;
+
+                localStorage.setItem('userType', userType);
+
+                if (userType === 'medico') {
+                    this.$router.push('/MenuMedico');
+                } else if (userType === 'paciente') {
+                    this.$router.push('/MenuPaciente');
+                } else {
+                    alert('Usuario no registrado');
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+                alert('Error al iniciar sesión');
+            }
+        }
     }
 };
 </script>

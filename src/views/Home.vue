@@ -5,14 +5,19 @@
                 <img src="../../public/vite.svg">
             </div>
             <div class="pageTitle"><h1>DentalMax</h1></div>
-            <div class="login-container">
-                <div class="login">
-                    <router-link to="/Login">
-                    <button type="button" id="btnLogin">Iniciar Sesion</button>
-                    </router-link>
+            <div>
+                <div v-if="!isLoggedIn"  class="login-container">
+                    <div class="login">
+                        <router-link to="/Login">
+                            <button type="button" id="btnLogin">Iniciar Sesion</button>
+                        </router-link>
+                    </div>
+                    <div class="register">
+                        <button type="button" id="btnRegister">Registrarse</button>
+                    </div>
                 </div>
-                <div class="register">
-                    <button type="button" id="btnRegister">Registrarse</button>
+                <div v-else>
+                    <p>Está logeado</p>
                 </div>
             </div>
         </section>
@@ -84,21 +89,35 @@
 
                     </div>
                 </section>
+                <section class="servicios">
+                    <div class="servLimpieza">
 
+                    </div>
+                    <div class="servOrtodoncia">
+
+                    </div>
+                    <div class="servBlanquiamiento">
+
+                    </div>
+                    <div class="servExtracciones">
+
+                    </div>
+                </section>
             </section>
             <section class="promociones-container">
                 <h1>Promociones</h1>
                 <section class="promociones">
                     <div class="promOrtodoncia">
-
+                        <img src="/imgSlider/prom1.webp" width="100%" height="100%">
                     </div>
                     <div class="promBlanqueamiento">
-
+                        <img src="/imgSlider/prom2.webp" width="100%" height="100%">
                     </div>
                     <div class="promEndodoncia">
                         
                     </div>
                 </section>
+                
                 <div class="btnAgendar">
                     <button type="button" id="btnAgendarPromociones" class="btnAgendarProm">
                         Agenda Ahora
@@ -154,6 +173,11 @@ export default {
             autoSlideInterval: null,
             resumeTimeout: null
         };
+    },
+    computed: {
+        isLoggedIn() {
+            return localStorage.getItem('userType') !== null;
+        }
     },
     mounted() {
         this.startAutoSlide();
@@ -403,9 +427,8 @@ nav ul li a {
 }
 
 .servicios div {
-    position: relative;
     width: 20%;
-    height: 500px;
+    height: 300px;
     border-radius: 10px;
     border: 3px solid #357ABD;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -572,5 +595,9 @@ footer .icono img {
 footer .icono:hover img {
     transform: scale(1.1);
     transition: transform 0.3s ease;
+}
+
+.niceComments{
+    color: black;
 }
 </style>
