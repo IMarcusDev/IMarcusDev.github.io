@@ -3,17 +3,15 @@
         <section class="menu-lateral-container">
             <div class="menu-lateral">
                 <div class="logo">
-                    <h2>DentalMax</h2>
+                    <h2>VitaDent</h2>
                 </div>
                 <ul class="menu">
                     <li><router-link to="/MenuMedico/historialMedico">Historial de citas</router-link></li>
                     <li><router-link to="/MenuMedico/agendarMedico">Agendar cita</router-link></li>
                 </ul>
-
-                <router-link to="/" class="position">
-                    <button class="btnPrincipalPage"><ArrowLongLeftIcon class="arrowIcon" />Volver a la pagina principal</button>
+                <router-link to="/">
+                    <button class="btnCerrarSesion" @click="logout">Cerrar Sesion <ArrowRightStartOnRectangleIcon class="arrowIcon" /></button>
                 </router-link>
-                <button class="btnCerrarSesion">Cerrar Sesion <ArrowRightStartOnRectangleIcon class="arrowIcon" /></button>
             </div>
         </section>
 
@@ -32,6 +30,7 @@ export default {
     name: 'MenuMedico',
     components: {
         ArrowLongLeftIcon,
+        ArrowRightStartOnRectangleIcon
     },
     methods: {
         logout() {

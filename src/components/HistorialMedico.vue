@@ -25,7 +25,7 @@
                             <td>{{ cita.cedula }}</td>
                             <td>{{ cita.estado }}</td>
                             <td v-if="cita.estado === 'Por asistir'">
-                                <button @click="abrirModal(cita)">Cambiar estado</button>
+                                <button class="btnEstado" @click="abrirModal(cita)">Cambiar estado</button>
                             </td>
                         </tr>
                     </tbody>
@@ -243,5 +243,10 @@ h2 {
 
 .modal-content button:hover {
     background-color: #0056b3;
+}
+
+.btnEstado{
+    background-color: #0056b3;
+    color: white;
 }
 </style>

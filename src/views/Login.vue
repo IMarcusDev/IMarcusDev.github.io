@@ -82,7 +82,13 @@ export default {
                 }
             } catch (error) {
                 console.error('Error durante el login:', error);
-                alert('Error al iniciar sesión');
+                if (error.response && error.response.status === 404) {
+                    alert('Usuario no encontrado');
+                } else if (error.response && error.response.status === 401) {
+                    alert('Contraseña incorrecta');
+                } else {
+                    alert('Error al iniciar sesión');
+                }
             }
         },
 

@@ -3,7 +3,7 @@
         <section class="menu-lateral-container">
             <div class="menu-lateral">
                 <div class="logo">
-                    <h2>DentalMax</h2>
+                    <h2>VitaDent</h2>
                 </div>
                 <ul class="menu">
                     <li><router-link to="/MenuPaciente/historialPaciente">Historial de citas</router-link></li>

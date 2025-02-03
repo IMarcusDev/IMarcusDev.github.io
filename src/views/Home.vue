@@ -2,9 +2,9 @@
     <header>
         <section class="pageInfo">
             <div class="logo">
-                <img src="../../public/vite.svg">
+                <img src="/public/logo.png">
             </div>
-            <div class="pageTitle"><h1>DentalMax</h1></div>
+            <div class="pageTitle"><h1>VitaDent</h1></div>
             <div>
                 <div v-if="!isLoggedIn"  class="login-container">
                     <div class="login">
@@ -223,8 +223,8 @@ header {
 }
 
 .logo img {
-    width: 120px;
-    border-radius: 50%;
+    width: 150px;
+    border-radius: 40%;
     margin-left: 30px;
 }
 
