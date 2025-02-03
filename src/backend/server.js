@@ -67,9 +67,14 @@ app.post("/api/login", async (req, res) => {
       }
 
       const user = await Queries.getUserName(username);
+      console.log(user);
 
-      if (!user || user.password_user !== password) {
-          return res.status(401).json({ message: "Contrasenia o usuario incorrectos" });
+      if (!user) {
+          return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+
+      if (user.password_user !== password) {
+          return res.status(401).json({ message: "Contraseña incorrecta" });
       }
 
       res.status(200).json({ message: "Ha iniciado sesion correctamente", userType: user.id_rol === 2 ? 'medico' : 'paciente' });
