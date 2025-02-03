@@ -38,6 +38,10 @@ app.get("/api/user/:username", async (req, res) => {
   }
 });
 
+//logica
+
+//aqui defino como hago yo /api/pongo el nombre yo , req es la solicitud que le hago al front para que me pase los parametros
+
 app.post("/api/register", async (req, res) => {
   try {
       const { firstName, secondName, firstSurName, secondSurName, age, email, username, password } = req.body;
@@ -46,13 +50,31 @@ app.post("/api/register", async (req, res) => {
           return res.status(400).json({ message: "Debe llenar todos los campos" });
       }
 
-      await Queries.setPACIENTES(firstName, secondName, firstSurName, secondSurName, age, email, username, password);
+      const existeUSER = await Queries.getUserName(username);
 
+      if (Array.isArray(existeUSER) && existeUSER.length > 0) {
+        return res.status(409).json({ message: "El nombre de usuario ya está en uso" });
+      }
+
+      const existeEMAILUSERS = await Queries.getPacienteEmail(username);
+
+      if (Array.isArray(existeEMAILUSERS) && existeEMAILUSERS.length > 0) {
+        return res.status(409).json({ message: "El email de usuario ya está en uso" });
+      }
+
+      const id_users = await Queries.addUser(username, password);
+
+      await Queries.addPacienteInfo(firstName, secondName, firstSurName, secondSurName, age, email, id_users);
+      
       res.status(201).json({ message: "El usuario se registro correctamente" });
   } catch (error) {
       if (error.message === 'El nombre de usuario ya está en uso') {
+          console.log("Hola2");
           res.status(409).json({ message: error.message });
+          
+      
       } else {
+          console.log("Hola2");
           res.status(500).json({ message: error.message });
       }
   }
@@ -77,6 +99,7 @@ app.post("/api/login", async (req, res) => {
       res.status(500).json({ message: error.message });
   }
 });
+
 
 // Servir el frontend en producción
 const __filename = fileURLToPath(import.meta.url);

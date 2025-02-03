@@ -1,59 +1,18 @@
 import pool from '../config/db.js'
 
-//Juan
-
-async function setUSER(username, password) {
-    try {
-        if (!username || !password) {
-            throw new Error('El nombre de usuario y la contraseña son obligatorios');
-        }
-
-        const [existeUSER] = await pool.execute('SELECT * FROM USERS WHERE username_user = ?', [username]);
-
-        if (existeUSER.length > 0) {
-            throw new Error('El nombre de usuario ya está en uso');
-        }
-
-        const [rows] = await pool.execute('INSERT INTO USERS (username_user, password_user, id_rol) VALUES (?, ?, ?)', [username, password, 3]);
-        return rows.insertId;
-    } catch (error) {
-        if (error.code === 'ECONNREFUSED') {
-            throw new Error('Error de conexión a la base de datos: ' + error.message);
-        }
-        throw error;
-    }
-}
-
-async function setPACIENTES(primer_nombre_pac, segundo_nombre_pac, primer_apellido_pac, segundo_apellido_pac, edad_pac, email_pac, username, password) {
-    try {
-        const id_user = await setUSER(username, password);
-
-        if (!primer_nombre_pac || !primer_apellido_pac || !edad_pac || !email_pac) {
-            throw new Error('Son obligatorios todos los datos');
-        }
-
-        const [existeEMAIL] = await pool.execute('SELECT * FROM PACIENTES WHERE email_pac = ?', [email_pac]);
-
-        if (existeEMAIL.length > 0) {
-            throw new Error('El email ya está en uso');
-        }
-
-        const [rows] = await pool.execute('INSERT INTO PACIENTES (primer_nombre_pac, segundo_nombre_pac, primer_apellido_pac, segundo_apellido_pac, edad_pac, email_pac, id_user) VALUES (?, ?, ?, ?, ?, ?, ?)', 
-            [primer_nombre_pac, segundo_nombre_pac, primer_apellido_pac, segundo_apellido_pac, edad_pac, email_pac, id_user]);
-        return rows.insertId;
-    } catch (error) {
-        if (error.code === 'ECONNREFUSED') {
-            throw new Error('Error de conexión a la base de datos: ' + error.message);
-        }
-        throw error;
-    }
-}
-
-//Mateo --------
 async function getUserName(username) {
     try {
-        const [rows] = await pool.query('SELECT * FROM USERS WHERE username_user = ?;', [username]);
-        return rows[0];
+        const [rows] = await pool.execute('SELECT * FROM USERS WHERE username_user = ?;', [username]);
+        return rows;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+};
+
+async function getPacienteEmail(emailpaciente) {
+    try {
+        const [rows] = await pool.execute('SELECT * FROM PACIENTES WHERE email_pac = ?;', [emailpaciente]);
+        return rows;
     } catch (error) {
         throw new Error('Error al obtener información: ' + error);
     }
@@ -133,7 +92,7 @@ async function addUser(username, password) {
         // Paciente: id_rol = 3
         const [result] = await pool.query('INSERT INTO USERS (username_user, password_user, id_rol) VALUES (?, ?, 3);', [username, password]);
 
-        return result;
+        return result.insertId;
     } catch (error) {
         throw new Error('Error al obtener información: ' + error);
     }
@@ -178,7 +137,6 @@ export {
     addUser,
     addCita,
     addPacienteInfo,
-    setPACIENTES,
-    setUSER
+    getPacienteEmail
 }
 
