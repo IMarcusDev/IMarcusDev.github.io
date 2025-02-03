@@ -29,5 +29,8 @@ services:
     networks:
       - consultorio_network
 
+networks:
+  consultorio_network:
+
 volumes:
   mysql_data:

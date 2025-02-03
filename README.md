@@ -131,9 +131,17 @@ Para solicitar llamadas a la API, siempre iniciaremos el `localhost:PORT/api/loq
 Acceda a la carpeta de [backend](./src/backend/server.js) y ejecute el comando: 
 
 ```bash
+npm install
+```
+
+Este comando instalará dependencias necesarias para ejecutar comandos en nodeJS.
+
+Una vez instalados, ejecute el comando:
+
+```bash
 npm start
 ```
 
 Esto iniciará los servicios y podrá hacer llamadas desde `localhost:5000/api`. Para verificar si el servidor MySQL está corriendo, revise el [estado](localhost:5000/api/status) del servidor.
 
-Si desea cerrar el servidor, ejecute la combinación de teclas `Ctrl + C`.
+Si desea cerrar el servidor, ejecute la combinación de teclas `Ctrl + C` en la consola donde se ejecutó `npm start`.

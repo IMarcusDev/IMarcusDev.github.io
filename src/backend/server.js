@@ -40,6 +40,23 @@ app.get("/api/user/:username", async (req, res) => {
   }
 });
 
+app.get("/api/addUser", async (req, res) => {
+  try {
+      const { username, password } = req.query;
+
+      if (!username || !password) {
+          return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      // Only use insertId (result.insertId) for the addPaciente id foreign key
+      const result = await Queries.addUser(username, password);
+
+      res.status(201).json({ message: "User added successfully" });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+});
+
 
 // Servir el frontend en producción
 const __filename = fileURLToPath(import.meta.url);

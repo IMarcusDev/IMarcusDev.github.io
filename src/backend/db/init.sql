@@ -68,9 +68,9 @@ CREATE TABLE CITA (
 -- Default Values
 INSERT INTO ROLES (nombre_rol)
 VALUES 
-('Administrador'),
-('Doctor'),
-('Paciente');
+('Administrador'),  -- 1
+('Doctor'),  -- 2
+('Paciente');  -- 3
 
 INSERT INTO USERS (username_user, password_user, id_rol) VALUES
 ('admin', 'admin123', 1);
