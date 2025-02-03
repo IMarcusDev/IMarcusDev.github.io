@@ -4,7 +4,6 @@ CREATE USER 'admin'@'%' IDENTIFIED BY 'admin';  -- user 'admin', password 'admin
 GRANT ALL PRIVILEGES ON consultorio_db.* TO 'admin'@'%';
 FLUSH PRIVILEGES;
 
-
 -- Para crear estas tablas, se necesita el superusuario superior (admin)
 
 -- Create default tables

@@ -2,8 +2,8 @@ import pool from '../config/db.js'
 
 //Juan
 
-async function setUSER(username,password) {
-    try{
+async function setUSER(username, password) {
+    try {
         if (!username || !password) {
             throw new Error('El nombre de usuario y la contraseña son obligatorios');
         }
@@ -14,20 +14,21 @@ async function setUSER(username,password) {
             throw new Error('El nombre de usuario ya está en uso');
         }
 
-        const [rows] = await pool.execute('INSERT INTO USERS (username_user, password_user, id_rol) VALUES (?, ?, ?)',[username, password, 1]);
-        //console.log(rows.insertId);
-        return rows.insertId
+        const [rows] = await pool.execute('INSERT INTO USERS (username_user, password_user, id_rol) VALUES (?, ?, ?)', [username, password, 3]);
+        return rows.insertId;
     } catch (error) {
-        throw new Error('Error al ingreso de información: ' + error);
+        if (error.code === 'ECONNREFUSED') {
+            throw new Error('Error de conexión a la base de datos: ' + error.message);
+        }
+        throw error;
     }
-    
 }
 
-async function setPACIENTES(primer_nombre_pac,segundo_nombre_pac,primer_apellido_pac,segundo_apellido_pac,edad_pac,email_pac,username,password) {
-    try{
-        const id_users = await setUSER(username,password);
+async function setPACIENTES(primer_nombre_pac, segundo_nombre_pac, primer_apellido_pac, segundo_apellido_pac, edad_pac, email_pac, username, password) {
+    try {
+        const id_user = await setUSER(username, password);
 
-        if (!primer_nombre_pac || !segundo_nombre_pac || !primer_apellido_pac || !segundo_apellido_pac || !edad_pac || !email_pac) {
+        if (!primer_nombre_pac || !primer_apellido_pac || !edad_pac || !email_pac) {
             throw new Error('Son obligatorios todos los datos');
         }
 
@@ -37,32 +38,21 @@ async function setPACIENTES(primer_nombre_pac,segundo_nombre_pac,primer_apellido
             throw new Error('El email ya está en uso');
         }
 
-        const rows = await pool.execute('INSERT INTO PACIENTES (primer_nombre_pac,segundo_nombre_pac,primer_apellido_pac,segundo_apellido_pac,edad_pac,email_pac,id_user) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [primer_nombre_pac,segundo_nombre_pac,primer_apellido_pac,segundo_apellido_pac,edad_pac,email_pac,id_users]); 
-        console.log(rows);
+        const [rows] = await pool.execute('INSERT INTO PACIENTES (primer_nombre_pac, segundo_nombre_pac, primer_apellido_pac, segundo_apellido_pac, edad_pac, email_pac, id_user) VALUES (?, ?, ?, ?, ?, ?, ?)', 
+            [primer_nombre_pac, segundo_nombre_pac, primer_apellido_pac, segundo_apellido_pac, edad_pac, email_pac, id_user]);
+        return rows.insertId;
     } catch (error) {
-        throw new Error('Error al ingreso de información: ' + error);
+        if (error.code === 'ECONNREFUSED') {
+            throw new Error('Error de conexión a la base de datos: ' + error.message);
+        }
+        throw error;
     }
-    
-}
-
-
-
-async function setUserName(username,password) {
-    try{
-        const rows = await pool.execute('INSERT INTO USERS (username_user, password_user,id_rol) VALUES (?, ?, ?)', [username, password,1]); 
-        console.log(rows);
-    } catch (error) {
-        throw new Error('Error al obtener información: ' + error);
-    }
-    
 }
 
 //Mateo --------
 async function getUserName(username) {
     try {
-        const [rows] = await pool.query('SELECT * FROM USERS WHERE username_user = ?;', [username]);  // [1, username, password123]
-        console.log(rows);
+        const [rows] = await pool.query('SELECT * FROM USERS WHERE username_user = ?;', [username]);
         return rows[0];
     } catch (error) {
         throw new Error('Error al obtener información: ' + error);
@@ -188,7 +178,7 @@ export {
     addUser,
     addCita,
     addPacienteInfo,
+    setPACIENTES,
+    setUSER
 }
 
-
-setPACIENTES("Marcos","David","Escobar","Vela",20,"marcos2213@gmail.com",'David22', '12346');

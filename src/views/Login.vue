@@ -3,26 +3,26 @@
 
     <div class="container" id="container">
         <div class="form-container sign-up">
-            <form>
+            <form @submit.prevent="handleRegister">
                 <h2>Crear una cuenta</h2>
                 <span>o usa tu correo electrónico para registrarte</span>
-                <input type="text" name="firstName" id="firstName" placeholder="Primer nombre">
-                <input type="text" name="secondName" id="secondName" placeholder="Segundo nombre">
-                <input type="text" name="firstSurName" id="firstSurName" placeholder="Primer apellido">
-                <input type="text" name="secondSurName" id="secondSurName" placeholder="segundo apellido">
-                <input type="number" placeholder="Edad ej. 19">
-                <input type="email" placeholder="Correo Electrónico">
-                <input type="text" placeholder="Nombre de usuario">
-                <input type="password" placeholder="Contraseña">
-                <button>Registrarse</button>
+                <input type="text" ref="firstName" placeholder="Primer nombre">
+                <input type="text" ref="secondName" placeholder="Segundo nombre">
+                <input type="text" ref="firstSurName" placeholder="Primer apellido">
+                <input type="text" ref="secondSurName" placeholder="segundo apellido">
+                <input type="number" ref="age" placeholder="Edad ej. 19">
+                <input type="email" ref="email" placeholder="Correo Electrónico">
+                <input type="text" ref="username" placeholder="Nombre de usuario">
+                <input type="password" ref="password" placeholder="Contraseña">
+                <button type="submit">Registrarse</button>
             </form>
         </div>
         <div class="form-container sign-in">
             <form @submit.prevent="handleLogin">
                 <h2>Iniciar Sesión</h2>
                 <span>o usa tu correo electrónico y contraseña</span>
-                <input type="text" placeholder="Nombre de usuario">
-                <input type="password" placeholder="Contraseña">
+                <input type="text" ref="loginUsername" placeholder="Nombre de usuario">
+                <input type="password" ref="loginPassword" placeholder="Contraseña">
                 <a href="#">¿Olvidaste tu contraseña?</a>
                 <button>Iniciar Sesión</button>
             </form>
@@ -64,8 +64,8 @@ export default {
     },
     methods: {
         async handleLogin() {
-            const username = this.$el.querySelector('input[placeholder="Nombre de usuario"]').value;
-            const password = this.$el.querySelector('input[placeholder="Contraseña"]').value;
+            const username = this.$refs.loginUsername.value;
+            const password = this.$refs.loginPassword.value;
 
             try {
                 const response = await axios.post('/login', { username, password });
@@ -81,8 +81,42 @@ export default {
                     alert('Usuario no registrado');
                 }
             } catch (error) {
-                console.error('Error during login:', error);
+                console.error('Error durante el login:', error);
                 alert('Error al iniciar sesión');
+            }
+        },
+
+        async handleRegister() {
+            const firstName = this.$refs.firstName.value;
+            const secondName = this.$refs.secondName.value;
+            const firstSurName = this.$refs.firstSurName.value;
+            const secondSurName = this.$refs.secondSurName.value;
+            const age = this.$refs.age.value;
+            const email = this.$refs.email.value;
+            const username = this.$refs.username.value;
+            const password = this.$refs.password.value;
+
+            try {
+                const response = await axios.post('/register', {
+                    firstName,
+                    secondName,
+                    firstSurName,
+                    secondSurName,
+                    age,
+                    email,
+                    username,
+                    password
+                });
+
+                if (response.status === 201) {
+                    alert('Usuario registrado exitosamente');
+                    this.$router.push('/login');
+                } else {
+                    alert('Error al registrar usuario');
+                }
+            } catch (error) {
+                console.error('Error durante el registro:', error);
+                alert('Error al registrar usuario');
             }
         }
     }
