@@ -136,6 +136,46 @@ async function getRoles() {
     }
 };
 
+// Only add Pacientes, no Doctors
+// Doctors created by admin in MySQL, not in functions
+async function addUser(username, password) {
+    try {
+        // Paciente: id_rol = 3
+        const [result] = await pool.query('INSERT INTO USERS (username_user, password_user, id_rol) VALUES (?, ?, 3);', [username, password]);
+
+        return result;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+}
+
+async function addPacienteInfo(first_name, second_name, last_name, very_last_name, age, email, id_user) {
+    //
+    try {
+        // Paciente: id_rol = 3
+        const [result] = await pool.query(
+            'INSERT INTO PACIENTES (primer_nombre_pac, segundo_nombre_pac, primer_apellido_pac, segundo_apellido_pac, edad_pac, email_pac, id_user) VALUES (?, ?, ?, ?, ?, ?, ?)', 
+            [first_name, second_name, last_name, very_last_name, age, email, id_user]);
+
+        return result;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+};
+
+async function addCita(asuntoCita, fechaRegistroCita, fechaRealizarCita, comentarioPacCita, comentarioDocCita, estadoCita, idDoc, idPac) {
+    try {
+        const [result] = await pool.query(
+            'INSERT INTO CITA (asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_pac_cita, comentario_doc_cita, estado_cita, id_doc, id_pac) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', 
+            [asuntoCita, fechaRegistroCita, fechaRealizarCita, comentarioPacCita, comentarioDocCita, estadoCita, idDoc, idPac]
+        );
+
+        return result;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+}
+
 export {
     getRoles,
     getUserName,
@@ -144,7 +184,10 @@ export {
     getCitasPac,
     getCitaId,
     getCitaDayRangeRegistro,
-    getCitaDayRangeRealizado
+    getCitaDayRangeRealizado,
+    addUser,
+    addCita,
+    addPacienteInfo,
 }
 
 
