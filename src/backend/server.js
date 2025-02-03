@@ -88,12 +88,14 @@ app.post("/api/login", async (req, res) => {
           return res.status(400).json({ message: "Debe llenar todos los campos" });
       }
 
-      const user = await Queries.getUserName(username);
-      console.log(user);
+      const users = await Queries.getUserName(username);
+      console.log(users);
 
-      if (!user) {
-          return res.status(404).json({ message: "Usuario no encontrado" });
+      if (users.length === 0) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
       }
+
+      const user = users[0];
 
       if (user.password_user !== password) {
           return res.status(401).json({ message: "Contraseña incorrecta" });
