@@ -18,6 +18,24 @@ async function getPacienteEmail(emailpaciente) {
     }
 };
 
+async function getFechaRegistro(fechaRegistro) {
+    try {
+        const [rows] = await pool.execute('SELECT * FROM CITA WHERE fecha_registro_cita = ?;', [fechaRegistro]);
+        return rows;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+};
+
+async function getPacienteCedula(cedula) {
+    try {
+        const [rows] = await pool.execute('SELECT * FROM PACIENTES WHERE cedula_pac = ?;', [cedula]);
+        return rows;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+};
+
 async function getInfo(table, id_user) {
     try {
         const [rows] = await pool.query(`SELECT * FROM ${table.toUpperCase()} WHERE id_user = ?;`, [id_user]);
@@ -98,13 +116,13 @@ async function addUser(username, password) {
     }
 }
 
-async function addPacienteInfo(first_name, second_name, last_name, very_last_name, age, email, id_user) {
+async function addPacienteInfo(first_name, second_name, last_name, very_last_name, cedula, age, email, id_user) {
     //
     try {
         // Paciente: id_rol = 3
         const [result] = await pool.query(
-            'INSERT INTO PACIENTES (primer_nombre_pac, segundo_nombre_pac, primer_apellido_pac, segundo_apellido_pac, edad_pac, email_pac, id_user) VALUES (?, ?, ?, ?, ?, ?, ?)', 
-            [first_name, second_name, last_name, very_last_name, age, email, id_user]);
+            'INSERT INTO PACIENTES (primer_nombre_pac, segundo_nombre_pac, primer_apellido_pac, segundo_apellido_pac, cedula_pac, edad_pac, email_pac, id_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', 
+            [first_name, second_name, last_name, very_last_name, cedula, age, email, id_user]);
 
         return result;
     } catch (error) {
@@ -112,11 +130,11 @@ async function addPacienteInfo(first_name, second_name, last_name, very_last_nam
     }
 };
 
-async function addCita(asuntoCita, fechaRegistroCita, fechaRealizarCita, comentarioPacCita, comentarioDocCita, estadoCita, idDoc, idPac) {
+async function addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_pac_cita, comentario_doc_cita, estado_cita, id_doc, id_pac) {
     try {
         const [result] = await pool.query(
-            'INSERT INTO CITA (asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_pac_cita, comentario_doc_cita, estado_cita, id_doc, id_pac) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', 
-            [asuntoCita, fechaRegistroCita, fechaRealizarCita, comentarioPacCita, comentarioDocCita, estadoCita, idDoc, idPac]
+            'INSERT INTO CITA (nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_pac_cita, comentario_doc_cita, estado_cita, id_doc, id_pac) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+            [nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_pac_cita, comentario_doc_cita, estado_cita, id_doc, id_pac]
         );
 
         return result;
@@ -137,6 +155,8 @@ export {
     addUser,
     addCita,
     addPacienteInfo,
-    getPacienteEmail
+    getPacienteEmail,
+    getPacienteCedula,
+    getFechaRegistro
 }
 

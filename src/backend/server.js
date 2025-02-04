@@ -44,9 +44,9 @@ app.get("/api/user/:username", async (req, res) => {
 
 app.post("/api/register", async (req, res) => {
   try {
-      const { firstName, secondName, firstSurName, secondSurName, age, email, username, password } = req.body;
+      const { firstName, secondName, firstSurName, secondSurName, cedula, age, email, username, password } = req.body;
 
-      if (!firstName || !firstSurName || !age || !email || !username || !password) {
+      if (!firstName || !firstSurName || !age || !email || !username || !password|| !cedula) {
           return res.status(400).json({ message: "Debe llenar todos los campos" });
       }
 
@@ -56,25 +56,29 @@ app.post("/api/register", async (req, res) => {
         return res.status(409).json({ message: "El nombre de usuario ya está en uso" });
       }
 
-      const existeEMAILUSERS = await Queries.getPacienteEmail(username);
+      const existeEMAILUSERS = await Queries.getPacienteEmail(email);
+
 
       if (Array.isArray(existeEMAILUSERS) && existeEMAILUSERS.length > 0) {
         return res.status(409).json({ message: "El email de usuario ya está en uso" });
       }
 
+      const cedulaUSERS = await Queries.getPacienteCedula(cedula);
+
+
+      if (Array.isArray(cedulaUSERS) && cedulaUSERS.length > 0) {
+        return res.status(409).json({ message: "El email de usuario ya está en uso" });
+      }      
+
       const id_users = await Queries.addUser(username, password);
 
-      await Queries.addPacienteInfo(firstName, secondName, firstSurName, secondSurName, age, email, id_users);
+      await Queries.addPacienteInfo(firstName, secondName, firstSurName, secondSurName,cedula, age, email, id_users);
       
       res.status(201).json({ message: "El usuario se registro correctamente" });
   } catch (error) {
       if (error.message === 'El nombre de usuario ya está en uso') {
-          console.log("Hola2");
           res.status(409).json({ message: error.message });
-          
-      
       } else {
-          console.log("Hola2");
           res.status(500).json({ message: error.message });
       }
   }
@@ -104,6 +108,27 @@ app.post("/api/login", async (req, res) => {
       res.status(200).json({ message: "Ha iniciado sesion correctamente", userType: user.id_rol === 2 ? 'medico' : 'paciente' });
   } catch (error) {
       res.status(500).json({ message: error.message });
+  }
+});
+
+app.post("/api/agendarPaciente", async (req, res) => {
+  try {
+    const {nombre_paciente, apellido_paciente, cedula, tipo_cita, fecha_registro, fecha_realizar, comentario_doctor, id_paciente} = req.body;
+
+    if (!nombre_paciente|| !apellido_paciente || !cedula || !tipo_cita || !fecha_registro || !fecha_realizar || !id_paciente) {
+      return res.status(400).json({ message: "Debe llenar todos los campos" });
+    }
+
+    const existFECHAREGISTRO = Queries.getFechaRegistro(fecha_registro);
+
+    if (Array.isArray(existFECHAREGISTRO) && existFECHAREGISTRO.length > 0) {
+      return res.status(409).json({ message: "El nombre de usuario ya está en uso" });
+    }
+
+    await Queries.addCita(nombre_paciente, apellido_paciente, cedula, tipo_cita, fecha_registro, fecha_realizar, comentario_doctor = null, estado = "pendiente", id_paciente, id_doctor = 1);
+
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 });
 
