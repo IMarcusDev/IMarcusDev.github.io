@@ -27,12 +27,10 @@ CREATE TABLE USERS (
 -- Pacientes
 CREATE TABLE PACIENTES (
     id_pac INTEGER AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    primer_nombre_pac VARCHAR(15) NOT NULL,
-    segundo_nombre_pac VARCHAR(15),
-    primer_apellido_pac VARCHAR(15) NOT NULL,
-    segundo_apellido_pac VARCHAR(15),
+    nombres_pac VARCHAR(45) NOT NULL,
+    apellidos_pac VARCHAR(45) NOT NULL,
     cedula_pac VARCHAR(10) NOT NULL,
-    edad_pac INTEGER NOT NULL,
+    fecha_nac_pac DATE NOT NULL,
     email_pac VARCHAR(50) NOT NULL,
     id_user INTEGER NOT NULL,
     FOREIGN KEY (id_user) REFERENCES USERS(id_user) ON DELETE CASCADE
@@ -41,14 +39,21 @@ CREATE TABLE PACIENTES (
 -- Doctores
 CREATE TABLE DOCTORES (
     id_doc INTEGER AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    primer_nombre_doc VARCHAR(15) NOT NULL,
-    segundo_nombre_doc VARCHAR(15),
-    primer_apellido_doc VARCHAR(15) NOT NULL,
-    segundo_apellido_doc VARCHAR(15),
+    nombres_doc VARCHAR(45) NOT NULL,
+    apellidos_doc VARCHAR(45) NOT NULL,
     cedula_doc VARCHAR(10) NOT NULL,
     email_doc VARCHAR(50) NOT NULL,
     id_user INTEGER NOT NULL,
     FOREIGN KEY (id_user) REFERENCES USERS(id_user) ON DELETE CASCADE
+);
+
+CREATE TABLE DEPENDIENTES (
+    cedula_dep VARCHAR(10) NOT NULL PRIMARY KEY,
+    nombre_dep VARCHAR(45) NOT NULL,
+    apellido_dep VARCHAR(45) NOT NULL,
+    fecha_nac_dep DATE NOT NULL,
+    id_pac INTEGER NOT NULL,
+    FOREIGN KEY (id_pac) REFERENCES PACIENTES(id_pac)
 );
 
 -- Citas

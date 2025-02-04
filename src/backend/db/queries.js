@@ -141,7 +141,43 @@ async function addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paci
     } catch (error) {
         throw new Error('Error al obtener información: ' + error);
     }
-}
+};
+
+async function addDependent(cedula, nombre, apellido, fechaNac, id_pac) {
+    try {
+        const [result] = await pool.query(
+            'INSERT INTO DEPENDIENTES (cedula_dep, nombre_dep, apellido_dep, fecha_nac_dep, id_pac) VALUES (?, ?, ?, ?, ?);', 
+            [cedula, nombre, apellido, fechaNac, id_pac]
+        );
+        return result;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+};
+
+async function getDependentsByPac(id_pac) {
+    try {
+        const [result] = await pool.query(
+            'SELECT * FROM DEPENDIENTES WHERE id_pac = ?', 
+            [id_pac]
+        );
+        return result;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+};
+
+async function getDependentsByCedula(cedula) {
+    try {
+        const [result] = await pool.query(
+            'SELECT * FROM DEPENDIENTES WHERE cedula_dep = ?', 
+            [cedula]
+        );
+        return result;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+};
 
 export {
     getRoles,
@@ -154,9 +190,12 @@ export {
     getCitaDayRangeRealizado,
     addUser,
     addCita,
+    addDependent,
     addPacienteInfo,
     getPacienteEmail,
     getPacienteCedula,
-    getFechaRegistro
+    getFechaRegistro,
+    getDependentsByPac,
+    getDependentsByCedula,
 }
 
