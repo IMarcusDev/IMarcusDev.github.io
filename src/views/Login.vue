@@ -98,6 +98,7 @@ export default {
             const secondName = this.$refs.secondName.value;
             const firstSurName = this.$refs.firstSurName.value;
             const secondSurName = this.$refs.secondSurName.value;
+            const cedula = this.$refs.cedula.value;
             const age = this.$refs.age.value;
             const email = this.$refs.email.value;
             const username = this.$refs.username.value;
@@ -109,6 +110,7 @@ export default {
                     secondName,
                     firstSurName,
                     secondSurName,
+                    cedula,
                     age,
                     email,
                     username,
