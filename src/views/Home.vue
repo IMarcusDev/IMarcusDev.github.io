@@ -114,7 +114,7 @@
                         <img src="/imgSlider/prom2.webp" width="100%" height="100%">
                     </div>
                     <div class="promEndodoncia">
-                        
+                        <img src="/imgSlider/prom3.webp" width="100%" height="100%">
                     </div>
                 </section>
                 
@@ -127,8 +127,12 @@
                 
             </section>
             <section class="direccionInfo-container">
-                <section class="niceComments">
-                    <h1>Reseñas</h1>
+                <section class="testimonios">
+                    <h1>Testimonios de nuestros pacientes</h1>
+                    <div class="testimonio" v-for="(testimonio, index) in testimonios" :key="index">
+                        <p>"{{ testimonio.texto }}"</p>
+                        <p><strong>- {{ testimonio.nombre }}</strong></p>
+                    </div>
                 </section>
                 <section class="map">
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7580915507997!2d-78.44251930000003!3d-0.3148209999999978!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d5bd12538eb13b%3A0x907c61f1abbe45ab!2sUNIVERSITY%20OF%20THE%20ARMED%20FORCES%20ESPE!5e0!3m2!1sen!2sec!4v1733323393170!5m2!1sen!2sec" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
@@ -171,7 +175,12 @@ export default {
             itemIndex: 0,
             isPaused: false,
             autoSlideInterval: null,
-            resumeTimeout: null
+            resumeTimeout: null,
+            testimonios: [
+                { nombre: "Juan Pérez", texto: "Excelente servicio y atención. Muy profesionales." },
+                { nombre: "María López", texto: "Me sentí muy cómoda durante mi tratamiento. ¡Recomendado!" },
+                { nombre: "Carlos García", texto: "El mejor consultorio dental al que he ido. Muy satisfecho con los resultados." }
+            ]
         };
     },
     computed: {
@@ -521,13 +530,27 @@ iframe {
     border-radius: 10px;
 }
 
-.niceComments {
+.testimonios {
     width: 40%;
     border: 3px solid #357ABD;
     background-color: #e6f2ff;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.testimonios h1 {
+    color: black;
+    margin-bottom: 20px;
+}
+
+.testimonio {
+    margin-bottom: 20px;
+}
+
+.testimonio p {
+    color: black;
+    margin: 0;
 }
 
 footer{

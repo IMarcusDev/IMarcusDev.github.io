@@ -7,7 +7,7 @@
             <section class="form-content">
                 <div class="form-info">
                     <div class="logo"></div>
-                    <div class="titulo"><h2>DentalMax</h2></div>
+                    <div class="titulo"><h2>VitaDent</h2></div>
                 </div>
                 <form class="form" @submit.prevent="submitForm">
                     <div class="form-group">
@@ -17,9 +17,19 @@
                             <option value="Control">Control</option>
                         </select>
                     </div>
+
+                    <div class="form-group">
+                        <label for="nombre">Nombre del paciente</label>
+                        <input type="text" name="nombre" id="nombre" placeholder="Nombre del paciente" v-model="nombre">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="apellido">Apellido del paciente</label>
+                        <input type="text" name="apellido" id="apellido" placeholder="Apellido del paciente" v-model="apellido">
+                    </div>
                     
                     <div class="form-group">
-                        <label for="cedula">Número de Cédula</label>
+                        <label for="cedula">Número de Cédula del paciente</label>
                         <input type="text" name="cedula" id="cedula" placeholder="Número de cédula" v-model="cedula">
                     </div>
                     

@@ -1,7 +1,7 @@
 <template>
     <div class="calendario">
         <div class="encabezado">
-            <button @click="mesAnterior">←</button>
+            <button @click="mesAnterior" :disabled="mesAnteriorDeshabilitado">←</button>
             <span>{{ nombresMeses[mesActual] }} {{ añoActual }}</span>
             <button @click="mesSiguiente">→</button>
         </div>
@@ -10,9 +10,14 @@
         </div>
         <div class="dias">
             <div v-for="blanco in primerDiaDelMes" :key="'blanco-' + blanco" class="dia blanco"></div>
-            <div v-for="dia in diasDelMes" :key="dia" class="dia" @mouseover="hoverDia(dia)" @mouseleave="leaveDia(dia)">
+            <div v-for="dia in diasDelMes" :key="dia" class="dia" 
+                 :class="{ deshabilitado: esDiaPasado(dia) }" 
+                 @mouseover="hoverDia(dia)" 
+                 @mouseleave="leaveDia(dia)" 
+                 @click="seleccionarDia(dia)" 
+                 :disabled="esDiaPasado(dia)">
                 {{ dia }}
-                <button v-if="diaHover === dia" @click="seleccionarDia(dia)">Escoger</button>
+                <button v-if="diaHover === dia && !esDiaPasado(dia)" @click="seleccionarDia(dia)">Escoger</button>
             </div>
         </div>
         <div v-if="diaSeleccionado" class="detalles-dia">
@@ -52,6 +57,7 @@ export default {
         return {
             añoActual: new Date().getFullYear(),
             mesActual: new Date().getMonth(),
+            diaActual: new Date().getDate(),
             diasSemana: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
             nombresMeses: [
                 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -76,15 +82,22 @@ export default {
         primerDiaDelMes() {
             const fecha = new Date(this.añoActual, this.mesActual, 1);
             return fecha.getDay();
+        },
+        mesAnteriorDeshabilitado() {
+            const fechaActual = new Date();
+            return this.añoActual < fechaActual.getFullYear() || 
+                   (this.añoActual === fechaActual.getFullYear() && this.mesActual <= fechaActual.getMonth());
         }
     },
     methods: {
         mesAnterior() {
-            if (this.mesActual === 0) {
-                this.mesActual = 11;
-                this.añoActual--;
-            } else {
-                this.mesActual--;
+            if (!this.mesAnteriorDeshabilitado) {
+                if (this.mesActual === 0) {
+                    this.mesActual = 11;
+                    this.añoActual--;
+                } else {
+                    this.mesActual--;
+                }
             }
         },
         mesSiguiente() {
@@ -102,15 +115,22 @@ export default {
             this.diaHover = null;
         },
         seleccionarDia(dia) {
-            this.diaSeleccionado = dia;
-            this.turnoSeleccionado = null; // Reset selected slot when a new day is selected
-            const calendarStore = useCalendarStore();
-            calendarStore.setSelectedDate(`${this.añoActual}-${this.mesActual + 1}-${dia}`);
+            if (!this.esDiaPasado(dia)) {
+                this.diaSeleccionado = dia;
+                this.turnoSeleccionado = null; // Reset selected slot when a new day is selected
+                const calendarStore = useCalendarStore();
+                calendarStore.setSelectedDate(`${this.añoActual}-${this.mesActual + 1}-${dia}`);
+            }
         },
         seleccionarTurno(turno) {
             this.turnoSeleccionado = turno;
             const calendarStore = useCalendarStore();
             calendarStore.setSelectedTimeSlot(turno);
+        },
+        esDiaPasado(dia) {
+            const fechaActual = new Date();
+            const fechaSeleccionada = new Date(this.añoActual, this.mesActual, dia);
+            return fechaSeleccionada < fechaActual.setHours(0, 0, 0, 0);
         }
     }
 };
@@ -140,6 +160,10 @@ export default {
         color: white;
         font-size: 18px;
         cursor: pointer;
+    }
+    .encabezado button:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
     }
     .encabezado span {
         font-size: 18px;
@@ -182,6 +206,10 @@ export default {
     }
     .dia:hover button {
         display: block;
+    }
+    .dia.deshabilitado {
+        background-color: #e9ecef;
+        cursor: not-allowed;
     }
     .blanco {
         border: none;

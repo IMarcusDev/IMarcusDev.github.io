@@ -9,7 +9,8 @@
                 <input type="text" ref="firstName" placeholder="Primer nombre">
                 <input type="text" ref="secondName" placeholder="Segundo nombre">
                 <input type="text" ref="firstSurName" placeholder="Primer apellido">
-                <input type="text" ref="secondSurName" placeholder="segundo apellido">
+                <input type="text" ref="secondSurName" placeholder="Segundo apellido">
+                <input type="text" ref="cedula" placeholder="Cedula">
                 <input type="number" ref="age" placeholder="Edad ej. 19">
                 <input type="email" ref="email" placeholder="Correo Electrónico">
                 <input type="text" ref="username" placeholder="Nombre de usuario">
