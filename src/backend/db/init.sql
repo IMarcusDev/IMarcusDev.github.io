@@ -31,6 +31,7 @@ CREATE TABLE PACIENTES (
     segundo_nombre_pac VARCHAR(15),
     primer_apellido_pac VARCHAR(15) NOT NULL,
     segundo_apellido_pac VARCHAR(15),
+    cedula_pac VARCHAR(10) NOT NULL,
     edad_pac INTEGER NOT NULL,
     email_pac VARCHAR(50) NOT NULL,
     id_user INTEGER NOT NULL,
@@ -44,6 +45,7 @@ CREATE TABLE DOCTORES (
     segundo_nombre_doc VARCHAR(15),
     primer_apellido_doc VARCHAR(15) NOT NULL,
     segundo_apellido_doc VARCHAR(15),
+    cedula_doc VARCHAR(10) NOT NULL,
     email_doc VARCHAR(50) NOT NULL,
     id_user INTEGER NOT NULL,
     FOREIGN KEY (id_user) REFERENCES USERS(id_user) ON DELETE CASCADE
@@ -52,10 +54,12 @@ CREATE TABLE DOCTORES (
 -- Citas
 CREATE TABLE CITA (
     id_cita INTEGER AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    nombre_paciente_cita VARCHAR (45) NOT NULL,
+    apellido_paciente_cita VARCHAR(45) NOT NULL,
+    cedula_paciente_cita VARCHAR(10) NOT NULL,
     asunto_cita VARCHAR(50) NOT NULL,
     fecha_registro_cita DATE NOT NULL,
     fecha_realizar_cita DATE NOT NULL,
-    comentario_pac_cita VARCHAR(100),
     comentario_doc_cita VARCHAR(100),
     estado_cita VARCHAR(20) NOT NULL,
     id_doc INTEGER NOT NULL,
