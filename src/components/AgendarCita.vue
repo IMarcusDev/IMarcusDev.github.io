@@ -74,7 +74,9 @@ export default {
             cedula: '',
             asunto: '',
             valorCita: '',
-            metodoPago: 'Credito'
+            metodoPago: 'Credito',
+            nombre: '',  
+            apellido: ''  
         };
     },
     computed: {
@@ -88,11 +90,17 @@ export default {
         }
     },
     methods: {
-        getAppoitmentDate(){
-        const fecha = new Date();
-        const fechaSQL = fecha.toISOString().split('T')[0]; // Obtiene YYYY-MM-DD
-        console.log(fechaSQL); // "2025-02-04"
-
+        getAppoitmentDate() {
+            const fecha = new Date();
+            const fechaSQL = fecha.toISOString().split('T')[0]; // Obtiene YYYY-MM-DD
+            return fechaSQL;
+        },
+        formatDate(date) {
+            const d = new Date(date);
+            const month = '' + (d.getMonth() + 1).toString().padStart(2, '0');
+            const day = '' + d.getDate().toString().padStart(2, '0');
+            const year = d.getFullYear();
+            return [year, month, day].join('-');
         },
         async submitForm() {
             const tipoCita = this.$refs.tipoCita.value;
@@ -100,9 +108,11 @@ export default {
             const apellidoPac = this.$refs.apellidoPac.value;
             const cedulaPac = this.$refs.cedulaPac.value;
             const startAppoitmentDate = this.getAppoitmentDate();
-            const endAppoitmentDate = this.selectedDate;
+            const endAppoitmentDate = this.formatDate(this.selectedDate);
+            console.log(startAppoitmentDate);
+            console.log(endAppoitmentDate);
 
-            try{
+            try {
                 const response = await axios.post('/agendarPaciente', {
                     nombrePac,
                     apellidoPac,
@@ -118,10 +128,9 @@ export default {
                 } else {
                     alert('Error al registrar la cita');
                 }
-
-            }catch (error) {
+            } catch (error) {
                 console.log('Error durante el registro:', error);
-                alert('Error al registrar ula cita');
+                alert('Error al registrar la cita');
             }
         }
     }

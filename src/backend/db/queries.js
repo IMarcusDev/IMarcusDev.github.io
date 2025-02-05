@@ -116,30 +116,28 @@ async function addUser(username, password) {
     }
 }
 
-async function addPacienteInfo(first_name, second_name, last_name, very_last_name, cedula, age, email, id_user) {
-    //
+async function addPacienteInfo(Names, SurNames, cedula, fecha_nac, email, id_user) {
     try {
-        // Paciente: id_rol = 3
         const [result] = await pool.query(
-            'INSERT INTO PACIENTES (primer_nombre_pac, segundo_nombre_pac, primer_apellido_pac, segundo_apellido_pac, cedula_pac, edad_pac, email_pac, id_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', 
-            [first_name, second_name, last_name, very_last_name, cedula, age, email, id_user]);
-
+            'INSERT INTO PACIENTES (nombres_pac, apellidos_pac, cedula_pac, fecha_nac_pac, email_pac, id_user) VALUES (?, ?, ?, ?, ?, ?)', 
+            [Names, SurNames, cedula, fecha_nac, email, id_user]
+        );
         return result;
     } catch (error) {
-        throw new Error('Error al obtener información: ' + error);
+        throw new Error('Error al registrar paciente: ' + error);
     }
 };
 
-async function addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_doc_cita, estado_cita, id_doc) {
+async function addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_doc_cita, estado_cita, id_doc, id_pac) {
     try {
         const [result] = await pool.query(
-            'INSERT INTO CITA (nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_doc_cita, estado_cita, id_doc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-            [nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_doc_cita, estado_cita, id_doc]
+            'INSERT INTO CITA (nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_doc_cita, estado_cita, id_doc, id_pac) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+            [nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_doc_cita, estado_cita, id_doc, id_pac]
         );
 
         return result;
     } catch (error) {
-        throw new Error('Error al obtener información: ' + error);
+        throw new Error('Error al registrar la cita: ' + error);
     }
 };
 

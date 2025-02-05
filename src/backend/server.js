@@ -44,9 +44,9 @@ app.get("/api/user/:username", async (req, res) => {
 
 app.post("/api/register", async (req, res) => {
   try {
-      const { firstName, secondName, firstSurName, secondSurName, cedula, age, email, username, password } = req.body;
+      const { Names, SurNames, cedula, fecha_nac, email, username, password } = req.body;
 
-      if (!firstName || !firstSurName || !age || !email || !username || !password|| !cedula) {
+      if (!Names || !SurNames || !fecha_nac || !email || !username || !password || !cedula) {
           return res.status(400).json({ message: "Debe llenar todos los campos" });
       }
 
@@ -58,23 +58,21 @@ app.post("/api/register", async (req, res) => {
 
       const existeEMAILUSERS = await Queries.getPacienteEmail(email);
 
-
       if (Array.isArray(existeEMAILUSERS) && existeEMAILUSERS.length > 0) {
         return res.status(409).json({ message: "El email de usuario ya está en uso" });
       }
 
       const cedulaUSERS = await Queries.getPacienteCedula(cedula);
 
-
       if (Array.isArray(cedulaUSERS) && cedulaUSERS.length > 0) {
-        return res.status(409).json({ message: "El email de usuario ya está en uso" });
+        return res.status(409).json({ message: "La cédula de usuario ya está en uso" });
       }      
 
       const id_users = await Queries.addUser(username, password);
 
-      await Queries.addPacienteInfo(firstName, secondName, firstSurName, secondSurName,cedula, age, email, id_users);
+      await Queries.addPacienteInfo(Names, SurNames, cedula, fecha_nac, email, id_users);
       
-      res.status(201).json({ message: "El usuario se registro correctamente" });
+      res.status(201).json({ message: "El usuario se registró correctamente" });
   } catch (error) {
       if (error.message === 'El nombre de usuario ya está en uso') {
           res.status(409).json({ message: error.message });
@@ -125,7 +123,14 @@ app.post("/api/agendarPaciente", async (req, res) => {
       return res.status(409).json({ message: "La fecha de la cita ya está en uso" });
     }
 
-    await Queries.addCita(nombrePac, apellidoPac, cedulaPac, tipoCita, startAppoitmentDate, endAppoitmentDate, null, "pendiente", 1);
+    const paciente = await Queries.getPacienteCedula(cedulaPac);
+    if (paciente.length === 0) {
+      return res.status(404).json({ message: "Paciente no encontrado" });
+    }
+
+    const id_pac = paciente[0].id_pac;
+
+    await Queries.addCita(nombrePac, apellidoPac, cedulaPac, tipoCita, startAppoitmentDate, endAppoitmentDate, null, "pendiente", 1, id_pac);
 
     res.status(201).json({ message: "La cita fue registrada exitosamente" });
   } catch (error) {

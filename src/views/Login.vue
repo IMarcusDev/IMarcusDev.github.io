@@ -6,12 +6,10 @@
             <form @submit.prevent="handleRegister">
                 <h2>Crear una cuenta</h2>
                 <span>o usa tu correo electrónico para registrarte</span>
-                <input type="text" ref="firstName" placeholder="Primer nombre">
-                <input type="text" ref="secondName" placeholder="Segundo nombre">
-                <input type="text" ref="firstSurName" placeholder="Primer apellido">
-                <input type="text" ref="secondSurName" placeholder="Segundo apellido">
+                <input type="text" ref="Names" placeholder="Nombres">
+                <input type="text" ref="SurNames" placeholder="Apellidos">
                 <input type="text" ref="cedula" placeholder="Cedula">
-                <input type="number" ref="age" placeholder="Edad ej. 19">
+                <input type="date" ref="age">
                 <input type="email" ref="email" placeholder="Correo Electrónico">
                 <input type="text" ref="username" placeholder="Nombre de usuario">
                 <input type="password" ref="password" placeholder="Contraseña">
@@ -94,24 +92,20 @@ export default {
         },
 
         async handleRegister() {
-            const firstName = this.$refs.firstName.value;
-            const secondName = this.$refs.secondName.value;
-            const firstSurName = this.$refs.firstSurName.value;
-            const secondSurName = this.$refs.secondSurName.value;
+            const Names = this.$refs.Names.value;
+            const SurNames = this.$refs.SurNames.value;
             const cedula = this.$refs.cedula.value;
-            const age = this.$refs.age.value;
+            const fecha_nac = this.$refs.age.value;
             const email = this.$refs.email.value;
             const username = this.$refs.username.value;
             const password = this.$refs.password.value;
 
             try {
                 const response = await axios.post('/register', {
-                    firstName,
-                    secondName,
-                    firstSurName,
-                    secondSurName,
+                    Names,
+                    SurNames,
                     cedula,
-                    age,
+                    fecha_nac,
                     email,
                     username,
                     password
