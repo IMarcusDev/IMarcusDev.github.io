@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 
 // Para hacer un query a la db, utilice Queries.functionToUse()
 import * as Queries from "./db/queries.js"
+import { error } from "console";
 
 const app = express();
 const PORT = 5000;
@@ -137,6 +138,50 @@ app.post("/api/agendarPaciente", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+
+app.post("/api/historialCitas", async (req, res) => {
+  try{
+
+    const {id_users} = req.body;
+
+    if(!id_users) {
+      return res.status(500).json({message: "El id del usuario no encontrado"});
+    }
+
+    const infoCitas = await Queries.getCitaForIdOfPac(id_users);
+
+    return res.status(200).json({
+      success: true,
+      message: infoCitas.length > 0 ? "Citas obtenidas exitosamente." : "No hay citas registradas.",
+      data: infoCitas
+    });
+
+  }catch(error){
+    res.status(500).json({ message: "Error al obtener las citas del pacientes"+error});
+  }
+});
+
+
+app.post("/api/RegistroDependientes", async (req,res)=>{
+  try {
+
+    const {id_users, cedula, nombre, apellido, fecha_nacimiento} = req.body;
+
+    if(!id_users || !cedula || !nombre || ! apellido || !fecha_nacimiento) {
+      return res.status(500).json({message: "El id del usuario no encontrado"});
+    }
+
+    const id_pac = await Queries.getIdOfPac(id_users);
+
+    await Queries.addDependent(cedula,nombre,apellido,fecha_nacimiento,id_pac);
+    
+    res.status(201).json({ message: "El dependiente fue registrado exitosamente"})
+  } catch (error) {
+    res.status(500).json({ message: "Error al registrar dependiente:"+error});
+  }
+});
+
 
 // Servir el frontend en producción
 const __filename = fileURLToPath(import.meta.url);

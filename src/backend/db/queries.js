@@ -53,7 +53,7 @@ async function getCitasDoc(id_doc) {
         throw new Error('Error al obtener información: ' + error);
     }
 };
-
+//--
 async function getCitasPac(id_pac) {
     try {
         const [rows] = await pool.query('SELECT * FROM CITA WHERE id_pac = ?;', [id_pac]);
@@ -71,6 +71,16 @@ async function getCitaId(id_cita) {
         throw new Error('Error al obtener información: ' + error);
     }
 };
+
+async function getCitaForIdOfPac(id_users){
+    try{
+        const[rows] = await pool.query('SELECT * FROM PACIENTES WHERE id_user= ?;', [id_users])
+        return rows;
+    } catch(error){
+        throw new Error('Error al obtener información: ' + error);
+    }
+
+}
 
 async function getCitaDayRangeRegistro(date_from, date_to) {
     // Formato esperado para fechas: YYYY-MM-DD
@@ -195,5 +205,6 @@ export {
     getFechaRegistro,
     getDependentsByPac,
     getDependentsByCedula,
+    getCitaForIdOfPac
 }
 
