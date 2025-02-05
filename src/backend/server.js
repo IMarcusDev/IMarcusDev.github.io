@@ -113,25 +113,25 @@ app.post("/api/login", async (req, res) => {
 
 app.post("/api/agendarPaciente", async (req, res) => {
   try {
-    const {nombre_paciente, apellido_paciente, cedula, tipo_cita, fecha_registro, fecha_realizar, comentario_doctor, id_paciente} = req.body;
+    const { nombrePac, apellidoPac, cedulaPac, tipoCita, startAppoitmentDate, endAppoitmentDate } = req.body;
 
-    if (!nombre_paciente|| !apellido_paciente || !cedula || !tipo_cita || !fecha_registro || !fecha_realizar || !id_paciente) {
+    if (!nombrePac || !apellidoPac || !cedulaPac || !tipoCita || !startAppoitmentDate || !endAppoitmentDate) {
       return res.status(400).json({ message: "Debe llenar todos los campos" });
     }
 
-    const existFECHAREGISTRO = Queries.getFechaRegistro(fecha_registro);
+    const existFECHAREGISTRO = await Queries.getFechaRegistro(endAppoitmentDate);
 
     if (Array.isArray(existFECHAREGISTRO) && existFECHAREGISTRO.length > 0) {
-      return res.status(409).json({ message: "El nombre de usuario ya está en uso" });
+      return res.status(409).json({ message: "La fecha de la cita ya está en uso" });
     }
 
-    await Queries.addCita(nombre_paciente, apellido_paciente, cedula, tipo_cita, fecha_registro, fecha_realizar, comentario_doctor = null, estado = "pendiente", id_paciente, id_doctor = 1);
+    await Queries.addCita(nombrePac, apellidoPac, cedulaPac, tipoCita, startAppoitmentDate, endAppoitmentDate, null, "pendiente", 1);
 
+    res.status(201).json({ message: "La cita fue registrada exitosamente" });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
-
 
 // Servir el frontend en producción
 const __filename = fileURLToPath(import.meta.url);

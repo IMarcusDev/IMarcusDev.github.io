@@ -124,7 +124,7 @@ export default {
                     alert('Error al registrar usuario');
                 }
             } catch (error) {
-                console.error('Error durante el registro:', error);
+                console.log('Error durante el registro:', error);
                 alert('Error al registrar usuario');
             }
         }

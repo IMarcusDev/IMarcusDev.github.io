@@ -130,11 +130,11 @@ async function addPacienteInfo(first_name, second_name, last_name, very_last_nam
     }
 };
 
-async function addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_pac_cita, comentario_doc_cita, estado_cita, id_doc, id_pac) {
+async function addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_doc_cita, estado_cita, id_doc) {
     try {
         const [result] = await pool.query(
-            'INSERT INTO CITA (nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_pac_cita, comentario_doc_cita, estado_cita, id_doc, id_pac) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-            [nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_pac_cita, comentario_doc_cita, estado_cita, id_doc, id_pac]
+            'INSERT INTO CITA (nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_doc_cita, estado_cita, id_doc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+            [nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_doc_cita, estado_cita, id_doc]
         );
 
         return result;

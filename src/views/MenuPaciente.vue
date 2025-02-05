@@ -98,7 +98,7 @@ export default {
 
 .logo h2 {
     color: #ecf0f1;
-    font-size: 24px;
+    font-size: 40px;
     font-weight: bold;
     text-align: center;
 }
@@ -116,6 +116,7 @@ export default {
 
 .menu-lateral li {
     width: 100%;
+    font-size: 20px;
 }
 
 .menu-lateral li a {

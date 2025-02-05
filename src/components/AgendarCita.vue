@@ -12,7 +12,7 @@
                 <form class="form" @submit.prevent="submitForm">
                     <div class="form-group">
                         <label for="tipoCita">Tipo de Cita</label>
-                        <select name="tipoCita" id="tipoCita" v-model="tipoCita">
+                        <select name="tipoCita" id="tipoCita" ref="tipoCita" v-model="tipoCita">
                             <option value="Consulta/tratamiento">Consulta/Tratamiento</option>
                             <option value="Control">Control</option>
                         </select>
@@ -20,22 +20,22 @@
 
                     <div class="form-group">
                         <label for="nombre">Nombre del paciente</label>
-                        <input type="text" name="nombre" id="nombre" placeholder="Nombre del paciente" v-model="nombre">
+                        <input ref="nombrePac" type="text" name="nombre" id="nombre" placeholder="Nombre del paciente" v-model="nombre">
                     </div>
 
                     <div class="form-group">
                         <label for="apellido">Apellido del paciente</label>
-                        <input type="text" name="apellido" id="apellido" placeholder="Apellido del paciente" v-model="apellido">
+                        <input ref="apellidoPac" type="text" name="apellido" id="apellido" placeholder="Apellido del paciente" v-model="apellido">
                     </div>
                     
                     <div class="form-group">
                         <label for="cedula">Número de Cédula del paciente</label>
-                        <input type="text" name="cedula" id="cedula" placeholder="Número de cédula" v-model="cedula">
+                        <input ref="cedulaPac" type="text" name="cedula" id="cedula" placeholder="Número de cédula" v-model="cedula">
                     </div>
                     
                     <div class="form-group">
                         <label for="asunto">Descripción de la Cita</label>
-                        <textarea placeholder="Descripción de la cita" name="asunto" id="asunto" v-model="asunto"></textarea>
+                        <textarea ref="descripcionPac" placeholder="Descripción de la cita" name="asunto" id="asunto" v-model="asunto"></textarea>
                     </div>
                     
                     <div class="form-group">
@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import axios from '../api/axios';
 import { useCalendarStore } from '../store/calendarStore';
 import Calendar from './calendar.vue';
 
@@ -87,18 +88,41 @@ export default {
         }
     },
     methods: {
-        submitForm() {
-            const appointmentData = {
-                tipoCita: this.tipoCita,
-                cedula: this.cedula,
-                asunto: this.asunto,
-                valorCita: this.valorCita,
-                metodoPago: this.metodoPago,
-                fecha: this.selectedDate,
-                turno: this.selectedTimeSlot
-            };
+        getAppoitmentDate(){
+        const fecha = new Date();
+        const fechaSQL = fecha.toISOString().split('T')[0]; // Obtiene YYYY-MM-DD
+        console.log(fechaSQL); // "2025-02-04"
 
-            console.log(appointmentData);
+        },
+        async submitForm() {
+            const tipoCita = this.$refs.tipoCita.value;
+            const nombrePac = this.$refs.nombrePac.value;
+            const apellidoPac = this.$refs.apellidoPac.value;
+            const cedulaPac = this.$refs.cedulaPac.value;
+            const startAppoitmentDate = this.getAppoitmentDate();
+            const endAppoitmentDate = this.selectedDate;
+
+            try{
+                const response = await axios.post('/agendarPaciente', {
+                    nombrePac,
+                    apellidoPac,
+                    cedulaPac,
+                    tipoCita,
+                    startAppoitmentDate,
+                    endAppoitmentDate
+                });
+
+                if (response.status === 201) {
+                    alert('La cita fue registrada exitosamente');
+                    this.$router.push('/login');
+                } else {
+                    alert('Error al registrar la cita');
+                }
+
+            }catch (error) {
+                console.log('Error durante el registro:', error);
+                alert('Error al registrar ula cita');
+            }
         }
     }
 };
