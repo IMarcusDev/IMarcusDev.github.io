@@ -6,6 +6,9 @@ import Historial from '@/components/Historial.vue';
 import AgendarCita from '../components/AgendarCita.vue';
 import HistorialMedico from '../components/HistorialMedico.vue';
 import MenuMedico from '../views/MenuMedico.vue';
+import InsertarDependientes from '../components/InsertarDependientes.vue';
+import ListaDependientes from '../components/ListaDependientes.vue';
+import AgendarCitaPaciente from '../components/AgendarCitaPaciente.vue';
 
 const routes = [
     {
@@ -26,7 +29,17 @@ const routes = [
             {
                 path: 'agendarPaciente',
                 name: 'AgendarPaciente',
-                component: AgendarCita,
+                component: AgendarCitaPaciente,
+            },
+            {
+                path: 'agregarDependiente',
+                name: 'AgregarDependiente',
+                component: InsertarDependientes,
+            },
+            {
+                path: 'listaDependientes',
+                name: 'ListaDependientes',
+                component: ListaDependientes,
             }
         ]
     },

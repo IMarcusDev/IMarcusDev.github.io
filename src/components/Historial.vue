@@ -35,6 +35,9 @@
 </template>
 
 <script>
+import { useUserStore } from '../store/userStore';
+import axios from '../api/axios';
+
 export default {
     name: 'Historial',
     data() {
@@ -44,18 +47,39 @@ export default {
             citas: []
         };
     },
-    methods: {
-        buscarCitas() {
-            // Aquí se realizaría la búsqueda en la base de datos
-            // Datos de prueba
-            this.citas = [
-                { id: 1, fecha: '2023-10-01', tipoCita: 'Consulta/tratamiento', cedula: '1234567890', estado: 'completado'},
-                { id: 2, fecha: '2023-10-02', tipoCita: 'Control', cedula: '0987654321', estado: 'Por asistir' }
-            ].filter(cita => 
-                (this.busquedaCedula ? cita.cedula.includes(this.busquedaCedula) : true) &&
-                (this.busquedaFecha ? cita.fecha === this.busquedaFecha : true)
-            );
+    computed: {
+        loggedInUser() {
+            const userStore = useUserStore();
+            return userStore.loggedInUser;
         }
+    },
+    methods: {
+        async buscarCitas() {
+            try {
+                const response = await fetch('historialCitas', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id_users: this.loggedInUser.id_user })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    this.citas = data.data.filter(cita => 
+                        (this.busquedaCedula ? cita.cedula.includes(this.busquedaCedula) : true) &&
+                        (this.busquedaFecha ? cita.fecha === this.busquedaFecha : true)
+                    );
+                } else {
+                    this.citas = [];
+                }
+            } catch (error) {
+                console.error('Error al buscar citas:', error);
+                this.citas = [];
+            }
+        }
+    },
+    async created() {
+        await this.buscarCitas();
     }
 };
 </script>

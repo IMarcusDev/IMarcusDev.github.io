@@ -6,17 +6,16 @@
                     <h2>VitaDent</h2>
                 </div>
                 <ul class="menu">
-                    <li><router-link to="/MenuPaciente/historialPaciente">Historial de citas</router-link></li>
                     <li><router-link to="/MenuPaciente/agendarPaciente">Agendar cita</router-link></li>
+                    <li><router-link to="/MenuPaciente/historialPaciente">Historial de citas</router-link></li>
+                    <li><router-link to="/MenuPaciente/agregarDependiente">Agregar dependiente</router-link></li>
+                    <li><router-link to="/MenuPaciente/listaDependientes">Lista dependiente</router-link></li>
                 </ul>
-
                 <router-link to="/">
-                    <button class="btnCerrarSesion" @click="logout">Cerrar Sesion <ArrowRightStartOnRectangleIcon class="arrowIcon" /></button>
+                    <button class="btnCerrarSesion" @click="logout">Cerrar Sesión <ArrowRightStartOnRectangleIcon class="arrowIcon" /></button>
                 </router-link>
-                
             </div>
         </section>
-
         <section class="screen-content" id="screen-content">
             <router-view></router-view>
         </section>
@@ -24,13 +23,11 @@
 </template>
 
 <script>
-import { ArrowLongLeftIcon } from '@heroicons/vue/24/solid';
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/vue/24/solid';
 
 export default {
     name: 'MenuPaciente',
     components: {
-        ArrowLongLeftIcon,
         ArrowRightStartOnRectangleIcon,
     },
     methods: {
@@ -42,30 +39,6 @@ export default {
 </script>
 
 <style scoped>
-.position{
-    position: relative;
-    bottom: 70%;
-}
-
-.btnPrincipalPage{
-    position: relative;
-    display: flex;
-    color: black;
-    background-color: #1abc9c;
-
-}
-
-.btnCerrarSesion{
-    background-color: pink;
-    display: flex;
-    align-items: center;
-}
-
-.arrowIcon {
-    width: 30px;
-    margin-left: 10px;
-}
-
 .content {
     display: flex;
     width: 100%;
@@ -81,15 +54,15 @@ export default {
 .menu-lateral {
     height: 95vh;
     width: 250px;
-    background-color: #2c3e50;
-    color: #ecf0f1;
+    background-color: #007bff;
+    color: #ffffff;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 20px;
     justify-content: space-between;
+    border-radius: 8px 0 0 8px;
 }
 
 .logo {
@@ -97,7 +70,7 @@ export default {
 }
 
 .logo h2 {
-    color: #ecf0f1;
+    color: #ffffff;
     font-size: 40px;
     font-weight: bold;
     text-align: center;
@@ -122,20 +95,42 @@ export default {
 .menu-lateral li a {
     display: block;
     padding: 15px 20px;
-    color: #ecf0f1;
+    color: #ffffff;
     text-decoration: none;
     transition: background-color 0.3s ease, color 0.3s ease;
     text-align: center;
+    border-radius: 4px;
 }
 
 .menu-lateral li a:hover {
-    background-color: #34495e;
-    color: #bdc3c7;
+    background-color: #0056b3;
+    color: #d1ecf1;
 }
 
 .menu-lateral li a.router-link-active {
     background-color: #1abc9c;
-    color: #ecf0f1;
+    color: #ffffff;
+}
+
+.btnCerrarSesion {
+    background-color: #e74c3c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.btnCerrarSesion:hover {
+    background-color: #c0392b;
+}
+
+.arrowIcon {
+    width: 20px;
+    margin-left: 10px;
 }
 
 .screen-content {
@@ -143,5 +138,6 @@ export default {
     display: flex;
     padding: 20px;
     background-color: #ecf0f1;
+    border-radius: 0 8px 8px 0;
 }
 </style>

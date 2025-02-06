@@ -163,25 +163,33 @@ app.post("/api/historialCitas", async (req, res) => {
 });
 
 
-app.post("/api/RegistroDependientes", async (req,res)=>{
+app.post("/api/RegistroDependientes", async (req, res) => {
   try {
+    const { user, cedula, nombre, apellido, fecha_nacimiento } = req.body;
 
-    const {id_users, cedula, nombre, apellido, fecha_nacimiento} = req.body;
-
-    if(!id_users || !cedula || !nombre || ! apellido || !fecha_nacimiento) {
-      return res.status(500).json({message: "El id del usuario no encontrado"});
+    if (!user || !cedula || !nombre || !apellido || !fecha_nacimiento) {
+      return res.status(400).json({ message: "Debe llenar todos los campos" });
     }
 
-    const id_pac = await Queries.getIdOfPac(id_users);
+    const id_user = await Queries.getIdOfUser(user);
 
-    await Queries.addDependent(cedula,nombre,apellido,fecha_nacimiento,id_pac);
-    
-    res.status(201).json({ message: "El dependiente fue registrado exitosamente"})
+    if (!id_user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    const id_pac = await Queries.getIdOfPac(id_user);
+
+    if (!id_pac) {
+      return res.status(404).json({ message: "Paciente no encontrado" });
+    }
+
+    await Queries.addDependent(cedula, nombre, apellido, fecha_nacimiento, id_pac);
+
+    res.status(201).json({ message: "El dependiente fue registrado exitosamente" });
   } catch (error) {
-    res.status(500).json({ message: "Error al registrar dependiente:"+error});
+    res.status(500).json({ message: "Error al registrar dependiente: " + error.message });
   }
 });
-
 
 // Servir el frontend en producción
 const __filename = fileURLToPath(import.meta.url);

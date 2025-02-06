@@ -45,6 +45,7 @@
 
 <script>
 import axios from '../api/axios';
+import { useUserStore } from '../store/userStore';
 
 export default {
     name: 'Login',
@@ -71,6 +72,9 @@ export default {
                 const userType = response.data.userType;
 
                 localStorage.setItem('userType', userType);
+
+                const userStore = useUserStore();
+                userStore.login(username); // Store only the username string
 
                 if (userType === 'medico') {
                     this.$router.push('/MenuMedico');

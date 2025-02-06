@@ -159,7 +159,7 @@ async function addDependent(cedula, nombre, apellido, fechaNac, id_pac) {
         );
         return result;
     } catch (error) {
-        throw new Error('Error al obtener información: ' + error);
+        throw new Error('Error al registrar dependiente: ' + error);
     }
 };
 
@@ -187,6 +187,24 @@ async function getDependentsByCedula(cedula) {
     }
 };
 
+async function getIdOfUser(username) {
+    try {
+        const [rows] = await pool.query('SELECT id_user FROM USERS WHERE username_user = ?;', [username]);
+        return rows.length > 0 ? rows[0].id_user : null;
+    } catch (error) {
+        throw new Error('Error al obtener el ID del usuario: ' + error);
+    }
+}
+
+async function getIdOfPac(id_user) {
+    try {
+        const [rows] = await pool.query('SELECT id_pac FROM PACIENTES WHERE id_user = ?;', [id_user]);
+        return rows.length > 0 ? rows[0].id_pac : null;
+    } catch (error) {
+        throw new Error('Error al obtener el ID del paciente: ' + error);
+    }
+}
+
 export {
     getRoles,
     getUserName,
@@ -205,6 +223,8 @@ export {
     getFechaRegistro,
     getDependentsByPac,
     getDependentsByCedula,
-    getCitaForIdOfPac
+    getCitaForIdOfPac,
+    getIdOfUser,
+    getIdOfPac
 }
 
