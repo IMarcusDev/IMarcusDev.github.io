@@ -44,33 +44,39 @@ export default {
         return {
             busquedaCedula: '',
             busquedaFecha: '',
-            citas: []
+            citas: [],
+            cita: {
+                fecha: '',
+                tipoCita: '',
+                cedula: '',
+                estado: ''
+            }
         };
     },
     computed: {
-        loggedInUser() {
+        currentUser() {
             const userStore = useUserStore();
-            return userStore.loggedInUser;
+            return userStore.currentUser;
         }
     },
     methods: {
         async buscarCitas() {
+            const user = this.currentUser;
+
             try {
-                const response = await fetch('historialCitas', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ id_users: this.loggedInUser.id_user })
+                const response = await axios.post('/historialCitas', {
+                    user
                 });
-                const data = await response.json();
-                if (data.success) {
-                    this.citas = data.data.filter(cita => 
-                        (this.busquedaCedula ? cita.cedula.includes(this.busquedaCedula) : true) &&
-                        (this.busquedaFecha ? cita.fecha === this.busquedaFecha : true)
-                    );
-                } else {
-                    this.citas = [];
+
+                this.citas = response.data.data.map(cita => ({
+                    fecha: cita.fecha_realizar_cita.slice(0,-14),
+                    tipoCita: cita.asunto_cita,
+                    cedula: cita.cedula_paciente_cita,
+                    estado: cita.estado_cita
+                }));
+
+                if (response.status !== 200) {
+                    alert('Error al cargar las citas');
                 }
             } catch (error) {
                 console.error('Error al buscar citas:', error);

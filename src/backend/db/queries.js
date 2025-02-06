@@ -72,9 +72,9 @@ async function getCitaId(id_cita) {
     }
 };
 
-async function getCitaForIdOfPac(id_users){
+async function getCitaForIdOfPac(id_pac){
     try{
-        const[rows] = await pool.query('SELECT * FROM PACIENTES WHERE id_user= ?;', [id_users])
+        const[rows] = await pool.query('SELECT * FROM CITA WHERE id_pac= ?;', [id_pac])
         return rows;
     } catch(error){
         throw new Error('Error al obtener información: ' + error);

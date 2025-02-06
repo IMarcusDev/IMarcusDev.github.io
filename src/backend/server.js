@@ -143,13 +143,17 @@ app.post("/api/agendarPaciente", async (req, res) => {
 app.post("/api/historialCitas", async (req, res) => {
   try{
 
-    const {id_users} = req.body;
+    const {user} = req.body;
 
-    if(!id_users) {
-      return res.status(500).json({message: "El id del usuario no encontrado"});
+    const id_user = await Queries.getIdOfUser(user);
+
+    if (!id_user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    const infoCitas = await Queries.getCitaForIdOfPac(id_users);
+    const id_pac = await Queries.getIdOfPac(id_user);
+
+    const infoCitas = await Queries.getCitaForIdOfPac(id_pac);
 
     return res.status(200).json({
       success: true,
