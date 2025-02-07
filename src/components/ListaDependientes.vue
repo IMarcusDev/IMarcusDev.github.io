@@ -31,13 +31,20 @@
 </template>
 
 <script>
+import { useUserStore } from '../store/userStore';
 import axios from '../api/axios';
 
 export default {
     name: 'ListaDependientes',
     data() {
         return {
-            dependientes: []
+            dependientes: [],
+            dependiente: {
+                cedula_dep: '',
+                nombre_dep: '',
+                apellido_dep: '',
+                fecha_nac_dep: ''
+            }
         };
     },
     created() {
@@ -46,11 +53,34 @@ export default {
     methods: {
         async fetchDependientes() {
             try {
-                const response = await axios.get('/dependientes');
-                this.dependientes = response.data;
+                const user = this.currentUser;
+
+                const response = await axios.post('/ListaDependientes', {
+                    user
+                });
+
+                this.dependientes = response.data.data.map(dependiente => ({
+                    cedula_dep: dependiente.cedula_dep,
+                    nombre_dep: dependiente.nombre_dep,
+                    apellido_dep: dependiente.apellido_dep,
+                    fecha_nac_dep: dependiente.fecha_nac_dep.slice(0,-14)
+                }));
+
+                console.log(this.dependientes);
+
+                if (response.status !== 200) {
+                    alert('Error al cargar las citas');
+                }
             } catch (error) {
                 console.error('Error fetching dependientes:', error);
+                this.dependientes = [];
             }
+        }
+    },
+    computed: {
+        currentUser() {
+            const userStore = useUserStore();
+            return userStore.currentUser;
         }
     }
 };
@@ -102,6 +132,10 @@ export default {
 .table th {
     background-color: #007bff;
     color: white;
+}
+
+.table tr{
+    color: black;
 }
 
 .table tr:nth-child(even) {

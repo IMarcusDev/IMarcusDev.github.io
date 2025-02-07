@@ -21,7 +21,10 @@
                     <div class="form-group">
                         <label for="paciente">Seleccione al paciente</label>
                         <select name="paciente" id="paciente" ref="paciente" v-model="paciente">
-                            <option>Mi persona</option>
+                            <option value="Mi persona">Mi persona</option>
+                            <option v-for="dependiente in dependientes" :key="dependiente.cedula_dep" :value="dependiente.cedula_dep">
+                                {{ dependiente.nombre_dep }}
+                            </option>
                         </select>
                     </div>
                     
@@ -53,6 +56,7 @@
 <script>
 import axios from '../api/axios';
 import { useCalendarStore } from '../store/calendarStore';
+import { useUserStore } from '../store/userStore';
 import Calendar from './calendar.vue';
 
 export default {
@@ -68,7 +72,16 @@ export default {
             valorCita: '',
             metodoPago: 'Credito',
             nombre: '',  
-            apellido: ''  
+            apellido: '',
+            dependientes: [],
+            paciente: 'Mi persona',
+            DatosPaciente: {
+                nombres_pac: '',
+                apellidos_pac: '',
+                cedula_pac: '',
+                fecha_nac_pac: '',
+                email_pac: ''
+            }
         };
     },
     computed: {
@@ -79,6 +92,10 @@ export default {
         selectedTimeSlot() {
             const calendarStore = useCalendarStore();
             return calendarStore.selectedTimeSlot;
+        },
+        currentUser() {
+            const userStore = useUserStore();
+            return userStore.currentUser;
         }
     },
     methods: {
@@ -95,21 +112,31 @@ export default {
             return [year, month, day].join('-');
         },
         async submitForm() {
-            const tipoCita = this.$refs.tipoCita.value;
-            const nombrePac = this.$refs.nombrePac.value;
-            const apellidoPac = this.$refs.apellidoPac.value;
-            const cedulaPac = this.$refs.cedulaPac.value;
-            const startAppoitmentDate = this.getAppoitmentDate();
-            const endAppoitmentDate = this.formatDate(this.selectedDate);
+            const asunto_cita = this.$refs.tipoCita.value;
+            const fecha_registro_cita = this.getAppoitmentDate();
+            const fecha_realizar_cita = this.formatDate(this.selectedDate);
+            let nombre_paciente_cita = '', apellido_paciente_cita = '', cedula_paciente_cita = '';
+
+            if (this.paciente === 'Mi persona') {
+                const pac = await this.datosUser();
+                nombre_paciente_cita = pac[0].nombres_pac;
+                apellido_paciente_cita = pac[0].apellidos_pac;
+                cedula_paciente_cita = pac[0].cedula_pac;
+            } else {
+                const selectedDependiente = this.dependientes.find(dep => dep.cedula_dep === this.paciente);
+                nombre_paciente_cita = selectedDependiente.nombre_dep;
+                apellido_paciente_cita = selectedDependiente.apellido_dep;
+                cedula_paciente_cita = selectedDependiente.cedula_dep;
+            }
 
             try {
                 const response = await axios.post('/agendarPaciente', {
-                    nombrePac,
-                    apellidoPac,
-                    cedulaPac,
-                    tipoCita,
-                    startAppoitmentDate,
-                    endAppoitmentDate
+                    nombre_paciente_cita,
+                    apellido_paciente_cita,
+                    cedula_paciente_cita,
+                    asunto_cita,
+                    fecha_registro_cita,
+                    fecha_realizar_cita
                 });
 
                 if (response.status === 201) {
@@ -122,7 +149,56 @@ export default {
                 console.log('Error durante el registro:', error);
                 alert('Error al registrar la cita');
             }
+        },
+        async llenarCampos() {
+            try {
+                const user = this.currentUser;
+
+                const response = await axios.post('/ListaDependientes', {
+                    user
+                });
+
+                this.dependientes = response.data.data.map(dependiente => ({
+                    cedula_dep: dependiente.cedula_dep,
+                    nombre_dep: dependiente.nombre_dep,
+                    apellido_dep: dependiente.apellido_dep,
+                    fecha_nac_dep: dependiente.fecha_nac_dep.slice(0,-14)
+                }));
+
+                if (response.status !== 200) {
+                    alert('Error al cargar las citas');
+                }
+            } catch (error) {
+                console.error('Error fetching dependientes:', error);
+                this.dependientes = [];
+            }
+        },
+        async datosUser(){
+            try {
+                const user = this.currentUser;
+                console.log(user);
+
+                const response = await axios.post('/DatosUser', {
+                    user
+                });
+
+                this.DatosPaciente = response.data.map(pac => ({
+                    nombres_pac: pac.nombres_pac,
+                    apellidos_pac: pac.apellidos_pac,
+                    cedula_pac: pac.cedula_pac,
+                    fecha_nac_pac: pac.fecha_nac_pac.slice(0, 10),
+                    email_pac: pac.email_pac
+                }));
+                return this.DatosPaciente;
+                
+            } catch (error) {
+                console.error('Error fetching datos del paciente:', error);
+                this.DatosPaciente = [];
+            }
         }
+    },
+    created(){
+        this.llenarCampos();
     }
 };
 </script>

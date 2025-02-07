@@ -112,26 +112,31 @@ app.post("/api/login", async (req, res) => {
 
 app.post("/api/agendarPaciente", async (req, res) => {
   try {
-    const { nombrePac, apellidoPac, cedulaPac, tipoCita, startAppoitmentDate, endAppoitmentDate } = req.body;
+    const { nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita } = req.body;
 
-    if (!nombrePac || !apellidoPac || !cedulaPac || !tipoCita || !startAppoitmentDate || !endAppoitmentDate) {
+    console.log(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita);
+
+    if (!nombre_paciente_cita || !apellido_paciente_cita || !cedula_paciente_cita || !asunto_cita || !fecha_registro_cita || !fecha_realizar_cita) {
       return res.status(400).json({ message: "Debe llenar todos los campos" });
     }
 
-    const existFECHAREGISTRO = await Queries.getFechaRegistro(endAppoitmentDate);
+    const existFECHAREGISTRO = await Queries.getFechaRegistro(fecha_realizar_cita);
 
     if (Array.isArray(existFECHAREGISTRO) && existFECHAREGISTRO.length > 0) {
       return res.status(409).json({ message: "La fecha de la cita ya está en uso" });
     }
 
-    const paciente = await Queries.getPacienteCedula(cedulaPac);
+    const paciente = await Queries.getPacienteCedula(cedula_paciente_cita);
+
     if (paciente.length === 0) {
       return res.status(404).json({ message: "Paciente no encontrado" });
     }
 
     const id_pac = paciente[0].id_pac;
 
-    await Queries.addCita(nombrePac, apellidoPac, cedulaPac, tipoCita, startAppoitmentDate, endAppoitmentDate, null, "pendiente", 1, id_pac);
+    await Queries.addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, null, "pendiente", 1, id_pac);
+
+
 
     res.status(201).json({ message: "La cita fue registrada exitosamente" });
   } catch (error) {
@@ -192,6 +197,53 @@ app.post("/api/RegistroDependientes", async (req, res) => {
     res.status(201).json({ message: "El dependiente fue registrado exitosamente" });
   } catch (error) {
     res.status(500).json({ message: "Error al registrar dependiente: " + error.message });
+  }
+});
+
+app.post("/api/ListaDependientes", async (req, res) => {
+  try{
+
+    const {user} = req.body;
+
+    const id_user = await Queries.getIdOfUser(user);
+
+    if (!id_user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    const id_pac = await Queries.getIdOfPac(id_user);
+
+    const infoDependientes = await Queries.getDependantForIdOfPac(id_pac);
+
+    return res.status(200).json({
+      success: true,
+      message: infoDependientes.length > 0 ? "Dependientes obtenidas exitosamente." : "No hay dependientes registrados.",
+      data: infoDependientes
+    });
+
+  }catch(error){
+    res.status(500).json({ message: "Error al obtener las citas del pacientes"+error});
+  }
+});
+
+app.post("/api/DatosUser", async (req, res) => {
+  try{
+    const {user} = req.body;
+
+    const id_user = await Queries.getIdOfUser(user);
+
+    if (!id_user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    const id_pac = await Queries.getIdOfPac(id_user);
+
+    const paciente = await Queries.getDataOfPac(id_pac);
+
+    res.json(paciente[0]);
+
+  }catch(error){
+    res.status(500).json({ message: "Error al obtener las citas del pacientes"+error});
   }
 });
 

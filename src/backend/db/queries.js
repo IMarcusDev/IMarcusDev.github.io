@@ -82,6 +82,16 @@ async function getCitaForIdOfPac(id_pac){
 
 }
 
+async function getDependantForIdOfPac(id_pac){
+    try{
+        const[rows] = await pool.query('SELECT * FROM DEPENDIENTES WHERE id_pac= ?;', [id_pac])
+        return rows;
+    } catch(error){
+        throw new Error('Error al obtener información: ' + error);
+    }
+
+}
+
 async function getCitaDayRangeRegistro(date_from, date_to) {
     // Formato esperado para fechas: YYYY-MM-DD
     try {
@@ -140,6 +150,8 @@ async function addPacienteInfo(Names, SurNames, cedula, fecha_nac, email, id_use
 
 async function addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_doc_cita, estado_cita, id_doc, id_pac) {
     try {
+        console.log("Entro add cita");
+        
         const [result] = await pool.query(
             'INSERT INTO CITA (nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_doc_cita, estado_cita, id_doc, id_pac) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
             [nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_doc_cita, estado_cita, id_doc, id_pac]
@@ -205,7 +217,17 @@ async function getIdOfPac(id_user) {
     }
 }
 
+async function getDataOfPac (id_pac){
+    try{
+        const row = await pool.query('SELECT * FROM PACIENTES WHERE id_pac = ?;', [id_pac]);
+        return row;
+    }catch (error){
+        throw new Error('Error al obtener los datos del paciente: ' + error);
+    }
+}
+
 export {
+    getDataOfPac,
     getRoles,
     getUserName,
     getInfo,
@@ -225,6 +247,7 @@ export {
     getDependentsByCedula,
     getCitaForIdOfPac,
     getIdOfUser,
-    getIdOfPac
+    getIdOfPac,
+    getDependantForIdOfPac
 }
 
