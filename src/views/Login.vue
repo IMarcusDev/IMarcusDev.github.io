@@ -14,6 +14,9 @@
                 <input type="text" ref="username" placeholder="Nombre de usuario">
                 <input type="password" ref="password" placeholder="Contraseña">
                 <button type="submit">Registrarse</button>
+                <router-link to="/">
+                    <button>Cancelar</button>
+                </router-link>
             </form>
         </div>
         <div class="form-container sign-in">
@@ -24,6 +27,9 @@
                 <input type="password" ref="loginPassword" placeholder="Contraseña">
                 <a href="#">¿Olvidaste tu contraseña?</a>
                 <button>Iniciar Sesión</button>
+                <router-link to="/">
+                    <button>Cancelar</button>
+                </router-link>
             </form>
         </div>
         <div class="toggle-container">
@@ -46,6 +52,8 @@
 <script>
 import axios from '../api/axios';
 import { useUserStore } from '../store/userStore';
+import { useStateStore } from '../store/stateStore';
+import { useLoginStore } from '../store/loginStore';
 
 export default {
     name: 'Login',
@@ -61,6 +69,19 @@ export default {
         loginBtn.addEventListener('click', () => {
             container.classList.remove("active");
         });
+
+        const option = this.currenOption;
+        if (option === 'registrarse') {
+            container.classList.add("active");
+        } else if (option === 'iniciarSesion') {
+            container.classList.remove("active");
+        }
+    },
+    computed: {
+        currenOption(){
+            const loginOpion = useLoginStore();
+            return loginOpion.selectedBtn;
+        }
     },
     methods: {
         async handleLogin() {
@@ -71,15 +92,18 @@ export default {
                 const response = await axios.post('/login', { username, password });
                 const userType = response.data.userType;
 
-                localStorage.setItem('userType', userType);
+                const userTypeStore = useStateStore();
+                userTypeStore.login(userType);
 
                 const userStore = useUserStore();
-                userStore.login(username); // Store only the username string
+                userStore.login(username);
 
-                if (userType === 'medico') {
+                if (userType === 'medico' || userType === 'secretario') {
                     this.$router.push('/MenuMedico');
                 } else if (userType === 'paciente') {
                     this.$router.push('/MenuPaciente');
+                } else if (userType === 'administrador'){
+                    this.$router.push('/MenuAdmin');
                 } else {
                     alert('Usuario no registrado');
                 }
@@ -94,7 +118,6 @@ export default {
                 }
             }
         },
-
         async handleRegister() {
             const Names = this.$refs.Names.value;
             const SurNames = this.$refs.SurNames.value;

@@ -109,8 +109,6 @@ export default {
             const cedulaPac = this.$refs.cedulaPac.value;
             const startAppoitmentDate = this.getAppoitmentDate();
             const endAppoitmentDate = this.formatDate(this.selectedDate);
-            console.log(startAppoitmentDate);
-            console.log(endAppoitmentDate);
 
             try {
                 const response = await axios.post('/agendarPaciente', {
@@ -124,7 +122,6 @@ export default {
 
                 if (response.status === 201) {
                     alert('La cita fue registrada exitosamente');
-                    this.$router.push('/login');
                 } else {
                     alert('Error al registrar la cita');
                 }

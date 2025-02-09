@@ -141,7 +141,6 @@ export default {
 
                 if (response.status === 201) {
                     alert('La cita fue registrada exitosamente');
-                    this.$router.push('/login');
                 } else {
                     alert('Error al registrar la cita');
                 }

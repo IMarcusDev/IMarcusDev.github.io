@@ -9,11 +9,13 @@
                 <div v-if="!isLoggedIn"  class="login-container">
                     <div class="login">
                         <router-link to="/Login">
-                            <button type="button" id="btnLogin">Iniciar Sesion</button>
+                            <button type="button" id="btnLogin" @click="optionClicked">Iniciar Sesion</button>
                         </router-link>
                     </div>
                     <div class="register">
-                        <button type="button" id="btnRegister">Registrarse</button>
+                        <router-link to="/Login">
+                            <button type="button" id="btnRegister" @click="optionClicked">Registrarse</button>
+                        </router-link>
                     </div>
                 </div>
                 <div v-else>
@@ -24,15 +26,11 @@
         <section class="navMenu">
             <div class="menu-container">
                 <nav>
-                    <ul class="menu">
-                        <li><router-link to="/">Inicio</router-link></li>
-                        <li><router-link to="/agendar">Acerca de</router-link></li>
-                        <li><router-link to="/contact">Contactar</router-link></li>
-                    </ul>
+                    <h2>Tu sonrisa es nuestra prioridad, porque sabemos que al renovarla, transformas tu vida. Por eso la sonrisa que siempre soñaste, con nosotros es posible.</h2>
                 </nav>
             </div>
             <div class="directCita">
-                <router-link to="/MenuPaciente">
+                <router-link to="/Login">
                     <button type="button" id="btnQuickAgend">
                         Agendar cita
                     </button>
@@ -119,10 +117,12 @@
                 </section>
                 
                 <div class="btnAgendar">
-                    <button type="button" id="btnAgendarPromociones" class="btnAgendarProm">
-                        Agenda Ahora
-                        <ArrowLongRightIcon class="arrowIcon" />
-                    </button>
+                    <router-link to="/Login">
+                        <button type="button" id="btnAgendarPromociones" class="btnAgendarProm">
+                            Agenda Ahora
+                            <ArrowLongRightIcon class="arrowIcon" />
+                        </button>
+                    </router-link>
                 </div>
                 
             </section>
@@ -159,6 +159,7 @@
 <script>
 import { ArrowLongRightIcon } from '@heroicons/vue/24/solid'
 import { RouterLink } from 'vue-router';
+import { useLoginStore } from '../store/loginStore';
 
 export default {
     name: 'Home',
@@ -190,6 +191,7 @@ export default {
     },
     mounted() {
         this.startAutoSlide();
+        localStorage.removeItem('userType');
     },
     methods: {
         startAutoSlide() {
@@ -217,6 +219,14 @@ export default {
             this.stopAutoSlide();
             this.itemIndex = index;
         },
+        optionClicked(event) {
+            const loginOptionStore = useLoginStore();
+            if (event.target.id === 'btnLogin') {
+                loginOptionStore.setSelectedBtn('iniciarSesion');
+            } else if (event.target.id === 'btnRegister') {
+                loginOptionStore.setSelectedBtn('registrarse');
+            }
+        }
     }
 };
 </script>

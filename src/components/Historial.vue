@@ -37,6 +37,7 @@
 <script>
 import { useUserStore } from '../store/userStore';
 import axios from '../api/axios';
+import { useStateStore } from '../store/stateStore';
 
 export default {
     name: 'Historial',
@@ -57,6 +58,10 @@ export default {
         currentUser() {
             const userStore = useUserStore();
             return userStore.currentUser;
+        },
+        currentState(){
+            const stateStore = useStateStore();
+            return stateStore;
         }
     },
     methods: {
@@ -82,10 +87,44 @@ export default {
                 console.error('Error al buscar citas:', error);
                 this.citas = [];
             }
+        },
+        async buscarCitasTodos() {
+            // Aquí se realizaría la búsqueda en la base de datos
+            // Datos de prueba
+            // this.citas = [
+            //     { id: 1, fecha: '2023-10-01', tipoCita: 'Consulta/tratamiento', cedula: '1234567890', estado: 'completado'},
+            //     { id: 2, fecha: '2023-10-02', tipoCita: 'Control', cedula: '0987654321', estado: 'Por asistir' }
+            // ].filter(cita => 
+            //     (this.busquedaCedula ? cita.cedula.includes(this.busquedaCedula) : true) &&
+            //     (this.busquedaFecha ? cita.fecha === this.busquedaFecha : true)
+            // );
+            try{
+                const response = await axios.post('/historialCitasTodos');
+
+                this.citas = response.data.data.map(cita => ({
+                    fecha: cita.fecha_realizar_cita.slice(0,-14),
+                    tipoCita: cita.asunto_cita,
+                    cedula: cita.cedula_paciente_cita,
+                    estado: cita.estado_cita
+                }));
+
+                if (response.status !== 200) {
+                    alert('Error al cargar las citas');
+                }
+            }catch (error) {
+                console.error('Error al buscar citas:', error);
+                this.citas = [];
+            }
         }
     },
     async created() {
-        await this.buscarCitas();
+        const state = this.currentState.currentUserType;
+
+        if (state === 'secretario'){
+            await this.buscarCitasTodos();
+        }else if (state === 'paciente'){
+            await this.buscarCitas();
+        }
     }
 };
 </script>

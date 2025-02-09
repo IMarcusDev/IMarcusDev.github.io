@@ -66,8 +66,6 @@ export default {
                     fecha_nac_dep: dependiente.fecha_nac_dep.slice(0,-14)
                 }));
 
-                console.log(this.dependientes);
-
                 if (response.status !== 200) {
                     alert('Error al cargar las citas');
                 }

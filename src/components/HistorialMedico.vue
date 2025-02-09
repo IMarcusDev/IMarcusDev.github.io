@@ -5,7 +5,7 @@
             <div class="busqueda">
                 <input type="text" v-model="busquedaCedula" placeholder="Buscar por número de cédula" />
                 <input type="date" v-model="busquedaFecha"/>
-                <button @click="buscarCitas">Buscar</button>
+                <button @click="filtrarCitas">Buscar</button>
             </div>
             <div v-if="citas.length > 0" class="tabla-citas">
                 <table>
@@ -15,7 +15,6 @@
                             <th>Tipo de Cita</th>
                             <th>Número de Cédula</th>
                             <th>Estado</th>
-                            <th v-if="true">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -23,9 +22,8 @@
                             <td>{{ cita.fecha }}</td>
                             <td>{{ cita.tipoCita }}</td>
                             <td>{{ cita.cedula }}</td>
-                            <td>{{ cita.estado }}</td>
-                            <td v-if="cita.estado === 'Por asistir'">
-                                <button class="btnEstado" @click="abrirModal(cita)">Cambiar estado</button>
+                            <td @mouseover="hoverEstado(cita)" @mouseleave="leaveEstado">{{ cita.estado }}
+                                <button v-if="citaHover === cita && cita.estado === 'pendiente'" @click="abrirModal(cita)">Cambiar estado</button>
                             </td>
                         </tr>
                     </tbody>
@@ -42,6 +40,9 @@
                     <option value="completado">Completada</option>
                     <option value="no asistio">No asistió</option>
                 </select>
+                <h3>Comentario del doctor</h3>
+                <textarea v-model="comentarioDoc" placeholder="Ingrese un comentario referente a la cita"></textarea>
+                
                 <button @click="guardarEstado">Guardar</button>
                 <button @click="cerrarModal">Cancelar</button>
             </div>
@@ -50,6 +51,10 @@
 </template>
 
 <script>
+import { useUserStore } from '../store/userStore';
+import axios from '../api/axios';
+import { useStateStore } from '../store/stateStore';
+
 export default {
     name: 'HistorialMedico',
     data() {
@@ -59,20 +64,38 @@ export default {
             citas: [],
             mostrarModal: false,
             citaSeleccionada: null,
-            nuevoEstado: ''
+            nuevoEstado: '',
+            comentarioDoc: '',
+            cita: {
+                id: 0,
+                fecha: '',
+                tipoCita: '',
+                cedula: '',
+                estado: ''
+            },
+            citaHover: null,
         };
     },
     methods: {
-        buscarCitas() {
-            // Aquí se realizaría la búsqueda en la base de datos
-            // Datos de prueba
-            this.citas = [
-                { id: 1, fecha: '2023-10-01', tipoCita: 'Consulta/tratamiento', cedula: '1234567890', estado: 'completado'},
-                { id: 2, fecha: '2023-10-02', tipoCita: 'Control', cedula: '0987654321', estado: 'Por asistir' }
-            ].filter(cita => 
-                (this.busquedaCedula ? cita.cedula.includes(this.busquedaCedula) : true) &&
-                (this.busquedaFecha ? cita.fecha === this.busquedaFecha : true)
-            );
+        async buscarCitasTodos() {
+            try{
+                const response = await axios.post('/historialCitasTodos');
+
+                this.citas = response.data.data.map(cita => ({
+                    id: cita.id_cita,
+                    fecha: cita.fecha_realizar_cita.slice(0,-14),
+                    tipoCita: cita.asunto_cita,
+                    cedula: cita.cedula_paciente_cita,
+                    estado: cita.estado_cita
+                }));
+
+                if (response.status !== 200) {
+                    alert('Error al cargar las citas');
+                }
+            }catch (error) {
+                console.error('Error al buscar citas:', error);
+                this.citas = [];
+            }
         },
         abrirModal(cita) {
             this.citaSeleccionada = cita;
@@ -84,12 +107,44 @@ export default {
             this.citaSeleccionada = null;
             this.nuevoEstado = '';
         },
-        guardarEstado() {
+        async guardarEstado() {
             if (this.citaSeleccionada) {
-                this.citaSeleccionada.estado = this.nuevoEstado;
-                this.cerrarModal();
+                try {
+                    console.log("Paso1");
+                    const response = await axios.post('/actualizarEstadoCita', {
+                        id_cita: this.citaSeleccionada.id,
+                        nuevoEstado_cita: this.nuevoEstado,
+                        comentario_cita: this.comentarioDoc
+                    });
+                    console.log("Paso2");
+
+                    if (response.status === 201) {
+                        alert('Cita actualizada con exito');
+                        this.citaSeleccionada.estado = this.nuevoEstado;
+                        this.cerrarModal();
+                    } else {
+                        alert('Error al actualizar el estado de la cita');
+                    }
+                } catch (error) {
+                    console.error('Error al actualizar el estado de la cita:', error);
+                }
             }
+        },
+        filtrarCitas(){
+            this.citas = this.citas.filter(cita =>
+                (this.busquedaCedula ? cita.cedula.includes(this.busquedaCedula) : true) &&
+                (this.busquedaFecha ? cita.fecha === this.busquedaFecha : true)
+            );
+        },
+        hoverEstado(cita) {
+            this.citaHover = cita;
+        },
+        leaveEstado() {
+            this.citaHover = null;
         }
+    },
+    async created() {
+        await this.buscarCitasTodos();
     }
 };
 </script>
@@ -181,6 +236,7 @@ h2 {
     text-align: center;
     font-size: 16px;
     color: black;
+    position: relative;
 }
 
 .tabla-citas th {
@@ -214,10 +270,13 @@ h2 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 300px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
 }
 
 .modal-content h3 {
     margin-bottom: 20px;
+    color: black;
 }
 
 .modal-content select {
@@ -248,5 +307,23 @@ h2 {
 .btnEstado{
     background-color: #0056b3;
     color: white;
+}
+
+.tabla-citas td button {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.tabla-citas td:hover button {
+    display: block;
 }
 </style>

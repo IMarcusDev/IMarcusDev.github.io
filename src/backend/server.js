@@ -104,7 +104,25 @@ app.post("/api/login", async (req, res) => {
           return res.status(401).json({ message: "Contraseña incorrecta" });
       }
 
-      res.status(200).json({ message: "Ha iniciado sesion correctamente", userType: user.id_rol === 2 ? 'medico' : 'paciente' });
+      let state = '';
+
+      switch(user.id_rol){
+        case 1:
+          state = 'administrador';
+          break;
+        case 2:
+          state = 'medico';
+          break;
+        case 3:
+          state = 'paciente';
+          break;
+        case 4:
+          state = 'secretario';
+          break;
+      }
+      
+
+      res.status(200).json({ message: "Ha iniciado sesion correctamente", userType: state });
   } catch (error) {
       res.status(500).json({ message: error.message });
   }
@@ -171,6 +189,19 @@ app.post("/api/historialCitas", async (req, res) => {
   }
 });
 
+app.post("/api/historialCitasTodos", async (req, res) => {
+  try {
+    const infoCitas = await Queries.getAllCitas();
+
+    return res.status(200).json({
+      success: true,
+      message: infoCitas.length > 0 ? "Citas obtenidas exitosamente." : "No hay citas registradas.",
+      data: infoCitas
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener las citas del pacientes: " + error.message });
+  }
+});
 
 app.post("/api/RegistroDependientes", async (req, res) => {
   try {
@@ -244,6 +275,18 @@ app.post("/api/DatosUser", async (req, res) => {
 
   }catch(error){
     res.status(500).json({ message: "Error al obtener las citas del pacientes"+error});
+  }
+});
+
+app.post('/api/actualizarEstadoCita', async (req, res) => {
+  try{
+    const { id_cita, nuevoEstado_cita, comentario_cita} = req.body;
+
+    await Queries.updateCita(id_cita, nuevoEstado_cita, comentario_cita);
+    
+    res.status(201).json({ message: "El dependiente fue registrado exitosamente" });
+  }catch(error){
+    res.status(500).json({ message: "Error al actualizar la cita del paciente"+error});
   }
 });
 

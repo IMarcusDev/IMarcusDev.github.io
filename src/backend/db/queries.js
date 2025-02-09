@@ -226,7 +226,26 @@ async function getDataOfPac (id_pac){
     }
 }
 
+async function getAllCitas (){
+    try{
+        const[rows] = await pool.query('SELECT * FROM CITA;')
+        return rows;
+    }catch (error){
+        throw new Error('Error al obtener los datos del paciente: ' + error);
+    }
+}
+
+async function updateCita(id_cita, nuevoEstado_cita, comentario_cita){
+    try{
+        await pool.query('UPDATE CITA SET comentario_doc_cita = ?, estado_cita = ? WHERE id_cita = ?', [comentario_cita, nuevoEstado_cita, id_cita])
+    }catch{
+        throw new Error('Error al actualizar los datos de la cita: ' + error);
+    }
+}
+
 export {
+    updateCita,
+    getAllCitas,
     getDataOfPac,
     getRoles,
     getUserName,

@@ -6,10 +6,8 @@
                     <h2>VitaDent</h2>
                 </div>
                 <ul class="menu">
-                    <li><router-link to="/MenuPaciente/agendarPaciente">Agendar cita</router-link></li>
-                    <li><router-link to="/MenuPaciente/historial">Historial de citas</router-link></li>
-                    <li><router-link to="/MenuPaciente/agregarDependiente">Agregar dependiente</router-link></li>
-                    <li><router-link to="/MenuPaciente/listaDependientes">Lista dependiente</router-link></li>
+                    <li><router-link to="/MenuAdmin/agendarMedico">Agendar cita</router-link></li>
+                    <li><router-link to="/MenuAdmin/historialAdmin">Historial de citas</router-link></li>
                 </ul>
                 <router-link to="/">
                     <button class="btnCerrarSesion" @click="logout">Cerrar Sesión <ArrowRightStartOnRectangleIcon class="arrowIcon" /></button>
@@ -29,7 +27,7 @@ import { useUserStore } from '../store/userStore';
 import { useStateStore } from '../store/stateStore';
 
 export default {
-    name: 'MenuPaciente',
+    name: 'MenuAdmin',
     components: {
         ArrowLongLeftIcon,
         ArrowRightStartOnRectangleIcon
