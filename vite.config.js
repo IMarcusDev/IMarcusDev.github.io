@@ -1,24 +1,25 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import path from 'path';  // Importa el módulo 'path'
+import path from 'path';
 
 export default defineConfig({
   plugins: [
-    vue(),          
+    vue(),
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),  // Configura el alias '@' para que apunte a la carpeta 'src'
+      '@': path.resolve(__dirname, 'src'),
       '#': path.resolve(__dirname, 'public'),
     },
   },
-    server: {
-      proxy: {
-        "/api": {
-          target: "http://localhost:5000",
-          changeOrigin: true,
-          secure: false
-        }
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:5000",
+        changeOrigin: true,
+        secure: false
       }
-    }
+    },
+    allowedHosts: ["susan-core-b-viewing.trycloudflare.com"] // <-- Agregado aquí
+  }
 });

@@ -12,17 +12,23 @@
                     <thead>
                         <tr>
                             <th>Fecha</th>
+                            <th>Hora</th>
                             <th>Tipo de Cita</th>
                             <th>Número de Cédula</th>
                             <th>Estado</th>
+                            <th>Comentario del Doctor</th>
+                            <th>Valor</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="cita in citas" :key="cita.id">
                             <td>{{ cita.fecha }}</td>
+                            <td>{{ cita.hora }}</td>
                             <td>{{ cita.tipoCita }}</td>
                             <td>{{ cita.cedula }}</td>
                             <td>{{ cita.estado }}</td>
+                            <td>{{ cita.comentario }}</td>
+                            <td>{{ cita.valor }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -48,9 +54,12 @@ export default {
             citas: [],
             cita: {
                 fecha: '',
+                hora: '',
                 tipoCita: '',
                 cedula: '',
-                estado: ''
+                estado: '',
+                comentario: '',
+                valor: ''
             }
         };
     },
@@ -74,10 +83,13 @@ export default {
                 });
 
                 this.citas = response.data.data.map(cita => ({
-                    fecha: cita.fecha_realizar_cita.slice(0,-14),
+                    fecha: cita.fecha_realizar_cita.slice(0, -14),
+                    hora: cita.hora_cita,
                     tipoCita: cita.asunto_cita,
                     cedula: cita.cedula_paciente_cita,
-                    estado: cita.estado_cita
+                    estado: cita.estado_cita,
+                    comentario: cita.comentario_doc_cita,
+                    valor: cita.valor_cita
                 }));
 
                 if (response.status !== 200) {
@@ -89,23 +101,17 @@ export default {
             }
         },
         async buscarCitasTodos() {
-            // Aquí se realizaría la búsqueda en la base de datos
-            // Datos de prueba
-            // this.citas = [
-            //     { id: 1, fecha: '2023-10-01', tipoCita: 'Consulta/tratamiento', cedula: '1234567890', estado: 'completado'},
-            //     { id: 2, fecha: '2023-10-02', tipoCita: 'Control', cedula: '0987654321', estado: 'Por asistir' }
-            // ].filter(cita => 
-            //     (this.busquedaCedula ? cita.cedula.includes(this.busquedaCedula) : true) &&
-            //     (this.busquedaFecha ? cita.fecha === this.busquedaFecha : true)
-            // );
             try{
                 const response = await axios.post('/historialCitasTodos');
 
                 this.citas = response.data.data.map(cita => ({
-                    fecha: cita.fecha_realizar_cita.slice(0,-14),
+                    fecha: cita.fecha_realizar_cita.slice(0, -14),
+                    hora: cita.hora_cita,
                     tipoCita: cita.asunto_cita,
                     cedula: cita.cedula_paciente_cita,
-                    estado: cita.estado_cita
+                    estado: cita.estado_cita,
+                    comentario: cita.comentario_doc_cita,
+                    valor: cita.valor_cita
                 }));
 
                 if (response.status !== 200) {

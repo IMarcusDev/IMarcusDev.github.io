@@ -126,6 +126,7 @@ export default {
             this.turnoSeleccionado = turno;
             const calendarStore = useCalendarStore();
             calendarStore.setSelectedTimeSlot(turno);
+            calendarStore.setSelectedTime(turno); // Set the selected time in the store
         },
         esDiaPasado(dia) {
             const fechaActual = new Date();

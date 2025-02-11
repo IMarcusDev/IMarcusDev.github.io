@@ -130,11 +130,11 @@ app.post("/api/login", async (req, res) => {
 
 app.post("/api/agendarPaciente", async (req, res) => {
   try {
-    const { nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita } = req.body;
+    const { nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita } = req.body;
 
-    console.log(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita);
+    console.log(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita);
 
-    if (!nombre_paciente_cita || !apellido_paciente_cita || !cedula_paciente_cita || !asunto_cita || !fecha_registro_cita || !fecha_realizar_cita) {
+    if (!nombre_paciente_cita || !apellido_paciente_cita || !cedula_paciente_cita || !asunto_cita || !fecha_registro_cita || !fecha_realizar_cita || !hora_cita || !valor_cita) {
       return res.status(400).json({ message: "Debe llenar todos los campos" });
     }
 
@@ -152,16 +152,13 @@ app.post("/api/agendarPaciente", async (req, res) => {
 
     const id_pac = paciente[0].id_pac;
 
-    await Queries.addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, null, "pendiente", 1, id_pac);
-
-
+    await Queries.addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, null,"pendiente", 1, id_pac);
 
     res.status(201).json({ message: "La cita fue registrada exitosamente" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
-
 
 app.post("/api/historialCitas", async (req, res) => {
   try{
@@ -287,6 +284,86 @@ app.post('/api/actualizarEstadoCita', async (req, res) => {
     res.status(201).json({ message: "El dependiente fue registrado exitosamente" });
   }catch(error){
     res.status(500).json({ message: "Error al actualizar la cita del paciente"+error});
+  }
+});
+
+app.post("/api/registrarDoctor", async (req, res) => {
+  try {
+      const { Names, SurNames, cedula, email, username, password } = req.body;
+
+      if (!Names || !SurNames || !email || !username || !password || !cedula) {
+          return res.status(400).json({ message: "Debe llenar todos los campos" });
+      }
+
+      const existeUSER = await Queries.getUserName(username);
+
+      if (Array.isArray(existeUSER) && existeUSER.length > 0) {
+        return res.status(409).json({ message: "El nombre de usuario ya está en uso" });
+      }
+
+      const existeEMAILUSERS = await Queries.getDoctorEmail(email);
+
+      if (Array.isArray(existeEMAILUSERS) && existeEMAILUSERS.length > 0) {
+        return res.status(409).json({ message: "El email de usuario ya está en uso" });
+      }
+
+      const cedulaUSERS = await Queries.getDoctorCedula(cedula);
+
+      if (Array.isArray(cedulaUSERS) && cedulaUSERS.length > 0) {
+        return res.status(409).json({ message: "La cédula de usuario ya está en uso" });
+      }      
+
+      const id_users = await Queries.addUserDoctor(username, password);
+
+      await Queries.addDoctorInfo(Names, SurNames, cedula, email, id_users);
+      
+      res.status(201).json({ message: "El usuario se registró correctamente" });
+  } catch (error) {
+      if (error.message === 'El nombre de usuario ya está en uso') {
+          res.status(409).json({ message: error.message });
+      } else {
+          res.status(500).json({ message: error.message });
+      }
+  }
+});
+
+app.post("/api/registrarSecretario", async (req, res) => {
+  try {
+      const { Names, SurNames, cedula, email, username, password } = req.body;
+
+      if (!Names || !SurNames || !email || !username || !password || !cedula) {
+          return res.status(400).json({ message: "Debe llenar todos los campos" });
+      }
+
+      const existeUSER = await Queries.getUserName(username);
+
+      if (Array.isArray(existeUSER) && existeUSER.length > 0) {
+        return res.status(409).json({ message: "El nombre de usuario ya está en uso" });
+      }
+
+      const existeEMAILUSERS = await Queries.getSecretarioEmail(email);
+
+      if (Array.isArray(existeEMAILUSERS) && existeEMAILUSERS.length > 0) {
+        return res.status(409).json({ message: "El email de usuario ya está en uso" });
+      }
+
+      const cedulaUSERS = await Queries.getSecretarioCedula(cedula);
+
+      if (Array.isArray(cedulaUSERS) && cedulaUSERS.length > 0) {
+        return res.status(409).json({ message: "La cédula de usuario ya está en uso" });
+      }      
+
+      const id_users = await Queries.addUserSecretario(username, password);
+
+      await Queries.addSecretarioInfo(Names, SurNames, cedula, email, id_users);
+      
+      res.status(201).json({ message: "El usuario se registró correctamente" });
+  } catch (error) {
+      if (error.message === 'El nombre de usuario ya está en uso') {
+          res.status(409).json({ message: error.message });
+      } else {
+          res.status(500).json({ message: error.message });
+      }
   }
 });
 

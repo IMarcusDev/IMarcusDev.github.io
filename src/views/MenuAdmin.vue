@@ -8,6 +8,8 @@
                 <ul class="menu">
                     <li><router-link to="/MenuAdmin/agendarMedico">Agendar cita</router-link></li>
                     <li><router-link to="/MenuAdmin/historialAdmin">Historial de citas</router-link></li>
+                    <li><router-link to="/MenuAdmin/registrarMedico">Registrar Medico</router-link></li>
+                    <li><router-link to="/MenuAdmin/registrarSecretario">Registrar Secretario</router-link></li>
                 </ul>
                 <router-link to="/">
                     <button class="btnCerrarSesion" @click="logout">Cerrar Sesión <ArrowRightStartOnRectangleIcon class="arrowIcon" /></button>

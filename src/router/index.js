@@ -10,6 +10,8 @@ import InsertarDependientes from '../components/InsertarDependientes.vue';
 import ListaDependientes from '../components/ListaDependientes.vue';
 import AgendarCitaPaciente from '../components/AgendarCitaPaciente.vue';
 import MenuAdmin from '../views/MenuAdmin.vue';
+import registrarDoctor from '../components/registrarDoctor.vue';
+import registrarSecretario from '../components/registrarSecretario.vue';
 
 const routes = [
     {
@@ -80,6 +82,16 @@ const routes = [
                 path: 'agendarMedico',
                 name: 'AgendarAdmin',
                 component: AgendarCita,
+            },
+            {
+                path: 'registrarMedico',
+                name: 'RegistrarMedico',
+                component: registrarDoctor
+            },
+            {
+                path: 'registrarSecretario',
+                name: 'RegistrarSecretario',
+                component: registrarSecretario
             }
         ]
     },

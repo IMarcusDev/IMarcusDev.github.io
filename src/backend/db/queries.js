@@ -18,9 +18,27 @@ async function getPacienteEmail(emailpaciente) {
     }
 };
 
+async function getDoctorEmail(emaildoctor) {
+    try {
+        const [rows] = await pool.execute('SELECT * FROM DOCTORES WHERE email_doc = ?;', [emaildoctor]);
+        return rows;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+};
+
+async function getSecretarioEmail(email) {
+    try {
+        const [rows] = await pool.execute('SELECT * FROM SECRETARIOS WHERE email_sec = ?;', [email]);
+        return rows;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+};
+
 async function getFechaRegistro(fechaRegistro) {
     try {
-        const [rows] = await pool.execute('SELECT * FROM CITA WHERE fecha_registro_cita = ?;', [fechaRegistro]);
+        const [rows] = await pool.execute('SELECT * FROM CITA WHERE fecha_realizar_cita = ?;', [fechaRegistro]);
         return rows;
     } catch (error) {
         throw new Error('Error al obtener información: ' + error);
@@ -30,6 +48,24 @@ async function getFechaRegistro(fechaRegistro) {
 async function getPacienteCedula(cedula) {
     try {
         const [rows] = await pool.execute('SELECT * FROM PACIENTES WHERE cedula_pac = ?;', [cedula]);
+        return rows;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+};
+
+async function getDoctorCedula(cedula) {
+    try {
+        const [rows] = await pool.execute('SELECT * FROM DOCTORES WHERE cedula_doc = ?;', [cedula]);
+        return rows;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+};
+
+async function getSecretarioCedula(cedula) {
+    try {
+        const [rows] = await pool.execute('SELECT * FROM SECRETARIOS WHERE cedula_sec = ?;', [cedula]);
         return rows;
     } catch (error) {
         throw new Error('Error al obtener información: ' + error);
@@ -136,6 +172,26 @@ async function addUser(username, password) {
     }
 }
 
+async function addUserDoctor(username, password) {
+    try {
+        const [result] = await pool.query('INSERT INTO USERS (username_user, password_user, id_rol) VALUES (?, ?, 2);', [username, password]);
+
+        return result.insertId;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+}
+
+async function addUserSecretario(username, password) {
+    try {
+        const [result] = await pool.query('INSERT INTO USERS (username_user, password_user, id_rol) VALUES (?, ?, 4);', [username, password]);
+
+        return result.insertId;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+}
+
 async function addPacienteInfo(Names, SurNames, cedula, fecha_nac, email, id_user) {
     try {
         const [result] = await pool.query(
@@ -148,13 +204,37 @@ async function addPacienteInfo(Names, SurNames, cedula, fecha_nac, email, id_use
     }
 };
 
-async function addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_doc_cita, estado_cita, id_doc, id_pac) {
+async function addDoctorInfo(Names, SurNames, cedula, email, id_user) {
+    try {
+        const [result] = await pool.query(
+            'INSERT INTO DOCTORES (nombres_doc, apellidos_doc, cedula_doc, email_doc, id_user) VALUES (?, ?, ?, ?, ?)', 
+            [Names, SurNames, cedula, email, id_user]
+        );
+        return result;
+    } catch (error) {
+        throw new Error('Error al registrar paciente: ' + error);
+    }
+};
+
+async function addSecretarioInfo(Names, SurNames, cedula, email, id_user) {
+    try {
+        const [result] = await pool.query(
+            'INSERT INTO SECRETARIOS (nombres_sec, apellidos_sec, cedula_sec, email_sec, id_user) VALUES (?, ?, ?, ?, ?)', 
+            [Names, SurNames, cedula, email, id_user]
+        );
+        return result;
+    } catch (error) {
+        throw new Error('Error al registrar paciente: ' + error);
+    }
+};
+
+async function addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, comentario_doc_cita, estado_cita, id_doc, id_pac) {
     try {
         console.log("Entro add cita");
         
         const [result] = await pool.query(
-            'INSERT INTO CITA (nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_doc_cita, estado_cita, id_doc, id_pac) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-            [nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, comentario_doc_cita, estado_cita, id_doc, id_pac]
+            'INSERT INTO CITA (nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, comentario_doc_cita, estado_cita, id_doc, id_pac) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+            [nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, comentario_doc_cita, estado_cita, id_doc, id_pac]
         );
 
         return result;
@@ -244,6 +324,14 @@ async function updateCita(id_cita, nuevoEstado_cita, comentario_cita){
 }
 
 export {
+    addUserSecretario,
+    addSecretarioInfo,
+    getSecretarioCedula,
+    getSecretarioEmail,
+    addUserDoctor,
+    addDoctorInfo,
+    getDoctorCedula,
+    getDoctorEmail,
     updateCita,
     getAllCitas,
     getDataOfPac,

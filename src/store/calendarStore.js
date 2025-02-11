@@ -3,7 +3,8 @@ import { defineStore } from 'pinia';
 export const useCalendarStore = defineStore('calendar', {
     state: () => ({
         selectedDate: null,
-        selectedTimeSlot: null
+        selectedTimeSlot: null,
+        selectedTime: null
     }),
     actions: {
         setSelectedDate(date) {
@@ -11,6 +12,9 @@ export const useCalendarStore = defineStore('calendar', {
         },
         setSelectedTimeSlot(timeSlot) {
             this.selectedTimeSlot = timeSlot;
+        },
+        setSelectedTime(time) {
+            this.selectedTime = time;
         }
     }
 });

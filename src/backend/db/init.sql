@@ -75,6 +75,8 @@ CREATE TABLE CITA (
     asunto_cita VARCHAR(50) NOT NULL,
     fecha_registro_cita DATE NOT NULL,
     fecha_realizar_cita DATE NOT NULL,
+    hora_cita TIME NOT NULL,
+    valor_cita INT NOT NULL,
     comentario_doc_cita VARCHAR(100),
     estado_cita VARCHAR(20) NOT NULL,
     id_doc INTEGER NOT NULL,
@@ -88,7 +90,8 @@ INSERT INTO ROLES (nombre_rol)
 VALUES 
 ('Administrador'),
 ('Doctor'),
-('Paciente');
+('Paciente'),
+('Secretario')
 
 INSERT INTO USERS (username_user, password_user, id_rol) VALUES
 ('admin', 'admin123', 1);

@@ -93,9 +93,22 @@ export default {
             const calendarStore = useCalendarStore();
             return calendarStore.selectedTimeSlot;
         },
+        selectedTime() {
+            const calendarStore = useCalendarStore();
+            return calendarStore.selectedTime;
+        },
         currentUser() {
             const userStore = useUserStore();
             return userStore.currentUser;
+        }
+    },
+    watch: {
+        tipoCita(newVal) {
+            if (newVal === 'Consulta/tratamiento') {
+                this.valorCita = '40 USD';
+            } else if (newVal === 'Control') {
+                this.valorCita = '20 USD';
+            }
         }
     },
     methods: {
@@ -111,10 +124,16 @@ export default {
             const year = d.getFullYear();
             return [year, month, day].join('-');
         },
+        formatTime(time) {
+            const [hour, minute] = time.split(':');
+            return `${hour}:${minute}:00`; // Formato HH:MM:SS
+        },
         async submitForm() {
             const asunto_cita = this.$refs.tipoCita.value;
             const fecha_registro_cita = this.getAppoitmentDate();
             const fecha_realizar_cita = this.formatDate(this.selectedDate);
+            const hora_cita = this.formatTime(this.selectedTime);
+            const valor_cita = this.tipoCita === 'Consulta/tratamiento' ? 40 : 20;
             let nombre_paciente_cita = '', apellido_paciente_cita = '', cedula_paciente_cita = '';
 
             if (this.paciente === 'Mi persona') {
@@ -136,7 +155,9 @@ export default {
                     cedula_paciente_cita,
                     asunto_cita,
                     fecha_registro_cita,
-                    fecha_realizar_cita
+                    fecha_realizar_cita,
+                    hora_cita,
+                    valor_cita
                 });
 
                 if (response.status === 201) {
@@ -198,6 +219,7 @@ export default {
     },
     created(){
         this.llenarCampos();
+        this.valorCita = this.tipoCita === 'Consulta/tratamiento' ? '40 USD' : '20 USD';
     }
 };
 </script>
@@ -281,6 +303,7 @@ export default {
         background-color: #e9ecef;
         border: 1px solid #ccc;
         border-radius: 5px;
+        color: black;
     }
 
     button {

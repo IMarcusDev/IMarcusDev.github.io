@@ -12,19 +12,25 @@
                     <thead>
                         <tr>
                             <th>Fecha</th>
+                            <th>Hora</th>
                             <th>Tipo de Cita</th>
                             <th>Número de Cédula</th>
                             <th>Estado</th>
+                            <th>Comentario del Doctor</th>
+                            <th>Valor</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="cita in citas" :key="cita.id">
                             <td>{{ cita.fecha }}</td>
+                            <td>{{ cita.hora }}</td>
                             <td>{{ cita.tipoCita }}</td>
                             <td>{{ cita.cedula }}</td>
                             <td @mouseover="hoverEstado(cita)" @mouseleave="leaveEstado">{{ cita.estado }}
                                 <button v-if="citaHover === cita && cita.estado === 'pendiente'" @click="abrirModal(cita)">Cambiar estado</button>
                             </td>
+                            <td>{{ cita.comentario }}</td>
+                            <td>{{ cita.valor }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -69,9 +75,12 @@ export default {
             cita: {
                 id: 0,
                 fecha: '',
+                hora: '',
                 tipoCita: '',
                 cedula: '',
-                estado: ''
+                estado: '',
+                comentario: '',
+                valor: ''
             },
             citaHover: null,
         };
@@ -84,9 +93,12 @@ export default {
                 this.citas = response.data.data.map(cita => ({
                     id: cita.id_cita,
                     fecha: cita.fecha_realizar_cita.slice(0,-14),
+                    hora: cita.hora_cita,
                     tipoCita: cita.asunto_cita,
                     cedula: cita.cedula_paciente_cita,
-                    estado: cita.estado_cita
+                    estado: cita.estado_cita,
+                    comentario: cita.comentario_doc_cita,
+                    valor: cita.valor_cita
                 }));
 
                 if (response.status !== 200) {
@@ -106,21 +118,21 @@ export default {
             this.mostrarModal = false;
             this.citaSeleccionada = null;
             this.nuevoEstado = '';
+            this.comentarioDoc = '';
         },
         async guardarEstado() {
             if (this.citaSeleccionada) {
                 try {
-                    console.log("Paso1");
                     const response = await axios.post('/actualizarEstadoCita', {
                         id_cita: this.citaSeleccionada.id,
                         nuevoEstado_cita: this.nuevoEstado,
                         comentario_cita: this.comentarioDoc
                     });
-                    console.log("Paso2");
 
                     if (response.status === 201) {
                         alert('Cita actualizada con exito');
                         this.citaSeleccionada.estado = this.nuevoEstado;
+                        this.citaSeleccionada.comentario = this.comentarioDoc;
                         this.cerrarModal();
                     } else {
                         alert('Error al actualizar el estado de la cita');

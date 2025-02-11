@@ -87,6 +87,19 @@ export default {
         selectedTimeSlot() {
             const calendarStore = useCalendarStore();
             return calendarStore.selectedTimeSlot;
+        },
+        selectedTime() {
+            const calendarStore = useCalendarStore();
+            return calendarStore.selectedTime;
+        }
+    },
+    watch: {
+        tipoCita(newVal) {
+            if (newVal === 'Consulta/tratamiento') {
+                this.valorCita = '40 USD';
+            } else if (newVal === 'Control') {
+                this.valorCita = '20 USD';
+            }
         }
     },
     methods: {
@@ -102,22 +115,30 @@ export default {
             const year = d.getFullYear();
             return [year, month, day].join('-');
         },
+        formatTime(time) {
+            const [hour, minute] = time.split(':');
+            return `${hour}:${minute}:00`; // Formato HH:MM:SS
+        },
         async submitForm() {
-            const tipoCita = this.$refs.tipoCita.value;
-            const nombrePac = this.$refs.nombrePac.value;
-            const apellidoPac = this.$refs.apellidoPac.value;
-            const cedulaPac = this.$refs.cedulaPac.value;
-            const startAppoitmentDate = this.getAppoitmentDate();
-            const endAppoitmentDate = this.formatDate(this.selectedDate);
+            const asunto_cita = this.$refs.tipoCita.value;
+            const fecha_registro_cita = this.getAppoitmentDate();
+            const fecha_realizar_cita = this.formatDate(this.selectedDate);
+            const hora_cita = this.formatTime(this.selectedTime);
+            const valor_cita = this.tipoCita === 'Consulta/tratamiento' ? 40 : 20;
+            const nombre_paciente_cita = this.nombre;
+            const apellido_paciente_cita = this.apellido;
+            const cedula_paciente_cita = this.cedula;
 
             try {
                 const response = await axios.post('/agendarPaciente', {
-                    nombrePac,
-                    apellidoPac,
-                    cedulaPac,
-                    tipoCita,
-                    startAppoitmentDate,
-                    endAppoitmentDate
+                    nombre_paciente_cita,
+                    apellido_paciente_cita,
+                    cedula_paciente_cita,
+                    asunto_cita,
+                    fecha_registro_cita,
+                    fecha_realizar_cita,
+                    hora_cita,
+                    valor_cita
                 });
 
                 if (response.status === 201) {
