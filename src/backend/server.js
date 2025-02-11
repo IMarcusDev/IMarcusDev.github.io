@@ -130,11 +130,11 @@ app.post("/api/login", async (req, res) => {
 
 app.post("/api/agendarPaciente", async (req, res) => {
   try {
-    const { nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita } = req.body;
+    const { nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, id_doc} = req.body;
 
     console.log(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita);
 
-    if (!nombre_paciente_cita || !apellido_paciente_cita || !cedula_paciente_cita || !asunto_cita || !fecha_registro_cita || !fecha_realizar_cita || !hora_cita || !valor_cita) {
+    if (!nombre_paciente_cita || !apellido_paciente_cita || !cedula_paciente_cita || !asunto_cita || !fecha_registro_cita || !fecha_realizar_cita || !hora_cita || !valor_cita || !id_doc) {
       return res.status(400).json({ message: "Debe llenar todos los campos" });
     }
 
@@ -152,7 +152,7 @@ app.post("/api/agendarPaciente", async (req, res) => {
 
     const id_pac = paciente[0].id_pac;
 
-    await Queries.addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, null,"pendiente", 1, id_pac);
+    await Queries.addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, null,"pendiente", id_doc, id_pac);
 
     res.status(201).json({ message: "La cita fue registrada exitosamente" });
   } catch (error) {
@@ -247,6 +247,21 @@ app.post("/api/ListaDependientes", async (req, res) => {
       success: true,
       message: infoDependientes.length > 0 ? "Dependientes obtenidas exitosamente." : "No hay dependientes registrados.",
       data: infoDependientes
+    });
+
+  }catch(error){
+    res.status(500).json({ message: "Error al obtener las citas del pacientes"+error});
+  }
+});
+
+app.post("/api/ListaDoctores", async (req, res) => {
+  try{
+    const infoDoctores = await Queries.getDoctores();
+
+    return res.status(200).json({
+      success: true,
+      message: infoDoctores.length > 0 ? "Doctores obtenidas exitosamente." : "No hay doctores registrados.",
+      data: infoDoctores
     });
 
   }catch(error){

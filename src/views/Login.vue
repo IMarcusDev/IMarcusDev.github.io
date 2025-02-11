@@ -1,48 +1,48 @@
 <template>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
-    <div class="container" id="container">
-        <div class="form-container sign-up">
-            <form @submit.prevent="handleRegister">
-                <h2>Crear una cuenta</h2>
-                <span>o usa tu correo electrónico para registrarte</span>
-                <input type="text" ref="Names" placeholder="Nombres">
-                <input type="text" ref="SurNames" placeholder="Apellidos">
-                <input type="text" ref="cedula" placeholder="Cedula">
-                <input type="date" ref="age">
-                <input type="email" ref="email" placeholder="Correo Electrónico">
-                <input type="text" ref="username" placeholder="Nombre de usuario">
-                <input type="password" ref="password" placeholder="Contraseña">
-                <button type="submit">Registrarse</button>
-                <router-link to="/">
-                    <button>Cancelar</button>
-                </router-link>
-            </form>
-        </div>
-        <div class="form-container sign-in">
-            <form @submit.prevent="handleLogin">
-                <h2>Iniciar Sesión</h2>
-                <span>o usa tu correo electrónico y contraseña</span>
-                <input type="text" ref="loginUsername" placeholder="Nombre de usuario">
-                <input type="password" ref="loginPassword" placeholder="Contraseña">
-                <a href="#">¿Olvidaste tu contraseña?</a>
-                <button>Iniciar Sesión</button>
-                <router-link to="/">
-                    <button>Cancelar</button>
-                </router-link>
-            </form>
-        </div>
-        <div class="toggle-container">
-            <div class="toggle">
-                <div class="toggle-panel toggle-left">
-                    <h1>¡Bienvenido de nuevo!</h1>
-                    <p>Ingresa tus datos personales para acceder a todas las funciones del sitio</p>
-                    <button class="hidden" id="login">Iniciar Sesión</button>
-                </div>
-                <div class="toggle-panel toggle-right">
-                    <h1>¡Hola!</h1>
-                    <p>Regístrate con tus datos personales para acceder a todas las funciones del sitio</p>
-                    <button class="hidden" id="register">Registrarse</button>
+    <div id="backgroundLogin">
+        <div class="container" id="container">
+            <div class="form-container sign-up">
+                <form @submit.prevent="handleRegister">
+                    <h2>Crear una cuenta</h2>
+                    <input type="text" ref="Names" placeholder="Nombres">
+                    <input type="text" ref="SurNames" placeholder="Apellidos">
+                    <input type="text" ref="cedula" placeholder="Cedula">
+                    <input type="date" ref="age">
+                    <input type="email" ref="email" placeholder="Correo Electrónico">
+                    <input type="text" ref="username" placeholder="Nombre de usuario">
+                    <input type="password" ref="password" placeholder="Contraseña">
+                    <button type="submit">Registrarse</button>
+                    <router-link to="/">
+                        <button>Cancelar</button>
+                    </router-link>
+                </form>
+            </div>
+            <div class="form-container sign-in">
+                <form @submit.prevent="handleLogin">
+                    <h2>Iniciar Sesión</h2>
+                    <span>o usa tu cedula y contraseña</span>
+                    <input type="text" ref="loginUsername" placeholder="Nombre de usuario">
+                    <input type="password" ref="loginPassword" placeholder="Contraseña">
+                    <a href="#">¿Olvidaste tu contraseña?</a>
+                    <button>Iniciar Sesión</button>
+                    <router-link to="/">
+                        <button>Cancelar</button>
+                    </router-link>
+                </form>
+            </div>
+            <div class="toggle-container">
+                <div class="toggle">
+                    <div class="toggle-panel toggle-left">
+                        <h1>¡Bienvenido de nuevo!</h1>
+                        <p>Ingresa tus datos personales para acceder a todas las funciones del sitio</p>
+                        <button class="hidden" id="login">Iniciar Sesión</button>
+                    </div>
+                    <div class="toggle-panel toggle-right">
+                        <h1>¡Hola!</h1>
+                        <p>Regístrate con tus datos personales para acceder a todas las funciones del sitio</p>
+                        <button class="hidden" id="register">Registrarse</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -166,13 +166,17 @@ export default {
 body{
     background-color: #c9d6ff;
     background: linear-gradient(to right, #e2e2e2, #c9d6ff);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
     height: 50vh;
     max-height: 50vh;
     margin: 0;
+}
+
+#backgroundLogin{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .container{
@@ -185,8 +189,6 @@ body{
     height: 600px;
     max-width: 100%;
     min-height: 480px;
-    margin-left: calc(30% - 10px);
-    margin-top: calc(15% - 10px);
 }    
 
 
@@ -199,6 +201,7 @@ body{
 
 .container span{
     font-size: 12px;
+    color: black;
 }
 
 .container a{

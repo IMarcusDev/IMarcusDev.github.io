@@ -174,7 +174,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        border-radius: 8px 0 0 8px; /* Updated border-radius */
+        border-radius: 8px 0 0 8px;
     }
 
     .form-content{
@@ -234,6 +234,7 @@ export default {
         background-color: #e9ecef;
         border: 1px solid #ccc;
         border-radius: 5px;
+        color: black;
     }
 
     button {

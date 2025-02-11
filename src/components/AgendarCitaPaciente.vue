@@ -23,11 +23,20 @@
                         <select name="paciente" id="paciente" ref="paciente" v-model="paciente">
                             <option value="Mi persona">Mi persona</option>
                             <option v-for="dependiente in dependientes" :key="dependiente.cedula_dep" :value="dependiente.cedula_dep">
-                                {{ dependiente.nombre_dep }}
+                                {{ dependiente.nombre_dep + ' ' + dependiente.apellido_dep}}
                             </option>
                         </select>
                     </div>
                     
+                    <div class="form-group">
+                        <label for="medico">Seleccione al medico</label>
+                        <select name="medico" id="medico" ref="medico" v-model="medico">
+                            <option v-for="doctor in doctores" :key="doctor.id_doc" :value="doctor.id_doc">
+                                {{ doctor.nombres_doc + ' ' + doctor.apellidos_doc}}
+                            </option>
+                        </select>
+                    </div>
+
                     <div class="form-group">
                         <label for="asunto">Descripción de la Cita</label>
                         <textarea ref="descripcionPac" placeholder="Descripción de la cita" name="asunto" id="asunto" v-model="asunto"></textarea>
@@ -71,9 +80,11 @@ export default {
             asunto: '',
             valorCita: '',
             metodoPago: 'Credito',
+            medico: '',
             nombre: '',  
             apellido: '',
             dependientes: [],
+            doctores: [],
             paciente: 'Mi persona',
             DatosPaciente: {
                 nombres_pac: '',
@@ -81,7 +92,7 @@ export default {
                 cedula_pac: '',
                 fecha_nac_pac: '',
                 email_pac: ''
-            }
+            },
         };
     },
     computed: {
@@ -135,6 +146,8 @@ export default {
             const hora_cita = this.formatTime(this.selectedTime);
             const valor_cita = this.tipoCita === 'Consulta/tratamiento' ? 40 : 20;
             let nombre_paciente_cita = '', apellido_paciente_cita = '', cedula_paciente_cita = '';
+            const selectedDoctor = this.doctores.find(doc => doc.id_doc === this.medico);
+            const id_doc = selectedDoctor.id_doc;
 
             if (this.paciente === 'Mi persona') {
                 const pac = await this.datosUser();
@@ -148,6 +161,7 @@ export default {
                 cedula_paciente_cita = selectedDependiente.cedula_dep;
             }
 
+
             try {
                 const response = await axios.post('/agendarPaciente', {
                     nombre_paciente_cita,
@@ -157,7 +171,8 @@ export default {
                     fecha_registro_cita,
                     fecha_realizar_cita,
                     hora_cita,
-                    valor_cita
+                    valor_cita,
+                    id_doc
                 });
 
                 if (response.status === 201) {
@@ -170,7 +185,7 @@ export default {
                 alert('Error al registrar la cita');
             }
         },
-        async llenarCampos() {
+        async llenarCamposDependientes() {
             try {
                 const user = this.currentUser;
 
@@ -186,11 +201,29 @@ export default {
                 }));
 
                 if (response.status !== 200) {
-                    alert('Error al cargar las citas');
+                    alert('Error al cargar las dependientes');
                 }
             } catch (error) {
                 console.error('Error fetching dependientes:', error);
                 this.dependientes = [];
+            }
+        },
+        async llenarCamposDoctores(){
+            try{
+                const response = await axios.post('/ListaDoctores');
+
+                this.doctores = response.data.data.map(doctor => ({
+                    id_doc: doctor.id_doc,
+                    nombres_doc: doctor.nombres_doc,
+                    apellidos_doc: doctor.apellidos_doc
+                }));
+
+                if (response.status !== 200) {
+                    alert('Error al cargar los doctores');
+                }
+            }catch(error){
+                console.error('Error fetching doctores:', error);
+                this.doctores = [];
             }
         },
         async datosUser(){
@@ -218,7 +251,8 @@ export default {
         }
     },
     created(){
-        this.llenarCampos();
+        this.llenarCamposDependientes();
+        this.llenarCamposDoctores();
         this.valorCita = this.tipoCita === 'Consulta/tratamiento' ? '40 USD' : '20 USD';
     }
 };

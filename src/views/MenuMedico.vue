@@ -61,7 +61,7 @@ export default {
 <style scoped>
 .content {
     display: flex;
-    width: 100%;
+    width: 100%;   
     font-family: 'Arial', sans-serif;
 }
 
@@ -72,7 +72,7 @@ export default {
 }
 
 .menu-lateral {
-    height: 95vh;
+    height: 100vh;
     width: 250px;
     background-color: #007bff;
     color: #ffffff;

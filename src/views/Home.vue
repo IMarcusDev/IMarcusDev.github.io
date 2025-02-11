@@ -26,7 +26,7 @@
         <section class="navMenu">
             <div class="menu-container">
                 <nav>
-                    <h2>Tu sonrisa es nuestra prioridad, porque sabemos que al renovarla, transformas tu vida. Por eso la sonrisa que siempre soñaste, con nosotros es posible.</h2>
+                    <h2>Tu sonrisa es nuestra prioridad, porque sabemos que al renovarla, transformas tu vida.</h2>
                 </nav>
             </div>
             <div class="directCita">
@@ -632,5 +632,9 @@ footer .icono:hover img {
 
 .niceComments{
     color: black;
+}
+
+nav h2{
+    text-align: center;
 }
 </style>

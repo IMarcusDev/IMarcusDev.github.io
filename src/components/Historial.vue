@@ -18,6 +18,7 @@
                             <th>Estado</th>
                             <th>Comentario del Doctor</th>
                             <th>Valor</th>
+                            <th>Doctor</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -29,6 +30,7 @@
                             <td>{{ cita.estado }}</td>
                             <td>{{ cita.comentario }}</td>
                             <td>{{ cita.valor }}</td>
+                            <td>{{ cita.nombre_doc }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -89,7 +91,8 @@ export default {
                     cedula: cita.cedula_paciente_cita,
                     estado: cita.estado_cita,
                     comentario: cita.comentario_doc_cita,
-                    valor: cita.valor_cita
+                    valor: cita.valor_cita,
+                    nombre_doc: cita.nombres_doc + ' ' + cita.apellidos_doc
                 }));
 
                 if (response.status !== 200) {
@@ -137,7 +140,7 @@ export default {
 
 <style scoped>
 .historial {
-    width: 80%;
+    width: 90%;
     margin: 20px auto;
     font-family: Arial, sans-serif;
     background-color: white;
@@ -209,11 +212,9 @@ h2 {
 .tabla-citas {
     width: 100%;
     border-collapse: collapse;
-    margin-left: 30px;
 }
 
 .tabla-citas table{
-    width: 90%;
     border-color: black
 }
 

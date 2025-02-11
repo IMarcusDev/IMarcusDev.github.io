@@ -1,3 +1,4 @@
+import { query } from 'express';
 import pool from '../config/db.js'
 
 async function getUserName(username) {
@@ -63,6 +64,15 @@ async function getDoctorCedula(cedula) {
     }
 };
 
+async function getDoctores(){
+    try{
+        const [rows] = await pool.execute('SELECT id_doc, nombres_doc, apellidos_doc FROM DOCTORES')
+        return rows;
+    }catch(error){
+        throw new Error('Error al obtener información: ' + error);
+    }
+}
+
 async function getSecretarioCedula(cedula) {
     try {
         const [rows] = await pool.execute('SELECT * FROM SECRETARIOS WHERE cedula_sec = ?;', [cedula]);
@@ -110,7 +120,7 @@ async function getCitaId(id_cita) {
 
 async function getCitaForIdOfPac(id_pac){
     try{
-        const[rows] = await pool.query('SELECT * FROM CITA WHERE id_pac= ?;', [id_pac])
+        const[rows] = await pool.query('SELECT * FROM CITA c, DOCTORES d WHERE c.id_doc = d.id_doc and c.id_pac = ?;', [id_pac])
         return rows;
     } catch(error){
         throw new Error('Error al obtener información: ' + error);
@@ -324,6 +334,7 @@ async function updateCita(id_cita, nuevoEstado_cita, comentario_cita){
 }
 
 export {
+    getDoctores,
     addUserSecretario,
     addSecretarioInfo,
     getSecretarioCedula,
