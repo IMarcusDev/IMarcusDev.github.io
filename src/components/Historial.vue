@@ -114,7 +114,8 @@ export default {
                     cedula: cita.cedula_paciente_cita,
                     estado: cita.estado_cita,
                     comentario: cita.comentario_doc_cita,
-                    valor: cita.valor_cita
+                    valor: cita.valor_cita,
+                    nombre_doc: cita.nombres_doc + ' ' + cita.apellidos_doc
                 }));
 
                 if (response.status !== 200) {

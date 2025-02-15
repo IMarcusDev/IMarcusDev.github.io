@@ -85,7 +85,44 @@ export default {
             citaHover: null,
         };
     },
+    computed: {
+        currentUser() {
+            const userStore = useUserStore();
+            return userStore.currentUser;
+        },
+        currentState(){
+            const stateStore = useStateStore();
+            return stateStore;
+        }
+    },
     methods: {
+        async buscarCitas() {
+            const user = this.currentUser;
+
+            try {
+                const response = await axios.post('/historialCitas', {
+                    user
+                });
+
+                this.citas = response.data.data.map(cita => ({
+                    fecha: cita.fecha_realizar_cita.slice(0, -14),
+                    hora: cita.hora_cita,
+                    tipoCita: cita.asunto_cita,
+                    cedula: cita.cedula_paciente_cita,
+                    estado: cita.estado_cita,
+                    comentario: cita.comentario_doc_cita,
+                    valor: cita.valor_cita,
+                    nombre_doc: cita.nombres_doc + ' ' + cita.apellidos_doc
+                }));
+
+                if (response.status !== 200) {
+                    alert('Error al cargar las citas');
+                }
+            } catch (error) {
+                console.error('Error al buscar citas:', error);
+                this.citas = [];
+            }
+        },
         async buscarCitasTodos() {
             try{
                 const response = await axios.post('/historialCitasTodos');
@@ -156,7 +193,13 @@ export default {
         }
     },
     async created() {
-        await this.buscarCitasTodos();
+        const state = this.currentState.currentUserType;
+
+        if (state === 'administrador'){
+            await this.buscarCitasTodos();
+        }else if (state === 'medico'){
+            await this.buscarCitas();
+        }
     }
 };
 </script>

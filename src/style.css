@@ -1,12 +1,16 @@
-
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --primary-color: #007BFF;
+  --secondary-color: #0056b3;
+  --background-color: #f4f4f4;
+  --text-color: #333;
+  --white-color: #fff;
+  --border-radius: 10px;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #a6bddc;
-
+  color: var(--text-color);
+  background-color: var(--background-color);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -15,11 +19,11 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--primary-color);
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--secondary-color);
 }
 
 h1 {
@@ -28,18 +32,17 @@ h1 {
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
+  border-radius: var(--border-radius);
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  border: none;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: background-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  background-color: var(--secondary-color);
 }
 button:focus,
 button:focus-visible {
@@ -48,7 +51,10 @@ button:focus-visible {
 
 .card {
   padding: 2em;
-} 
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  background-color: var(--white-color);
+}
 
 #app {
   margin: 0 auto;
@@ -56,15 +62,293 @@ button:focus-visible {
   text-align: center;
 }
 
+.features-section {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: var(--white-color);
+    color: var(--text-color);
+    margin-bottom: 40px;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+}
+
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.feature {
+    flex: 1;
+    min-width: 250px;
+    max-width: 300px;
+    padding: 20px;
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+}
+
+.feature i {
+    font-size: 40px;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.feature h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.feature p {
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.servicios-container {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: var(--white-color);
+    color: var(--text-color);
+    margin-bottom: 40px;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+}
+
+.servicios {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.servicio-card {
+    flex: 1;
+    min-width: 250px;
+    max-width: 300px;
+    padding: 20px;
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+}
+
+.testimonios {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: var(--white-color);
+    color: var(--text-color);
+    margin-bottom: 40px;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+}
+
+.testimonios-carrusel {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.testimonio {
+    flex: 0 0 auto;
+    min-width: 250px;
+    max-width: 300px;
+    padding: 20px;
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var (--box-shadow);
+    text-align: center;
+}
+
+.testimonio-foto {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+
+.testimonios-carrusel {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.testimonio {
+    flex: 0 0 auto;
+    min-width: 250px;
+    max-width: 300px;
+    padding: 20px;
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+}
+
+.testimonio-foto {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+
+.faq {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.faq-item {
+    padding: 20px;
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: left;
+}
+
+.faq-item h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.faq-item p {
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.contacto-container {
+    padding: 50px 20px;
+    background-color: var(--white-color);
+    color: var(--text-color);
+    margin-bottom: 40px;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+
+.contacto-container .form-group {
+    margin-bottom: 20px;
+}
+
+.contacto-container label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.contacto-container input,
+.contacto-container textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+}
+
+.contacto-container button {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.contacto-container button:hover {
+    background-color: var(--secondary-color);
+}
+
+.faq-section, .contacto-container {
+    flex: 1;
+    min-width: 300px;
+}
+
+.faq-section {
+    padding-right: 20px;
+}
+
+.contacto-container {
+    padding-left: 20px;
+}
+
+footer {
+    padding: 40px 20px;
+    text-align: center;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.infoFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logoFooter, .infoDerecha {
+    flex: 1;
+    margin: 20px;
+}
+
+.fotoFooter {
+    width: 150px;
+    margin-bottom: 20px;
+    background-color: #f4e7d1;
+    padding: 10px;
+    border-radius: var(--border-radius);
+}
+
+footer p {
+    font-size: 14px;
+    margin: 10px;
+    color: #d1d1d1;
+}
+
+footer h2 {
+    font-size: 24px;
+    color: #f4e7d1;
+    margin-bottom: 10px;
+}
+
+footer a {
+    color: #f4e7d1;
+    text-decoration: none;
+}
+
+footer .redesSociales {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+footer .icono {
+    margin: 0 10px;
+}
+
+footer .icono img {
+    width: 25px;
+    height: 25px;
+    border-radius: var(--border-radius);
+}
+
+footer .icono:hover img {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: var(--text-color);
+    background-color: var(--background-color);
   }
   a:hover {
-    color: #747bff;
+    color: var(--secondary-color);
   }
   button {
-    background-color: #f9f9f9;
+    background-color: var(--white-color);
   }
 }

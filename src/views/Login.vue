@@ -5,13 +5,20 @@
             <div class="form-container sign-up">
                 <form @submit.prevent="handleRegister">
                     <h2>Crear una cuenta</h2>
-                    <input type="text" ref="Names" placeholder="Nombres">
-                    <input type="text" ref="SurNames" placeholder="Apellidos">
-                    <input type="text" ref="cedula" placeholder="Cedula">
-                    <input type="date" ref="age">
-                    <input type="email" ref="email" placeholder="Correo Electrónico">
-                    <input type="text" ref="username" placeholder="Nombre de usuario">
-                    <input type="password" ref="password" placeholder="Contraseña">
+                    <input type="text" ref="Names" placeholder="Nombres" v-model="registerForm.Names" @input="validateNames">
+                    <span v-if="errors.Names">{{ errors.Names }}</span>
+                    <input type="text" ref="SurNames" placeholder="Apellidos" v-model="registerForm.SurNames" @input="validateSurNames">
+                    <span v-if="errors.SurNames">{{ errors.SurNames }}</span>
+                    <input type="text" ref="cedula" placeholder="Cedula" v-model="registerForm.cedula" @input="validateCedula">
+                    <span v-if="errors.cedula">{{ errors.cedula }}</span>
+                    <input type="date" ref="age" v-model="registerForm.age" @input="validateAge">
+                    <span v-if="errors.age">{{ errors.age }}</span>
+                    <input type="email" ref="email" placeholder="Correo Electrónico" v-model="registerForm.email" @input="validateEmail">
+                    <span v-if="errors.email">{{ errors.email }}</span>
+                    <input type="text" ref="username" placeholder="Nombre de usuario" v-model="registerForm.username" @input="validateUsername">
+                    <span v-if="errors.username">{{ errors.username }}</span>
+                    <input type="password" ref="password" placeholder="Contraseña" v-model="registerForm.password" @input="validatePassword">
+                    <span v-if="errors.password">{{ errors.password }}</span>
                     <button type="submit">Registrarse</button>
                     <router-link to="/">
                         <button>Cancelar</button>
@@ -22,8 +29,10 @@
                 <form @submit.prevent="handleLogin">
                     <h2>Iniciar Sesión</h2>
                     <span>o usa tu cedula y contraseña</span>
-                    <input type="text" ref="loginUsername" placeholder="Nombre de usuario">
-                    <input type="password" ref="loginPassword" placeholder="Contraseña">
+                    <input type="text" ref="loginUsername" placeholder="Nombre de usuario" v-model="loginForm.username" @input="validateLoginUsername">
+                    <span v-if="errors.loginUsername">{{ errors.loginUsername }}</span>
+                    <input type="password" ref="loginPassword" placeholder="Contraseña" v-model="loginForm.password" @input="validateLoginPassword">
+                    <span v-if="errors.loginPassword">{{ errors.loginPassword }}</span>
                     <a href="#">¿Olvidaste tu contraseña?</a>
                     <button>Iniciar Sesión</button>
                     <router-link to="/">
@@ -57,6 +66,24 @@ import { useLoginStore } from '../store/loginStore';
 
 export default {
     name: 'Login',
+    data() {
+        return {
+            registerForm: {
+                Names: '',
+                SurNames: '',
+                cedula: '',
+                age: '',
+                email: '',
+                username: '',
+                password: ''
+            },
+            loginForm: {
+                username: '',
+                password: ''
+            },
+            errors: {}
+        };
+    },
     mounted() {
         const container = document.getElementById('container');
         const registerBtn = document.getElementById('register');
@@ -84,9 +111,72 @@ export default {
         }
     },
     methods: {
+        validateNames() {
+            const regex = /^[a-zA-Z\s]*$/;
+            this.errors.Names = !regex.test(this.registerForm.Names) ? 'El nombre no puede contener números' : '';
+        },
+        validateSurNames() {
+            const regex = /^[a-zA-Z\s]*$/;
+            this.errors.SurNames = !regex.test(this.registerForm.SurNames) ? 'El apellido no puede contener números' : '';
+        },
+        validateCedula() {
+            const cedula = this.registerForm.cedula;
+            if (cedula.length !== 10) {
+                this.errors.cedula = 'La cédula debe tener 10 dígitos';
+                return;
+            }
+            const digits = cedula.split('').map(Number);
+            const provinceCode = parseInt(cedula.substring(0, 2), 10);
+            if (provinceCode < 1 || provinceCode > 24) {
+                this.errors.cedula = 'Código de provincia no válido';
+                return;
+            }
+            const lastDigit = digits.pop();
+            const sum = digits.reduce((acc, digit, index) => {
+                if (index % 2 === 0) {
+                    digit *= 2;
+                    if (digit > 9) digit -= 9;
+                }
+                return acc + digit;
+            }, 0);
+            const validator = 10 - (sum % 10);
+            this.errors.cedula = validator === lastDigit ? '' : 'Cédula no válida';
+        },
+        validateAge() {
+            this.errors.age = !this.registerForm.age ? 'La fecha de nacimiento es obligatoria' : '';
+        },
+        validateEmail() {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            this.errors.email = !regex.test(this.registerForm.email) ? 'Correo electrónico no válido' : '';
+        },
+        validateUsername() {
+            const regex = /^[a-zA-Z0-9_]*$/;
+            this.errors.username = !regex.test(this.registerForm.username) ? 'El nombre de usuario solo puede contener letras, números y guiones bajos' : '';
+        },
+        validatePassword() {
+            this.errors.password = this.registerForm.password.length < 8 ? 'La contraseña debe tener al menos 8 caracteres' : '';
+        },
+        validateLoginUsername() {
+            const regex = /^[a-zA-Z0-9_]*$/;
+            this.errors.loginUsername = !regex.test(this.loginForm.username) ? 'El nombre de usuario solo puede contener letras, números y guiones bajos' : '';
+        },
+        validateLoginPassword() {
+            this.errors.loginPassword = !this.loginForm.password ? 'La contraseña es obligatoria' : '';
+        },
         async handleLogin() {
-            const username = this.$refs.loginUsername.value;
-            const password = this.$refs.loginPassword.value;
+            this.validateLoginUsername();
+            this.validateLoginPassword();
+
+            if (this.errors.loginUsername || this.errors.loginPassword) {
+                return;
+            }
+
+            const { username, password } = this.loginForm;
+
+            if (!username || !password) {
+                alert('Por favor, complete todos los campos');
+                return;
+            }
 
             try {
                 const response = await axios.post('/login', { username, password });
@@ -119,20 +209,31 @@ export default {
             }
         },
         async handleRegister() {
-            const Names = this.$refs.Names.value;
-            const SurNames = this.$refs.SurNames.value;
-            const cedula = this.$refs.cedula.value;
-            const fecha_nac = this.$refs.age.value;
-            const email = this.$refs.email.value;
-            const username = this.$refs.username.value;
-            const password = this.$refs.password.value;
+            this.validateNames();
+            this.validateSurNames();
+            this.validateCedula();
+            this.validateAge();
+            this.validateEmail();
+            this.validateUsername();
+            this.validatePassword();
+
+            if (this.errors.Names || this.errors.SurNames || this.errors.cedula || this.errors.age || this.errors.email || this.errors.username || this.errors.password) {
+                return;
+            }
+
+            const { Names, SurNames, cedula, age, email, username, password } = this.registerForm;
+
+            if (!Names || !SurNames || !cedula || !age || !email || !username || !password) {
+                alert('Por favor, complete todos los campos');
+                return;
+            }
 
             try {
                 const response = await axios.post('/register', {
                     Names,
                     SurNames,
                     cedula,
-                    fecha_nac,
+                    fecha_nac: age,
                     email,
                     username,
                     password

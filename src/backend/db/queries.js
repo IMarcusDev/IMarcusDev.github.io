@@ -120,12 +120,21 @@ async function getCitaId(id_cita) {
 
 async function getCitaForIdOfPac(id_pac){
     try{
-        const[rows] = await pool.query('SELECT * FROM CITA c, DOCTORES d WHERE c.id_doc = d.id_doc and c.id_pac = ?;', [id_pac])
+        const[rows] = await pool.query('SELECT * FROM CITA c, DOCTORES d WHERE c.id_doc = d.id_doc and c.id_pac = ?;', [id_pac]);
         return rows;
     } catch(error){
         throw new Error('Error al obtener información: ' + error);
     }
 
+}
+
+async function getCitaForIdOfDoc(id_doc){
+    try{
+        const[rows] = await pool.query('SELECT * FROM CITA WHERE id_doc = ?;', [id_doc]);
+        return rows;
+    } catch(error){
+        throw new Error('Error al obtener información: ' + error);
+    }
 }
 
 async function getDependantForIdOfPac(id_pac){
@@ -298,12 +307,19 @@ async function getIdOfUser(username) {
     }
 }
 
-async function getIdOfPac(id_user) {
+async function getId(id_user) {
     try {
-        const [rows] = await pool.query('SELECT id_pac FROM PACIENTES WHERE id_user = ?;', [id_user]);
-        return rows.length > 0 ? rows[0].id_pac : null;
+        let [rows] = await pool.query('SELECT id_pac FROM PACIENTES WHERE id_user = ?;', [id_user]);
+        if (rows.length > 0) {
+            return rows[0].id_pac;
+        }
+        [rows] = await pool.query('SELECT id_doc FROM DOCTORES WHERE id_user = ?;', [id_user]);
+        if (rows.length > 0) {
+            return rows[0].id_doc;
+        }
+        return null;
     } catch (error) {
-        throw new Error('Error al obtener el ID del paciente: ' + error);
+        throw new Error('Error al obtener el ID del usuario: ' + error);
     }
 }
 
@@ -318,7 +334,7 @@ async function getDataOfPac (id_pac){
 
 async function getAllCitas (){
     try{
-        const[rows] = await pool.query('SELECT * FROM CITA;')
+        const[rows] = await pool.query('SELECT * FROM CITA c, DOCTORES d WHERE c.id_doc = d.id_doc;')
         return rows;
     }catch (error){
         throw new Error('Error al obtener los datos del paciente: ' + error);
@@ -365,7 +381,8 @@ export {
     getDependentsByCedula,
     getCitaForIdOfPac,
     getIdOfUser,
-    getIdOfPac,
-    getDependantForIdOfPac
+    getId,
+    getDependantForIdOfPac,
+    getCitaForIdOfDoc
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <router-view /> <!-- Aquí se cargarán las vistas -->
+  <router-view />
 </template>
 
 <script>

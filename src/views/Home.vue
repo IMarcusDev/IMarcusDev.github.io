@@ -39,121 +39,197 @@
         </section>
     </header>    
 
+    <div class="content">
+        <!-- Sección de características -->
+        <section class="features-section">
+            <h1>Nuestras Características</h1>
+            <div class="features">
+                <div class="feature">
+                    <font-awesome-icon icon="tooth" />
+                    <h2>Profesionales Calificados</h2>
+                    <p>Contamos con un equipo de dentistas altamente calificados y con experiencia.</p>
+                </div>
+                <div class="feature">
+                    <font-awesome-icon icon="heart" />
+                    <h2>Atención Personalizada</h2>
+                    <p>Ofrecemos atención personalizada para cada uno de nuestros pacientes.</p>
+                </div>
+                <div class="feature">
+                    <font-awesome-icon icon="clock" />
+                    <h2>Horarios Flexibles</h2>
+                    <p>Disponemos de horarios flexibles para adaptarnos a tus necesidades.</p>
+                </div>
+            </div>
+        </section>
 
-        <div class="content">
-            <section class="sliderHome">
-                <div class="slider">
-                    <div class="slider-container">
-                        <!-- Imagen actual del slider -->
-                        <div
-                            class="slider-item"
-                            :style="{ backgroundImage: 'url(' + sliderImgs[itemIndex].src + ')' }"
-                        >
-                            <div class="item-title__container">
-                                <h2 class="item-title__title">{{ sliderImgs[itemIndex].title }}</h2>
-                            </div>
+        <!-- Slider de imágenes -->
+        <section class="sliderHome">
+            <div class="slider">
+                <div class="slider-container">
+                    <!-- Imagen actual del slider -->
+                    <div
+                        class="slider-item"
+                        :style="{ backgroundImage: 'url(' + sliderImgs[itemIndex].src + ')' }"
+                    >
+                        <div class="item-title__container">
+                            <h2 class="item-title__title">{{ sliderImgs[itemIndex].title }}</h2>
                         </div>
-                    
-                        <!-- Controles -->
-                        <button class="arrow prev-item" @click="prevSlide">‹</button>
-                        <button class="arrow next-item" @click="nextSlide">›</button>
-                    
-                        <!-- Paginación -->
-                        <ul class="pagination">
-                            <li v-for="(img, index) in sliderImgs" :key="index">
-                                <button
-                                    class="dot"
-                                    :class="{ active: index === itemIndex }"
-                                    @click="goToSlide(index)"
-                                ></button>
-                            </li>
-                        </ul>
+                    </div>
+                
+                    <!-- Controles -->
+                    <button class="arrow prev-item" @click="prevSlide">‹</button>
+                    <button class="arrow next-item" @click="nextSlide">›</button>
+                
+                    <!-- Paginación -->
+                    <ul class="pagination">
+                        <li v-for="(img, index) in sliderImgs" :key="index">
+                            <button
+                                class="dot"
+                                :class="{ active: index === itemIndex }"
+                                @click="goToSlide(index)"
+                            ></button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Servicios destacados -->
+        <section class="servicios-container">
+            <h1>Algunos de nuestros servicios más solicitados</h1>
+            <section class="servicios">
+                <div class="servicio-card">
+                    <h2>Limpieza Dental</h2>
+                    <p>Mantén tus dientes limpios y saludables con nuestras limpiezas dentales profesionales.</p>
+                </div>
+                <div class="servicio-card">
+                    <h2>Ortodoncia</h2>
+                    <p>Corrige la alineación de tus dientes con nuestros tratamientos de ortodoncia.</p>
+                </div>
+                <div class="servicio-card">
+                    <h2>Blanqueamiento Dental</h2>
+                    <p>Obtén una sonrisa más blanca y brillante con nuestros tratamientos de blanqueamiento dental.</p>
+                </div>
+                <div class="servicio-card">
+                    <h2>Extracciones</h2>
+                    <p>Realizamos extracciones dentales de manera segura y sin dolor.</p>
+                </div>
+            </section>
+        </section>
+
+        <!-- Promociones -->
+        <section class="promociones-container">
+            <h1>Promociones</h1>
+            <section class="promociones">
+                <div class="prom-card">
+                    <img src="/imgSlider/prom1.webp" alt="Promoción Ortodoncia">
+                    <div class="prom-info">
+                        <h2>Descuento en Ortodoncia</h2>
+                        <p>Aprovecha un 20% de descuento en tratamientos de ortodoncia.</p>
+                    </div>
+                </div>
+                <div class="prom-card">
+                    <img src="/imgSlider/prom2.webp" alt="Promoción Blanqueamiento">
+                    <div class="prom-info">
+                        <h2>Blanqueamiento Dental</h2>
+                        <p>Obtén un blanqueamiento dental a mitad de precio.</p>
+                    </div>
+                </div>
+                <div class="prom-card">
+                    <img src="/imgSlider/prom3.webp" alt="Promoción Endodoncia">
+                    <div class="prom-info">
+                        <h2>Descuento en Endodoncia</h2>
+                        <p>Recibe un 15% de descuento en tratamientos de endodoncia.</p>
                     </div>
                 </div>
             </section>
-            <section class="servicios-container">
-                <h1>Algunos de nuestros servicios mas solicitados</h1>
-                <section class="servicios">
-                    <div class="servLimpieza">
+            
+            <div class="btnAgendar">
+                <router-link to="/Login">
+                    <button type="button" id="btnAgendarPromociones" class="btnAgendarProm">
+                        Agenda Ahora
+                        <ArrowLongRightIcon class="arrowIcon" />
+                    </button>
+                </router-link>
+            </div>
+        </section>
 
-                    </div>
-                    <div class="servOrtodoncia">
-
-                    </div>
-                    <div class="servBlanquiamiento">
-
-                    </div>
-                    <div class="servExtracciones">
-
-                    </div>
-                </section>
-                <section class="servicios">
-                    <div class="servLimpieza">
-
-                    </div>
-                    <div class="servOrtodoncia">
-
-                    </div>
-                    <div class="servBlanquiamiento">
-
-                    </div>
-                    <div class="servExtracciones">
-
-                    </div>
-                </section>
-            </section>
-            <section class="promociones-container">
-                <h1>Promociones</h1>
-                <section class="promociones">
-                    <div class="promOrtodoncia">
-                        <img src="/imgSlider/prom1.webp" width="100%" height="100%">
-                    </div>
-                    <div class="promBlanqueamiento">
-                        <img src="/imgSlider/prom2.webp" width="100%" height="100%">
-                    </div>
-                    <div class="promEndodoncia">
-                        <img src="/imgSlider/prom3.webp" width="100%" height="100%">
-                    </div>
-                </section>
-                
-                <div class="btnAgendar">
-                    <router-link to="/Login">
-                        <button type="button" id="btnAgendarPromociones" class="btnAgendarProm">
-                            Agenda Ahora
-                            <ArrowLongRightIcon class="arrowIcon" />
-                        </button>
-                    </router-link>
+        <!-- Testimonios -->
+        <section class="testimonios-container">
+            <h1>Testimonios de nuestros pacientes</h1>
+            <div class="testimonios-carrusel">
+                <div class="testimonio" v-for="(testimonio, index) in testimonios" :key="index">
+                    <img :src="testimonio.foto" alt="Foto de {{ testimonio.nombre }}" class="testimonio-foto">
+                    <p>"{{ testimonio.texto }}"</p>
+                    <p><strong>- {{ testimonio.nombre }}</strong></p>
                 </div>
-                
+            </div>
+        </section>
+
+        <!-- Mapa -->
+        <section class="map-container">
+            <h1>Encuéntranos</h1>
+            <section class="map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7580915507997!2d-78.44251930000003!3d-0.3148209999999978!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d5bd12538eb13b%3A0x907c61f1abbe45ab!2sUNIVERSITY%20OF%20THE%20ARMED%20FORCES%20ESPE!5e0!3m2!1sen!2sec!4v1733323393170!5m2!1sen!2sec" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </section>
-            <section class="direccionInfo-container">
-                <section class="testimonios">
-                    <h1>Testimonios de nuestros pacientes</h1>
-                    <div class="testimonio" v-for="(testimonio, index) in testimonios" :key="index">
-                        <p>"{{ testimonio.texto }}"</p>
-                        <p><strong>- {{ testimonio.nombre }}</strong></p>
+        </section>
+
+        <!-- Sección de preguntas frecuentes y contacto -->
+        <section class="faq-contact-container">
+            <!-- Sección de preguntas frecuentes -->
+            <section class="faq-section">
+                <h1>Preguntas Frecuentes</h1>
+                <div class="faq">
+                    <div class="faq-item">
+                        <h2>¿Cómo puedo agendar una cita?</h2>
+                        <p>Puedes agendar una cita a través de nuestro sitio web o llamándonos al +593 998765412.</p>
                     </div>
-                </section>
-                <section class="map">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7580915507997!2d-78.44251930000003!3d-0.3148209999999978!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d5bd12538eb13b%3A0x907c61f1abbe45ab!2sUNIVERSITY%20OF%20THE%20ARMED%20FORCES%20ESPE!5e0!3m2!1sen!2sec!4v1733323393170!5m2!1sen!2sec" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                </section>
+                    <div class="faq-item">
+                        <h2>¿Aceptan seguros dentales?</h2>
+                        <p>Sí, aceptamos una amplia variedad de seguros dentales. Contáctanos para más información.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h2>¿Qué debo hacer en caso de una emergencia dental?</h2>
+                        <p>En caso de una emergencia dental, llámanos de inmediato para recibir atención prioritaria.</p>
+                    </div>
+                </div>
             </section>
-        </div>
-        
-        
-        <footer>
-            <section class="infoFooter">
-                <section class="logoFooter">
-                    <h2>DentalMax</h2>
-                    <p> <i class="fa-solid fa-map-pin"></i> Moreno Bellido #200 y Av. Amazonas </p>
-                    <p> <i class="fa-solid fa-phone"></i> +593 998765412</p>
-                    <p><i class="fa-solid fa-envelope"></i><a href="mailto:dentalmax@gmai.com">dentalmax@gmai.com</a></p>
-                </section>
-                <section class="infoDerecha"> 
-                    &copy; DentalMax
-                </section>
+
+            <!-- Formulario de contacto -->
+            <section class="contacto-container">
+                <h1>Contáctanos</h1>
+                <form @submit.prevent="enviarFormulario">
+                    <div class="form-group">
+                        <label for="nombre">Nombre</label>
+                        <input type="text" id="nombre" v-model="formulario.nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" v-model="formulario.email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mensaje">Mensaje</label>
+                        <textarea id="mensaje" v-model="formulario.mensaje" required></textarea>
+                    </div>
+                    <button type="submit">Enviar</button>
+                </form>
             </section>
-        </footer>
+        </section>
+    </div>
+    
+    <footer>
+        <section class="infoFooter">
+            <section class="logoFooter">
+                <h2>DentalMax</h2>
+                <p> <i class="fa-solid fa-map-pin"></i> Moreno Bellido #200 y Av. Amazonas </p>
+                <p> <i class="fa-solid fa-phone"></i> +593 998765412</p>
+                <p><i class="fa-solid fa-envelope"></i><a href="mailto:dentalmax@gmai.com">dentalmax@gmai.com</a></p>
+            </section>
+            <section class="infoDerecha"> 
+                &copy; DentalMax
+            </section>
+        </section>
+    </footer>
 </template>
 
 <script>
@@ -178,10 +254,16 @@ export default {
             autoSlideInterval: null,
             resumeTimeout: null,
             testimonios: [
-                { nombre: "Juan Pérez", texto: "Excelente servicio y atención. Muy profesionales." },
-                { nombre: "María López", texto: "Me sentí muy cómoda durante mi tratamiento. ¡Recomendado!" },
-                { nombre: "Carlos García", texto: "El mejor consultorio dental al que he ido. Muy satisfecho con los resultados." }
-            ]
+                { nombre: "Juan Pérez", texto: "Excelente servicio y atención. Muy profesionales.", foto: "/imgTestimonios/juan.jpg" },
+                { nombre: "María López", texto: "Me sentí muy cómoda durante mi tratamiento. ¡Recomendado!", foto: "/imgTestimonios/maria.jpg" },
+                { nombre: "Carlos García", texto: "El mejor consultorio dental al que he ido. Muy satisfecho con los resultados.", foto: "/imgTestimonios/carlos.jpg" },
+                { nombre: "Ana Martínez", texto: "Un trato excepcional y resultados increíbles. Muy agradecida.", foto: "/imgTestimonios/ana.jpg" }
+            ],
+            formulario: {
+                nombre: '',
+                email: '',
+                mensaje: ''
+            }
         };
     },
     computed: {
@@ -226,6 +308,13 @@ export default {
             } else if (event.target.id === 'btnRegister') {
                 loginOptionStore.setSelectedBtn('registrarse');
             }
+        },
+        enviarFormulario() {
+            // Lógica para enviar el formulario
+            alert(`Mensaje enviado por ${this.formulario.nombre}`);
+            this.formulario.nombre = '';
+            this.formulario.email = '';
+            this.formulario.mensaje = '';
         }
     }
 };
@@ -243,7 +332,7 @@ header {
 
 .logo img {
     width: 150px;
-    border-radius: 40%;
+    border-radius: 50%;
     margin-left: 30px;
 }
 
@@ -385,22 +474,28 @@ nav ul li a {
 }
 
 .arrow {
+    background: transparent;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0, 123, 255, 0.8);
     color: white;
     border: none;
     padding: 10px 15px;
     cursor: pointer;
-    font-size: 24px;
+    font-size: 80px;
     z-index: 10;
-    border-radius: 50%;
-    transition: background 0.3s;
+    border-radius: 40%;
+    transition: background 0.3s, transform 0.3s;
+    outline: none; /* Add this line to remove the border */
+}
+
+.arrow:focus {
+    outline: none; /* Add this line to remove the border */
 }
 
 .arrow:hover {
-    background: rgba(0, 123, 255, 1);
+    transform: translateY(-50%) scale(1.1);
+    border: none;
 }
 
 .prev-item {
@@ -431,11 +526,15 @@ nav ul li a {
     background: rgba(0, 0, 0, 0.5);
     border: none;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.3s;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
 }
 
 .dot.active, .dot:hover {
     background: rgba(0, 123, 255, 1);
+    transform: scale(1.2);
 }
 
 .servicios {
@@ -445,13 +544,15 @@ nav ul li a {
     gap: 10px;
 }
 
-.servicios div {
+.servicio-card {
     width: 20%;
-    height: 300px;
+    height: auto;
     border-radius: 10px;
     border: 3px solid #357ABD;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #e6f2ff;
+    padding: 20px;
+    text-align: center;
 }
 
 .promociones-container {
@@ -465,16 +566,6 @@ nav ul li a {
     display: flex;
     justify-content: center;
     gap: 10px;
-}
-
-.promociones div {
-    position: relative;
-    width: 20%;
-    height: 200px;
-    border-radius: 10px;
-    border: 3px solid #357ABD;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #e6f2ff;
 }
 
 .btnAgendar {
@@ -519,14 +610,15 @@ nav ul li a {
 }
 
 section.map {
-    width: 60%;
+    width: 80%;
     min-width: 300px;
     box-sizing: border-box;
     height: auto;
+    margin: auto;
 }
 
 section.map {
-    height: auto;
+    height: 500px;
     border-radius: 10px;
     overflow: hidden;
     position: relative;
@@ -541,26 +633,40 @@ iframe {
 }
 
 .testimonios {
-    width: 40%;
-    border: 3px solid #357ABD;
-    background-color: #e6f2ff;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 50px 20px;
+    background-color: var(--white-color);
+    color: var(--text-color);
+    margin-bottom: 40px;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    margin: auto;
 }
 
-.testimonios h1 {
-    color: black;
-    margin-bottom: 20px;
+.testimonios-carrusel {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 20px 0;
+    justify-content: center;
 }
 
 .testimonio {
-    margin-bottom: 20px;
+    flex: 0 0 auto;
+    min-width: 250px;
+    max-width: 300px;
+    padding: 20px;
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
 }
 
-.testimonio p {
-    color: black;
-    margin: 0;
+.testimonio-foto {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-bottom: 10px;
 }
 
 footer{
@@ -636,5 +742,290 @@ footer .icono:hover img {
 
 nav h2{
     text-align: center;
+}
+
+.welcome-section {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin-bottom: 40px;
+}
+
+.features-section {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: var(--white-color);
+    color: var(--text-color);
+    margin-bottom: 40px;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+}
+
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.feature {
+    flex: 1;
+    min-width: 250px;
+    max-width: 300px;
+    padding: 20px;
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+}
+
+.feature i {
+    font-size: 40px;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.feature h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.feature p {
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.contacto-container {
+    padding: 50px 20px;
+    background-color: var(--white-color);
+    color: var(--text-color);
+    margin-bottom: 40px;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+
+.contacto-container .form-group {
+    margin-bottom: 20px;
+}
+
+.contacto-container label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.contacto-container input,
+.contacto-container textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+}
+
+.contacto-container button {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.contacto-container button:hover {
+    background-color: var(--secondary-color);
+}
+
+.servicios-container {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: var(--white-color);
+    color: var(--text-color);
+    margin-bottom: 40px;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+}
+
+.servicios {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.servicio-card {
+    flex: 1;
+    min-width: 250px;
+    max-width: 300px;
+    padding: 20px;
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+}
+
+.promociones-container {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: var(--white-color);
+    color: var(--text-color);
+    margin-bottom: 40px;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+}
+
+.promociones {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.prom-card {
+    border-radius: 10px;
+    border: 3px solid #357ABD;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    min-width: 250px;
+    max-width: 300px;
+    height: 350px;
+    padding: 20px;
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+}
+
+.prom-card img {
+    width: 100%;
+}
+
+.prom-info {
+    padding: 10px 0;
+}
+
+.prom-info h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.prom-info p {
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.faq-section {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: var(--white-color);
+    color: var(--text-color);
+    margin-bottom: 40px;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+}
+
+.faq {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.faq-item {
+    padding: 20px;
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: left;
+}
+
+.faq-item h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.faq-item p {
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.testimonios-container {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--text-color);
+    border-radius: var(--border-radius);
+}
+
+.testimonios-carrusel {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.testimonio {
+    flex: 0 0 auto;
+    min-width: 250px;
+    max-width: 300px;
+    padding: 20px;
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+}
+
+.testimonio-foto {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.map-container {
+    text-align: center;
+    padding: 0 20px;
+    color: var(--text-color);
+    margin-bottom: 40px;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+}
+
+.map {
+    width: 80%;
+    height: 500px;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    position: relative;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: var(--border-radius);
+}
+
+.faq-contact-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 50px 20px;
+    background-color: var(--white-color);
+    color: var(--text-color);
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+}
+
+.faq-section, .contacto-container {
+    flex: 1;
+    min-width: 300px;
+}
+
+.faq-section {
+    padding-right: 20px;
+}
+
+.contacto-container {
+    padding-left: 20px;
 }
 </style>

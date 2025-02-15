@@ -161,9 +161,8 @@ app.post("/api/agendarPaciente", async (req, res) => {
 });
 
 app.post("/api/historialCitas", async (req, res) => {
-  try{
-
-    const {user} = req.body;
+  try {
+    const { user } = req.body;
 
     const id_user = await Queries.getIdOfUser(user);
 
@@ -171,18 +170,32 @@ app.post("/api/historialCitas", async (req, res) => {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    const id_pac = await Queries.getIdOfPac(id_user);
+    const userInfo = await Queries.getInfo('USERS', id_user);
 
-    const infoCitas = await Queries.getCitaForIdOfPac(id_pac);
+    if (!userInfo) {
+      return res.status(404).json({ message: "Información del usuario no encontrada" });
+    }
+
+    let citas = [];
+
+    if (userInfo.id_rol === 3) { // Paciente
+      const id_pac = await Queries.getId(id_user);
+      citas = await Queries.getCitaForIdOfPac(id_pac);
+    } else if (userInfo.id_rol === 2) { // Doctor
+      const id_doc = await Queries.getId(id_user);
+      citas = await Queries.getCitaForIdOfDoc(id_doc);
+    } else {
+      return res.status(400).json({ message: "Rol de usuario no válido para esta operación" });
+    }
 
     return res.status(200).json({
       success: true,
-      message: infoCitas.length > 0 ? "Citas obtenidas exitosamente." : "No hay citas registradas.",
-      data: infoCitas
+      message: citas.length > 0 ? "Citas obtenidas exitosamente." : "No hay citas registradas.",
+      data: citas
     });
 
-  }catch(error){
-    res.status(500).json({ message: "Error al obtener las citas del pacientes"+error});
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener las citas: " + error.message });
   }
 });
 
@@ -214,7 +227,7 @@ app.post("/api/RegistroDependientes", async (req, res) => {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    const id_pac = await Queries.getIdOfPac(id_user);
+    const id_pac = await Queries.getId(id_user);
 
     if (!id_pac) {
       return res.status(404).json({ message: "Paciente no encontrado" });
@@ -239,7 +252,7 @@ app.post("/api/ListaDependientes", async (req, res) => {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    const id_pac = await Queries.getIdOfPac(id_user);
+    const id_pac = await Queries.getId(id_user);
 
     const infoDependientes = await Queries.getDependantForIdOfPac(id_pac);
 
@@ -279,7 +292,7 @@ app.post("/api/DatosUser", async (req, res) => {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    const id_pac = await Queries.getIdOfPac(id_user);
+    const id_pac = await Queries.getId(id_user);
 
     const paciente = await Queries.getDataOfPac(id_pac);
 
