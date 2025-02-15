@@ -242,6 +242,15 @@ export default {
                 if (response.status === 201) {
                     alert('Usuario registrado exitosamente');
                     this.$router.push('/login');
+                    this.registerForm = {
+                        Names: '',
+                        SurNames: '',
+                        cedula: '',
+                        age: '',
+                        email: '',
+                        username: '',
+                        password: ''
+                    };
                 } else {
                     alert('Error al registrar usuario');
                 }

@@ -78,7 +78,7 @@ export default {
             tipoCita: 'Consulta/tratamiento',
             cedula: '',
             asunto: '',
-            valorCita: '',
+            valorCita: '40 USD',
             metodoPago: 'Credito',
             medico: '',
             nombre: '',  

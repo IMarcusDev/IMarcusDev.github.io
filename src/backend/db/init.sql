@@ -32,7 +32,7 @@ CREATE TABLE PACIENTES (
     cedula_pac VARCHAR(10) NOT NULL,
     fecha_nac_pac DATE NOT NULL,
     email_pac VARCHAR(50) NOT NULL,
-    id_user INTEGER NOT NULL,
+    id_user INTEGER,
     FOREIGN KEY (id_user) REFERENCES USERS(id_user) ON DELETE CASCADE
 );
 
@@ -91,7 +91,7 @@ VALUES
 ('Administrador'),
 ('Doctor'),
 ('Paciente'),
-('Secretario')
+('Secretario');
 
 INSERT INTO USERS (username_user, password_user, id_rol) VALUES
 ('admin', 'admin123', 1);

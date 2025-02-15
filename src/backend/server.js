@@ -59,6 +59,40 @@ app.post("/api/register", async (req, res) => {
 
       const existeEMAILUSERS = await Queries.getPacienteEmail(email);
 
+      const cedulaUSERS = await Queries.getPacienteCedula(cedula);
+      const validate_id_user = await Queries.getIdUserPac(cedula);
+
+      const id_users = await Queries.addUser(username, password);
+
+      if ((Array.isArray(cedulaUSERS) && cedulaUSERS.length > 0) & validate_id_user[0].id_user === null) {
+        await Queries.updateIdUserPac(Names, SurNames, cedula, fecha_nac, email, id_users);
+      }else{
+        if (Array.isArray(existeEMAILUSERS) && existeEMAILUSERS.length > 0) {
+          return res.status(409).json({ message: "El email de usuario ya está en uso" });
+        }
+        await Queries.addPacienteInfo(Names, SurNames, cedula, fecha_nac, email, id_users);
+      }
+
+      res.status(201).json({ message: "El usuario se registró correctamente" });
+  } catch (error) {
+      if (error.message === 'El nombre de usuario ya está en uso') {
+          res.status(409).json({ message: error.message });
+      } else {
+          res.status(500).json({ message: error.message });
+      }
+  }
+});
+
+app.post("/api/registerFromDoc", async (req, res) => {
+  try {
+      const { Names, SurNames, cedula, fecha_nac, email } = req.body;
+
+      if (!Names || !SurNames || !fecha_nac || !email || !cedula) {
+          return res.status(400).json({ message: "Debe llenar todos los campos" });
+      }
+
+      const existeEMAILUSERS = await Queries.getPacienteEmail(email);
+
       if (Array.isArray(existeEMAILUSERS) && existeEMAILUSERS.length > 0) {
         return res.status(409).json({ message: "El email de usuario ya está en uso" });
       }
@@ -69,11 +103,9 @@ app.post("/api/register", async (req, res) => {
         return res.status(409).json({ message: "La cédula de usuario ya está en uso" });
       }      
 
-      const id_users = await Queries.addUser(username, password);
-
-      await Queries.addPacienteInfo(Names, SurNames, cedula, fecha_nac, email, id_users);
+      await Queries.addPacienteInfo(Names, SurNames, cedula, fecha_nac, email, null);
       
-      res.status(201).json({ message: "El usuario se registró correctamente" });
+      res.status(201).json({ message: "El paciente se registró correctamente" });
   } catch (error) {
       if (error.message === 'El nombre de usuario ya está en uso') {
           res.status(409).json({ message: error.message });
@@ -160,6 +192,27 @@ app.post("/api/agendarPaciente", async (req, res) => {
   }
 });
 
+app.post("/api/getIdMedico", async (req, res) => {
+  try {
+    const {user} = req.body;
+
+    const id_user = await Queries.getIdOfUser(user);
+
+    if (!id_user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    const id_doc = await Queries.getId(id_user);
+
+    if (!id_doc) {
+      return res.status(404).json({ message: "No encontrado" });
+    }
+    res.json({id_doc: id_doc});
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener el id: " + error.message });
+  }
+});
+
 app.post("/api/historialCitas", async (req, res) => {
   try {
     const { user } = req.body;
@@ -196,6 +249,25 @@ app.post("/api/historialCitas", async (req, res) => {
 
   } catch (error) {
     res.status(500).json({ message: "Error al obtener las citas: " + error.message });
+  }
+});
+
+app.post("/api/getPacInfo", async (req, res) => {
+  try {
+    const { cedula_paciente_cita} = req.body;
+
+    const pacInfo = await Queries.getInfoByCedula('PACIENTES', cedula_paciente_cita);
+
+    if (pacInfo.length === 0){
+      return res.status(404).json({ message: "Paciente no encontrado" });
+    }
+    return res.status(200).json({
+      success: true,
+      message: pacInfo.length > 0 ? "Datos obtenidos exitosamente." : "No hay datos registrados.",
+      data: pacInfo
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener los datos del pacientes: " + error.message });
   }
 });
 
@@ -392,6 +464,32 @@ app.post("/api/registrarSecretario", async (req, res) => {
       } else {
           res.status(500).json({ message: error.message });
       }
+  }
+});
+
+app.get("/api/bookedSlots/:date", async (req, res) => {
+  try {
+    const { date } = req.params;
+    const bookedSlots = await Queries.getBookedSlots(date);
+    res.status(200).json(bookedSlots);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener los horarios reservados: " + error.message });
+  }
+});
+
+app.post("/api/checkDuplicate", async (req, res) => {
+  try {
+    const { cedula, email, username } = req.body;
+
+    const userByUsername = await Queries.getUserName(username);
+    const userByEmail = await Queries.getUserByEmail(email);
+    const userByCedula = await Queries.getUserByCedula(cedula);
+
+    const isDuplicate = userByUsername.length > 0 || userByEmail.length > 0 || userByCedula.length > 0;
+
+    res.status(200).json({ isDuplicate });
+  } catch (error) {
+    res.status(500).json({ message: "Error al verificar duplicados: " + error.message });
   }
 });
 

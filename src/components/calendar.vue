@@ -33,13 +33,23 @@
                     <tr>
                         <td>9 AM - 1 PM</td>
                         <td>
-                            <span v-for="hora in turnosMañana" :key="hora" :class="{ seleccionado: turnoSeleccionado === hora }" @click="seleccionarTurno(hora)">{{ hora }}</span>
+                            <span v-for="hora in turnosMañana" :key="hora" 
+                                  :class="{ seleccionado: turnoSeleccionado === hora, deshabilitado: bookedSlots.includes(hora) }" 
+                                  @click="seleccionarTurno(hora)" 
+                                  :disabled="bookedSlots.includes(hora)">
+                                {{ hora }}
+                            </span>
                         </td>
                     </tr>
                     <tr>
                         <td>2 PM - 6 PM</td>
                         <td>
-                            <span v-for="hora in turnosTarde" :key="hora" :class="{ seleccionado: turnoSeleccionado === hora }" @click="seleccionarTurno(hora)">{{ hora }}</span>
+                            <span v-for="hora in turnosTarde" :key="hora" 
+                                  :class="{ seleccionado: turnoSeleccionado === hora, deshabilitado: bookedSlots.includes(hora) }" 
+                                  @click="seleccionarTurno(hora)" 
+                                  :disabled="bookedSlots.includes(hora)">
+                                {{ hora }}
+                            </span>
                         </td>
                     </tr>
                 </tbody>
@@ -50,6 +60,7 @@
 
 <script>
 import { useCalendarStore } from '../store/calendarStore';
+import axios from 'axios';
 
 export default {
     name: 'Calendario',
@@ -67,7 +78,8 @@ export default {
             diaSeleccionado: null,
             turnoSeleccionado: null,
             turnosMañana: ['09:30', '10:30', '11:30', '12:30'],
-            turnosTarde: ['14:30', '15:30', '16:30', '17:30']
+            turnosTarde: ['14:30', '15:30', '16:30', '17:30'],
+            bookedSlots: []
         };
     },
     computed: {
@@ -114,24 +126,35 @@ export default {
         leaveDia(dia) {
             this.diaHover = null;
         },
-        seleccionarDia(dia) {
+        async seleccionarDia(dia) {
             if (!this.esDiaPasado(dia)) {
                 this.diaSeleccionado = dia;
                 this.turnoSeleccionado = null; // Reset selected slot when a new day is selected
                 const calendarStore = useCalendarStore();
                 calendarStore.setSelectedDate(`${this.añoActual}-${this.mesActual + 1}-${dia}`);
+                await this.fetchBookedSlots(`${this.añoActual}-${this.mesActual + 1}-${dia}`);
             }
         },
         seleccionarTurno(turno) {
-            this.turnoSeleccionado = turno;
-            const calendarStore = useCalendarStore();
-            calendarStore.setSelectedTimeSlot(turno);
-            calendarStore.setSelectedTime(turno); // Set the selected time in the store
+            if (!this.bookedSlots.includes(turno)) {
+                this.turnoSeleccionado = turno;
+                const calendarStore = useCalendarStore();
+                calendarStore.setSelectedTimeSlot(turno);
+                calendarStore.setSelectedTime(turno); // Set the selected time in the store
+            }
         },
         esDiaPasado(dia) {
             const fechaActual = new Date();
             const fechaSeleccionada = new Date(this.añoActual, this.mesActual, dia);
             return fechaSeleccionada < fechaActual.setHours(0, 0, 0, 0);
+        },
+        async fetchBookedSlots(date) {
+            try {
+                const response = await axios.get(`/api/bookedSlots/${date}`);
+                this.bookedSlots = response.data.map(slot => slot.hora_cita.slice(0, 5)); // Convert HH:MM:SS to HH:MM
+            } catch (error) {
+                console.error("Error al obtener los horarios reservados: ", error);
+            }
         }
     }
 };
@@ -267,5 +290,9 @@ export default {
     }
     .detalles-dia td span:hover {
         background-color: #e2e6ea;
+    }
+    .detalles-dia td span.deshabilitado {
+        background-color: #e9ecef;
+        cursor: not-allowed;
     }
 </style>

@@ -277,11 +277,9 @@ h2 {
 .tabla-citas {
     width: 100%;
     border-collapse: collapse;
-    margin-left: 30px;
 }
 
 .tabla-citas table{
-    width: 90%;
     border-color: black
 }
 

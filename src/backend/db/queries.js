@@ -37,6 +37,15 @@ async function getSecretarioEmail(email) {
     }
 };
 
+async function getIdUserPac(cedula) {
+    try {
+        const [rows] = await pool.execute('SELECT id_user FROM PACIENTES WHERE cedula_pac = ?;', [cedula]);
+        return rows;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+};
+
 async function getFechaRegistro(fechaRegistro) {
     try {
         const [rows] = await pool.execute('SELECT * FROM CITA WHERE fecha_realizar_cita = ?;', [fechaRegistro]);
@@ -85,6 +94,15 @@ async function getSecretarioCedula(cedula) {
 async function getInfo(table, id_user) {
     try {
         const [rows] = await pool.query(`SELECT * FROM ${table.toUpperCase()} WHERE id_user = ?;`, [id_user]);
+        return rows[0];
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+};
+
+async function getInfoByCedula(table, cedula) {
+    try {
+        const [rows] = await pool.query(`SELECT * FROM ${table.toUpperCase()} WHERE cedula_pac = ?;`, [cedula]);
         return rows[0];
     } catch (error) {
         throw new Error('Error al obtener información: ' + error);
@@ -349,7 +367,45 @@ async function updateCita(id_cita, nuevoEstado_cita, comentario_cita){
     }
 }
 
+async function getBookedSlots(date) {
+    try {
+        const [rows] = await pool.query('SELECT DISTINCT hora_cita FROM CITA WHERE fecha_realizar_cita = ?;', [date]);
+        return rows;
+    } catch (error) {
+        throw new Error('Error al obtener los horarios reservados: ' + error);
+    }
+}
+
+async function getUserByEmail(email) {
+    try {
+        const [rows] = await pool.execute('SELECT * FROM USERS WHERE email_user = ?;', [email]);
+        return rows;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+}
+
+async function getUserByCedula(cedula) {
+    try {
+        const [rows] = await pool.execute('SELECT * FROM USERS WHERE cedula_user = ?;', [cedula]);
+        return rows;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+}
+
+async function updateIdUserPac(Names, SurNames, cedula, fecha_nac, email, id_users){
+    try {
+        await pool.execute('UPDATE PACIENTES SET nombres_pac = ?, apellidos_pac = ?, fecha_nac_pac = ?, email_pac = ?, id_user = ? WHERE cedula_pac=?', [Names, SurNames, fecha_nac, email, id_users, cedula]);
+    } catch (error) {
+        throw new Error('Error al actualizar la información: ' + error);
+    }
+}
+
 export {
+    updateIdUserPac,
+    getIdUserPac,
+    getInfoByCedula,
     getDoctores,
     addUserSecretario,
     addSecretarioInfo,
@@ -383,6 +439,9 @@ export {
     getIdOfUser,
     getId,
     getDependantForIdOfPac,
-    getCitaForIdOfDoc
+    getCitaForIdOfDoc,
+    getBookedSlots,
+    getUserByEmail,
+    getUserByCedula
 }
 

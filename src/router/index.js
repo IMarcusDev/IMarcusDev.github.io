@@ -12,6 +12,7 @@ import AgendarCitaPaciente from '../components/AgendarCitaPaciente.vue';
 import MenuAdmin from '../views/MenuAdmin.vue';
 import registrarDoctor from '../components/registrarDoctor.vue';
 import registrarSecretario from '../components/registrarSecretario.vue';
+import registrarPaciente from '../components/registrarPaciente.vue';
 
 const routes = [
     {
@@ -65,6 +66,11 @@ const routes = [
                 path: 'historial',  
                 name: 'HistorialPaciente',
                 component: Historial,  
+            },
+            {
+                path: 'registrarPaciente',  
+                name: 'RegistrarPaciente',
+                component: registrarPaciente, 
             }
         ]
     },

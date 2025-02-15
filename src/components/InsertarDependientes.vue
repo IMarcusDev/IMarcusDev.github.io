@@ -8,19 +8,23 @@
             <form @submit.prevent="submitForm" class="formDependientes">
                 <div class="form-group">
                     <label for="cedula_dep">Cédula:</label>
-                    <input type="text" ref="cedula" v-model="cedula_dep" placeholder="Ingrese la cédula" required />
+                    <input type="text" ref="cedula" v-model="cedula_dep" @input="validateCedula" placeholder="Ingrese la cédula" required />
+                    <span v-if="errors.cedula">{{ errors.cedula }}</span>
                 </div>
                 <div class="form-group">
                     <label for="nombre_dep">Nombre:</label>
-                    <input type="text" ref="nombre" v-model="nombre_dep" placeholder="Ingrese el nombre" required />
+                    <input type="text" ref="nombre" v-model="nombre_dep" @input="validateNombre" placeholder="Ingrese el nombre" required />
+                    <span v-if="errors.nombre">{{ errors.nombre }}</span>
                 </div>
                 <div class="form-group">
                     <label for="apellido_dep">Apellido:</label>
-                    <input type="text" ref="apellido" v-model="apellido_dep" placeholder="Ingrese el apellido" required />
+                    <input type="text" ref="apellido" v-model="apellido_dep" @input="validateApellido" placeholder="Ingrese el apellido" required />
+                    <span v-if="errors.apellido">{{ errors.apellido }}</span>
                 </div>
                 <div class="form-group">
                     <label for="fecha_nac_dep">Fecha de Nacimiento:</label>
-                    <input type="date" ref="fecha_nac" v-model="fecha_nac_dep" placeholder="Ingrese la fecha de nacimiento" required />
+                    <input type="date" ref="fecha_nac" v-model="fecha_nac_dep" @input="validateDateInput" placeholder="Ingrese la fecha de nacimiento" required />
+                    <span v-if="errors.fecha_nac">{{ errors.fecha_nac }}</span>
                 </div>
                 <button type="submit" class="btn-submit">Agregar Dependiente</button>
             </form>
@@ -40,7 +44,9 @@ export default {
             nombre_dep: '',
             apellido_dep: '',
             fecha_nac_dep: '',
-            id_pac: ''
+            username_dep: '',
+            email_dep: '',
+            errors: {}
         };
     },
     computed: {
@@ -63,6 +69,17 @@ export default {
                     return;
                 }
 
+                if (!this.validateDate(fecha_nacimiento)) {
+                    alert('Por favor, ingrese una fecha de nacimiento válida.');
+                    return;
+                }
+
+                const isDuplicate = await this.checkDuplicate(cedula, this.email_dep, this.username_dep);
+                if (isDuplicate) {
+                    alert('La cédula, el correo electrónico o el nombre de usuario ya están registrados.');
+                    return;
+                }
+
                 const response = await axios.post('/RegistroDependientes', {
                     user,
                     cedula,
@@ -79,6 +96,57 @@ export default {
                 console.log('Error durante el registro:', error);
                 alert('Error al registrar el dependiente');
             }
+        },
+        async checkDuplicate(cedula, email, username) {
+            try {
+                const response = await axios.post('/checkDuplicate', { cedula, email, username });
+                return response.data.isDuplicate;
+            } catch (error) {
+                console.log('Error al verificar duplicados:', error);
+                return true;
+            }
+        },
+        validateDate(date) {
+            const re = /^\d{4}-\d{2}-\d{2}$/;
+            return re.test(date);
+        },
+        validateDateInput() {
+            if (!this.validateDate(this.fecha_nac_dep)) {
+                this.errors.fecha_nac = 'Por favor, ingrese una fecha de nacimiento válida.';
+            } else {
+                this.errors.fecha_nac = '';
+            }
+        },
+        validateCedula() {
+            const cedula = this.cedula_dep;
+            if (cedula.length !== 10) {
+                this.errors.cedula = 'La cédula debe tener 10 dígitos';
+                return;
+            }
+            const digits = cedula.split('').map(Number);
+            const provinceCode = parseInt(cedula.substring(0, 2), 10);
+            if (provinceCode < 1 || provinceCode > 24) {
+                this.errors.cedula = 'Código de provincia no válido';
+                return;
+            }
+            const lastDigit = digits.pop();
+            const sum = digits.reduce((acc, digit, index) => {
+                if (index % 2 === 0) {
+                    digit *= 2;
+                    if (digit > 9) digit -= 9;
+                }
+                return acc + digit;
+            }, 0);
+            const validator = 10 - (sum % 10);
+            this.errors.cedula = validator === lastDigit ? '' : 'Cédula no válida';
+        },
+        validateNombre() {
+            const regex = /^[a-zA-Z\s]*$/;
+            this.errors.nombre = !regex.test(this.nombre_dep) ? 'El nombre no puede contener números' : '';
+        },
+        validateApellido() {
+            const regex = /^[a-zA-Z\s]*$/;
+            this.errors.apellido = !regex.test(this.apellido_dep) ? 'El apellido no puede contener números' : '';
         }
     }
 };
