@@ -135,12 +135,24 @@ export default {
                 await this.fetchBookedSlots(`${this.añoActual}-${this.mesActual + 1}-${dia}`);
             }
         },
-        seleccionarTurno(turno) {
+        async seleccionarTurno(turno) {
             if (!this.bookedSlots.includes(turno)) {
                 this.turnoSeleccionado = turno;
                 const calendarStore = useCalendarStore();
                 calendarStore.setSelectedTimeSlot(turno);
                 calendarStore.setSelectedTime(turno); // Set the selected time in the store
+                
+                // Call the method to register the appointment
+                await this.registrarCita(`${this.añoActual}-${this.mesActual + 1}-${this.diaSeleccionado}`, turno);
+            }
+        },
+        async registrarCita(date, time) {
+            try {
+                await axios.post('/api/registerAppointment', { date, time });
+                // Refresh booked slots after registering the appointment
+                await this.fetchBookedSlots(date);
+            } catch (error) {
+                console.error("Error al registrar la cita: ", error);
             }
         },
         esDiaPasado(dia) {

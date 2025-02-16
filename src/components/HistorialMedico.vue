@@ -5,7 +5,6 @@
             <div class="busqueda">
                 <input type="text" v-model="busquedaCedula" placeholder="Buscar por número de cédula" />
                 <input type="date" v-model="busquedaFecha"/>
-                <button @click="filtrarCitas">Buscar</button>
             </div>
             <div v-if="citas.length > 0" class="tabla-citas">
                 <table>

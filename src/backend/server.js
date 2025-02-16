@@ -59,7 +59,8 @@ app.post("/api/register", async (req, res) => {
 
       const existeEMAILUSERS = await Queries.getPacienteEmail(email);
 
-      const cedulaUSERS = await Queries.getPacienteCedula(cedula);
+      const cedulaUSERS = await Queries.getPacienteCedulaId(cedula);
+
       const validate_id_user = await Queries.getIdUserPac(cedula);
 
       const id_users = await Queries.addUser(username, password);
@@ -352,19 +353,23 @@ app.post("/api/ListaDoctores", async (req, res) => {
 });
 
 app.post("/api/DatosUser", async (req, res) => {
+  console.log('Buscando datos user');
   try{
     const {user} = req.body;
-
+    console.log(user);
     const id_user = await Queries.getIdOfUser(user);
-
+    console.log(id_user);
     if (!id_user) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
+    console.log('Hola');
     const id_pac = await Queries.getId(id_user);
-
+    console.log(id_pac);
+    console.log('hla');
     const paciente = await Queries.getDataOfPac(id_pac);
-
+    console.log('adios');
+    console.log(paciente);
     res.json(paciente[0]);
 
   }catch(error){

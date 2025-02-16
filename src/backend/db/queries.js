@@ -55,15 +55,21 @@ async function getFechaRegistro(fechaRegistro) {
     }
 };
 
+async function getPacienteCedulaId(cedula) {
+    try {
+        const [rows] = await pool.execute('SELECT * FROM PACIENTES WHERE cedula_pac = ?;', [cedula]);
+        return rows;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+};
+
 async function getPacienteCedula(cedula) {
-    console.log('Attempting to retrieve patient by cedula:', cedula);
     try {
         const [rows] = await pool.execute('SELECT id_pac FROM PACIENTES WHERE cedula_pac = ?;', [cedula]);
-        console.log('Query result:', rows);
         if (rows.length === 0) {
             throw new Error('No patient found with the given cedula');
         }
-        console.log('Returning result:', rows[0]);
         return rows[0];
     } catch (error) {
         console.error('Error while retrieving patient by cedula:', error);
@@ -410,6 +416,7 @@ async function updateIdUserPac(Names, SurNames, cedula, fecha_nac, email, id_use
 }
 
 export {
+    getPacienteCedulaId,
     updateIdUserPac,
     getIdUserPac,
     getInfoByCedula,

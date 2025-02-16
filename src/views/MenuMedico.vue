@@ -72,7 +72,7 @@ export default {
 }
 
 .menu-lateral {
-    height: 100vh;
+    height: 95vh;
     width: 250px;
     background-color: #007bff;
     color: #ffffff;

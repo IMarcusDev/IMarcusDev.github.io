@@ -2,7 +2,7 @@
     <div class="content">
         <div class="agendar-content">
             <section class="calendar-content">
-                <Calendar />
+                <Calendar ref="calendarComponent" />
             </section>
             <section class="form-content">
                 <div class="form-info">
@@ -249,6 +249,11 @@ export default {
 
                 if (response.status === 201) {
                     alert('La cita fue registrada exitosamente');
+                    // Refresh booked slots after registering the appointment
+                    const calendarComponent = this.$refs.calendarComponent;
+                    if (calendarComponent) {
+                        await calendarComponent.fetchBookedSlots(this.selectedDate);
+                    }
                 } else {
                     alert('Error al registrar la cita');
                 }

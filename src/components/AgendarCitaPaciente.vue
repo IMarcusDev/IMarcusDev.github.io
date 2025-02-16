@@ -2,7 +2,7 @@
     <div class="content">
         <div class="agendar-content">
             <section class="calendar-content">
-                <Calendar />
+                <Calendar ref="calendarComponent" />
             </section>
             <section class="form-content">
                 <div class="form-info">
@@ -153,17 +153,25 @@ export default {
 
             if (this.paciente === 'Mi persona') {
                 const pac = await this.datosUser();
-                nombre_paciente_cita = pac[0].nombres_pac;
-                apellido_paciente_cita = pac[0].apellidos_pac;
-                cedula_paciente_cita = pac[0].cedula_pac;
-                id_pac = pac[0].id_pac;
+                if (pac.length > 0) {
+                    nombre_paciente_cita = pac[0].nombres_pac;
+                    apellido_paciente_cita = pac[0].apellidos_pac;
+                    cedula_paciente_cita = pac[0].cedula_pac;
+                    id_pac = pac[0].id_pac;
+                } else {
+                    throw new Error('No se encontraron datos del paciente');
+                }
             } else {
                 const selectedDependiente = this.dependientes.find(dep => dep.cedula_dep === this.paciente);
                 const pac = await this.datosUser();
-                nombre_paciente_cita = selectedDependiente.nombre_dep;
-                apellido_paciente_cita = selectedDependiente.apellido_dep;
-                cedula_paciente_cita = selectedDependiente.cedula_dep;
-                id_pac = pac[0].id_pac;
+                if (pac.length > 0) {
+                    nombre_paciente_cita = selectedDependiente.nombre_dep;
+                    apellido_paciente_cita = selectedDependiente.apellido_dep;
+                    cedula_paciente_cita = selectedDependiente.cedula_dep;
+                    id_pac = pac[0].id_pac;
+                } else {
+                    throw new Error('No se encontraron datos del paciente');
+                }
             }
 
 
@@ -184,6 +192,11 @@ export default {
 
                 if (response.status === 201) {
                     alert('La cita fue registrada exitosamente');
+                    // Refresh booked slots after registering the appointment
+                    const calendarComponent = this.$refs.calendarComponent;
+                    if (calendarComponent) {
+                        await calendarComponent.fetchBookedSlots(this.selectedDate);
+                    }
                 } else {
                     alert('Error al registrar la cita');
                 }
@@ -241,20 +254,24 @@ export default {
                 const response = await axios.post('/DatosUser', {
                     user
                 });
-
-                this.DatosPaciente = response.data.map(pac => ({
-                    id_pac: pac.id_pac,
-                    nombres_pac: pac.nombres_pac,
-                    apellidos_pac: pac.apellidos_pac,
-                    cedula_pac: pac.cedula_pac,
-                    fecha_nac_pac: pac.fecha_nac_pac.slice(0, 10),
-                    email_pac: pac.email_pac
-                }));
-                return this.DatosPaciente;
-                
+                console.log(response);
+                if (response.data.length > 0) {
+                    this.DatosPaciente = response.data.map(pac => ({
+                        id_pac: pac.id_pac,
+                        nombres_pac: pac.nombres_pac,
+                        apellidos_pac: pac.apellidos_pac,
+                        cedula_pac: pac.cedula_pac,
+                        fecha_nac_pac: pac.fecha_nac_pac.slice(0, 10),
+                        email_pac: pac.email_pac
+                    }));
+                    return this.DatosPaciente;
+                } else {
+                    throw new Error('No se encontraron datos del paciente');
+                }
             } catch (error) {
                 console.error('Error fetching datos del paciente:', error);
                 this.DatosPaciente = [];
+                throw error;
             }
         }
     },
