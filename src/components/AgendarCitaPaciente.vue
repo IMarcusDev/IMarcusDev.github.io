@@ -145,6 +145,7 @@ export default {
             const fecha_realizar_cita = this.formatDate(this.selectedDate);
             const hora_cita = this.formatTime(this.selectedTime);
             const valor_cita = this.tipoCita === 'Consulta/tratamiento' ? 40 : 20;
+            const comentario_pac_cita = this.$refs.descripcionPac.value;
             let nombre_paciente_cita = '', apellido_paciente_cita = '', cedula_paciente_cita = '';
             const selectedDoctor = this.doctores.find(doc => doc.id_doc === this.medico);
             const id_doc = selectedDoctor.id_doc;
@@ -176,6 +177,7 @@ export default {
                     fecha_realizar_cita,
                     hora_cita,
                     valor_cita,
+                    comentario_pac_cita,
                     id_pac,
                     id_doc
                 });

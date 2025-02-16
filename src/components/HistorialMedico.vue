@@ -68,6 +68,7 @@ export default {
             busquedaCedula: '',
             busquedaFecha: '',
             citas: [],
+            citasOriginal: [], // Nueva propiedad para almacenar el arreglo original de citas
             mostrarModal: false,
             citaSeleccionada: null,
             nuevoEstado: '',
@@ -104,48 +105,51 @@ export default {
                     user
                 });
 
-                this.citas = response.data.data.map(cita => ({
-                    id: cita.id_cita,
-                    fecha: cita.fecha_realizar_cita.slice(0, -14),
-                    hora: cita.hora_cita,
-                    tipoCita: cita.asunto_cita,
-                    cedula: cita.cedula_paciente_cita,
-                    estado: cita.estado_cita,
-                    comentario: cita.comentario_doc_cita,
-                    valor: cita.valor_cita,
-                    nombre_doc: cita.nombres_doc + ' ' + cita.apellidos_doc
-                }));
-
-                if (response.status !== 200) {
-                    alert('Error al cargar las citas');
-                }
+                this.procesarCitas(response);
             } catch (error) {
                 console.error('Error al buscar citas:', error);
                 this.citas = [];
             }
         },
         async buscarCitasTodos() {
-            try{
+            try {
                 const response = await axios.post('/historialCitasTodos');
-
-                this.citas = response.data.data.map(cita => ({
-                    id: cita.id_cita,
-                    fecha: cita.fecha_realizar_cita.slice(0,-14),
-                    hora: cita.hora_cita,
-                    tipoCita: cita.asunto_cita,
-                    cedula: cita.cedula_paciente_cita,
-                    estado: cita.estado_cita,
-                    comentario: cita.comentario_doc_cita,
-                    valor: cita.valor_cita
-                }));
-
-                if (response.status !== 200) {
-                    alert('Error al cargar las citas');
-                }
-            }catch (error) {
+                this.procesarCitas(response);
+            } catch (error) {
                 console.error('Error al buscar citas:', error);
                 this.citas = [];
             }
+        },
+        procesarCitas(response) {
+            if (response.status !== 200) {
+                alert('Error al cargar las citas');
+                return;
+            }
+
+            this.citasOriginal = response.data.data.map(cita => ({
+                id: cita.id_cita,
+                fecha: cita.fecha_realizar_cita.slice(0, -14),
+                hora: cita.hora_cita,
+                tipoCita: cita.asunto_cita,
+                cedula: cita.cedula_paciente_cita,
+                estado: cita.estado_cita,
+                comentario: cita.comentario_doc_cita,
+                valor: cita.valor_cita,
+                nombre_doc: cita.nombres_doc + ' ' + cita.apellidos_doc
+            }));
+
+            this.citas = [...this.citasOriginal]; // Copia de las citas originales
+        },
+        filtrarCitas() {
+            if (!this.busquedaCedula && !this.busquedaFecha) {
+                this.citas = [...this.citasOriginal];
+                return;
+            }
+
+            this.citas = this.citasOriginal.filter(cita =>
+                (!this.busquedaCedula || cita.cedula.includes(this.busquedaCedula)) &&
+                (!this.busquedaFecha || cita.fecha === this.busquedaFecha)
+            );
         },
         abrirModal(cita) {
             this.citaSeleccionada = cita;
@@ -180,17 +184,19 @@ export default {
                 }
             }
         },
-        filtrarCitas(){
-            this.citas = this.citas.filter(cita =>
-                (this.busquedaCedula ? cita.cedula.includes(this.busquedaCedula) : true) &&
-                (this.busquedaFecha ? cita.fecha === this.busquedaFecha : true)
-            );
-        },
         hoverEstado(cita) {
             this.citaHover = cita;
         },
         leaveEstado() {
             this.citaHover = null;
+        }
+    },
+    watch: {
+        busquedaCedula() {
+            this.filtrarCitas();
+        },
+        busquedaFecha() {
+            this.filtrarCitas();
         }
     },
     async created() {
@@ -207,7 +213,7 @@ export default {
 
 <style scoped>
 .historial {
-    width: 80%;
+    width: 90%;
     margin: 20px auto;
     font-family: Arial, sans-serif;
     background-color: white;
@@ -224,16 +230,6 @@ h2 {
     color: #333;
 }
 
-.content {
-    width: 90%;
-    background-color: #a6bddc;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
 .busqueda {
     display: flex;

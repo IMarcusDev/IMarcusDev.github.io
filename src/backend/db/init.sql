@@ -78,6 +78,7 @@ CREATE TABLE CITA (
     hora_cita TIME NOT NULL,
     valor_cita INT NOT NULL,
     comentario_doc_cita VARCHAR(100),
+    comentario_pac_cita VARCHAR(100),
     estado_cita VARCHAR(20) NOT NULL,
     id_doc INTEGER NOT NULL,
     id_pac INTEGER NOT NULL,

@@ -56,10 +56,17 @@ async function getFechaRegistro(fechaRegistro) {
 };
 
 async function getPacienteCedula(cedula) {
+    console.log('Attempting to retrieve patient by cedula:', cedula);
     try {
-        const [rows] = await pool.execute('SELECT * FROM PACIENTES WHERE cedula_pac = ?;', [cedula]);
-        return rows;
+        const [rows] = await pool.execute('SELECT id_pac FROM PACIENTES WHERE cedula_pac = ?;', [cedula]);
+        console.log('Query result:', rows);
+        if (rows.length === 0) {
+            throw new Error('No patient found with the given cedula');
+        }
+        console.log('Returning result:', rows[0]);
+        return rows[0];
     } catch (error) {
+        console.error('Error while retrieving patient by cedula:', error);
         throw new Error('Error al obtener información: ' + error);
     }
 };
@@ -265,13 +272,13 @@ async function addSecretarioInfo(Names, SurNames, cedula, email, id_user) {
     }
 };
 
-async function addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, comentario_doc_cita, estado_cita, id_doc, id_pac) {
+async function addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, comentario_doc_cita, comentario_pac_cita,estado_cita, id_doc, id_pac) {
     try {
         console.log("Entro add cita");
         
         const [result] = await pool.query(
-            'INSERT INTO CITA (nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, comentario_doc_cita, estado_cita, id_doc, id_pac) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-            [nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, comentario_doc_cita, estado_cita, id_doc, id_pac]
+            'INSERT INTO CITA (nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, comentario_doc_cita, comentario_pac_cita, estado_cita, id_doc, id_pac) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+            [nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, comentario_doc_cita, comentario_pac_cita, estado_cita, id_doc, id_pac]
         );
 
         return result;

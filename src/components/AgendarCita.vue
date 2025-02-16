@@ -208,9 +208,11 @@ export default {
             const fecha_realizar_cita = this.formatDate(this.selectedDate);
             const hora_cita = this.formatTime(this.selectedTime);
             const valor_cita = this.tipoCita === 'Consulta/tratamiento' ? 40 : 20;
+            const comentario_pac_cita = this.$refs.descripcionPac.value;
             let nombre_paciente_cita = this.nombre;
             let apellido_paciente_cita = this.apellido;
             const cedula_paciente_cita = this.cedula;
+            let id_pac = undefined;
 
             if(cedula_paciente_cita !== '' & nombre_paciente_cita === '' & apellido_paciente_cita === ''){
                 const getPacInfo = await axios.post('/getPacInfo', { cedula_paciente_cita });
@@ -240,6 +242,8 @@ export default {
                     fecha_realizar_cita,
                     hora_cita,
                     valor_cita,
+                    comentario_pac_cita,
+                    id_pac,
                     id_doc
                 });
 
@@ -276,6 +280,30 @@ export default {
             this.apellido = patientData.SurNames;
             this.cedula = patientData.cedula;
             this.showRegisterDialog = false;
+        },
+        async datosUser(){
+            try {
+                const user = this.currentUser;
+                console.log(user);
+
+                const response = await axios.post('/DatosUser', {
+                    user
+                });
+
+                this.DatosPaciente = response.data.map(pac => ({
+                    id_pac: pac.id_pac,
+                    nombres_pac: pac.nombres_pac,
+                    apellidos_pac: pac.apellidos_pac,
+                    cedula_pac: pac.cedula_pac,
+                    fecha_nac_pac: pac.fecha_nac_pac.slice(0, 10),
+                    email_pac: pac.email_pac
+                }));
+                return this.DatosPaciente;
+                
+            } catch (error) {
+                console.error('Error fetching datos del paciente:', error);
+                this.DatosPaciente = [];
+            }
         }
     },
     created() {

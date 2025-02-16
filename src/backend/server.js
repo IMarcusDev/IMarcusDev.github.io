@@ -162,15 +162,26 @@ app.post("/api/login", async (req, res) => {
 
 app.post("/api/agendarPaciente", async (req, res) => {
   try {
-    const { nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, id_pac, id_doc} = req.body;
+    const { nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, comentario_pac_cita, id_pac, id_doc } = req.body;
 
-    console.log(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita);
+    console.log(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, comentario_pac_cita, id_pac, id_doc);
 
     if (!nombre_paciente_cita || !apellido_paciente_cita || !cedula_paciente_cita || !asunto_cita || !fecha_registro_cita || !fecha_realizar_cita || !hora_cita || !valor_cita || !id_doc) {
       return res.status(400).json({ message: "Debe llenar todos los campos" });
     }
 
-    await Queries.addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, null,"pendiente", id_doc, id_pac);
+    let patientId = id_pac;
+    if (!patientId) {
+      console.log('Fetching patient ID by cedula');
+      const patient = await Queries.getPacienteCedula(cedula_paciente_cita);
+      console.log('Patient ID:', patient);
+      if (!patient) {
+        return res.status(404).json({ message: "Paciente no encontrado" });
+      }
+      patientId = patient.id_pac;
+    }
+
+    await Queries.addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, null, comentario_pac_cita,"pendiente", id_doc, patientId);
 
     res.status(201).json({ message: "La cita fue registrada exitosamente" });
   } catch (error) {
