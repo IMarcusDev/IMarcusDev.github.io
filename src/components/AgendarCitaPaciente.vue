@@ -249,12 +249,10 @@ export default {
         async datosUser(){
             try {
                 const user = this.currentUser;
-                console.log(user);
 
                 const response = await axios.post('/DatosUser', {
                     user
                 });
-                console.log(response);
                 if (response.data.length > 0) {
                     this.DatosPaciente = response.data.map(pac => ({
                         id_pac: pac.id_pac,
