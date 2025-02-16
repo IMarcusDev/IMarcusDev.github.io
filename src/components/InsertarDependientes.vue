@@ -74,11 +74,11 @@ export default {
                     return;
                 }
 
-                const isDuplicate = await this.checkDuplicate(cedula, this.email_dep, this.username_dep);
-                if (isDuplicate) {
-                    alert('La cédula, el correo electrónico o el nombre de usuario ya están registrados.');
-                    return;
-                }
+                // const isDuplicate = await this.checkDuplicate(cedula, this.email_dep, this.username_dep);
+                // if (isDuplicate) {
+                //     alert('La cédula, el correo electrónico o el nombre de usuario ya están registrados.');
+                //     return;
+                // }
 
                 const response = await axios.post('/RegistroDependientes', {
                     user,

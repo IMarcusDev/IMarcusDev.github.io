@@ -162,27 +162,13 @@ app.post("/api/login", async (req, res) => {
 
 app.post("/api/agendarPaciente", async (req, res) => {
   try {
-    const { nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, id_doc} = req.body;
+    const { nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, id_pac, id_doc} = req.body;
 
     console.log(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita);
 
     if (!nombre_paciente_cita || !apellido_paciente_cita || !cedula_paciente_cita || !asunto_cita || !fecha_registro_cita || !fecha_realizar_cita || !hora_cita || !valor_cita || !id_doc) {
       return res.status(400).json({ message: "Debe llenar todos los campos" });
     }
-
-    const existFECHAREGISTRO = await Queries.getFechaRegistro(fecha_realizar_cita);
-
-    if (Array.isArray(existFECHAREGISTRO) && existFECHAREGISTRO.length > 0) {
-      return res.status(409).json({ message: "La fecha de la cita ya está en uso" });
-    }
-
-    const paciente = await Queries.getPacienteCedula(cedula_paciente_cita);
-
-    if (paciente.length === 0) {
-      return res.status(404).json({ message: "Paciente no encontrado" });
-    }
-
-    const id_pac = paciente[0].id_pac;
 
     await Queries.addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, null,"pendiente", id_doc, id_pac);
 
@@ -379,6 +365,7 @@ app.post('/api/actualizarEstadoCita', async (req, res) => {
   try{
     const { id_cita, nuevoEstado_cita, comentario_cita} = req.body;
 
+    console.log(id_cita);
     await Queries.updateCita(id_cita, nuevoEstado_cita, comentario_cita);
     
     res.status(201).json({ message: "El dependiente fue registrado exitosamente" });

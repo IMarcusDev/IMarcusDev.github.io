@@ -148,17 +148,21 @@ export default {
             let nombre_paciente_cita = '', apellido_paciente_cita = '', cedula_paciente_cita = '';
             const selectedDoctor = this.doctores.find(doc => doc.id_doc === this.medico);
             const id_doc = selectedDoctor.id_doc;
+            let id_pac = undefined;
 
             if (this.paciente === 'Mi persona') {
                 const pac = await this.datosUser();
                 nombre_paciente_cita = pac[0].nombres_pac;
                 apellido_paciente_cita = pac[0].apellidos_pac;
                 cedula_paciente_cita = pac[0].cedula_pac;
+                id_pac = pac[0].id_pac;
             } else {
                 const selectedDependiente = this.dependientes.find(dep => dep.cedula_dep === this.paciente);
+                const pac = await this.datosUser();
                 nombre_paciente_cita = selectedDependiente.nombre_dep;
                 apellido_paciente_cita = selectedDependiente.apellido_dep;
                 cedula_paciente_cita = selectedDependiente.cedula_dep;
+                id_pac = pac[0].id_pac;
             }
 
 
@@ -172,6 +176,7 @@ export default {
                     fecha_realizar_cita,
                     hora_cita,
                     valor_cita,
+                    id_pac,
                     id_doc
                 });
 
@@ -236,6 +241,7 @@ export default {
                 });
 
                 this.DatosPaciente = response.data.map(pac => ({
+                    id_pac: pac.id_pac,
                     nombres_pac: pac.nombres_pac,
                     apellidos_pac: pac.apellidos_pac,
                     cedula_pac: pac.cedula_pac,

@@ -73,7 +73,7 @@ export default {
             nuevoEstado: '',
             comentarioDoc: '',
             cita: {
-                id: 0,
+                id: undefined,
                 fecha: '',
                 hora: '',
                 tipoCita: '',
@@ -105,6 +105,7 @@ export default {
                 });
 
                 this.citas = response.data.data.map(cita => ({
+                    id: cita.id_cita,
                     fecha: cita.fecha_realizar_cita.slice(0, -14),
                     hora: cita.hora_cita,
                     tipoCita: cita.asunto_cita,
