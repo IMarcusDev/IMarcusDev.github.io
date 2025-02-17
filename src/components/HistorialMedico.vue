@@ -5,6 +5,7 @@
             <div class="busqueda">
                 <input type="text" v-model="busquedaCedula" placeholder="Buscar por número de cédula" />
                 <input type="date" v-model="busquedaFecha"/>
+                <button @click="filtrarCitas">Buscar</button>
             </div>
             <div v-if="citas.length > 0" class="tabla-citas">
                 <table>
@@ -67,13 +68,12 @@ export default {
             busquedaCedula: '',
             busquedaFecha: '',
             citas: [],
-            citasOriginal: [], // Nueva propiedad para almacenar el arreglo original de citas
             mostrarModal: false,
             citaSeleccionada: null,
             nuevoEstado: '',
             comentarioDoc: '',
             cita: {
-                id: undefined,
+                id: 0,
                 fecha: '',
                 hora: '',
                 tipoCita: '',
@@ -85,70 +85,29 @@ export default {
             citaHover: null,
         };
     },
-    computed: {
-        currentUser() {
-            const userStore = useUserStore();
-            return userStore.currentUser;
-        },
-        currentState(){
-            const stateStore = useStateStore();
-            return stateStore;
-        }
-    },
     methods: {
-        async buscarCitas() {
-            const user = this.currentUser;
-
-            try {
-                const response = await axios.post('/historialCitas', {
-                    user
-                });
-
-                this.procesarCitas(response);
-            } catch (error) {
-                console.error('Error al buscar citas:', error);
-                this.citas = [];
-            }
-        },
         async buscarCitasTodos() {
-            try {
+            try{
                 const response = await axios.post('/historialCitasTodos');
-                this.procesarCitas(response);
-            } catch (error) {
+
+                this.citas = response.data.data.map(cita => ({
+                    id: cita.id_cita,
+                    fecha: cita.fecha_realizar_cita.slice(0,-14),
+                    hora: cita.hora_cita,
+                    tipoCita: cita.asunto_cita,
+                    cedula: cita.cedula_paciente_cita,
+                    estado: cita.estado_cita,
+                    comentario: cita.comentario_doc_cita,
+                    valor: cita.valor_cita
+                }));
+
+                if (response.status !== 200) {
+                    alert('Error al cargar las citas');
+                }
+            }catch (error) {
                 console.error('Error al buscar citas:', error);
                 this.citas = [];
             }
-        },
-        procesarCitas(response) {
-            if (response.status !== 200) {
-                alert('Error al cargar las citas');
-                return;
-            }
-
-            this.citasOriginal = response.data.data.map(cita => ({
-                id: cita.id_cita,
-                fecha: cita.fecha_realizar_cita.slice(0, -14),
-                hora: cita.hora_cita,
-                tipoCita: cita.asunto_cita,
-                cedula: cita.cedula_paciente_cita,
-                estado: cita.estado_cita,
-                comentario: cita.comentario_doc_cita,
-                valor: cita.valor_cita,
-                nombre_doc: cita.nombres_doc + ' ' + cita.apellidos_doc
-            }));
-
-            this.citas = [...this.citasOriginal]; // Copia de las citas originales
-        },
-        filtrarCitas() {
-            if (!this.busquedaCedula && !this.busquedaFecha) {
-                this.citas = [...this.citasOriginal];
-                return;
-            }
-
-            this.citas = this.citasOriginal.filter(cita =>
-                (!this.busquedaCedula || cita.cedula.includes(this.busquedaCedula)) &&
-                (!this.busquedaFecha || cita.fecha === this.busquedaFecha)
-            );
         },
         abrirModal(cita) {
             this.citaSeleccionada = cita;
@@ -183,6 +142,12 @@ export default {
                 }
             }
         },
+        filtrarCitas(){
+            this.citas = this.citas.filter(cita =>
+                (this.busquedaCedula ? cita.cedula.includes(this.busquedaCedula) : true) &&
+                (this.busquedaFecha ? cita.fecha === this.busquedaFecha : true)
+            );
+        },
         hoverEstado(cita) {
             this.citaHover = cita;
         },
@@ -190,29 +155,15 @@ export default {
             this.citaHover = null;
         }
     },
-    watch: {
-        busquedaCedula() {
-            this.filtrarCitas();
-        },
-        busquedaFecha() {
-            this.filtrarCitas();
-        }
-    },
     async created() {
-        const state = this.currentState.currentUserType;
-
-        if (state === 'administrador'){
-            await this.buscarCitasTodos();
-        }else if (state === 'medico'){
-            await this.buscarCitas();
-        }
+        await this.buscarCitasTodos();
     }
 };
 </script>
 
 <style scoped>
 .historial {
-    width: 90%;
+    width: 80%;
     margin: 20px auto;
     font-family: Arial, sans-serif;
     background-color: white;
@@ -229,6 +180,16 @@ h2 {
     color: #333;
 }
 
+.content {
+    width: 90%;
+    background-color: #a6bddc;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 .busqueda {
     display: flex;
@@ -273,9 +234,11 @@ h2 {
 .tabla-citas {
     width: 100%;
     border-collapse: collapse;
+    margin-left: 30px;
 }
 
 .tabla-citas table{
+    width: 90%;
     border-color: black
 }
 
