@@ -100,9 +100,13 @@ app.post("/api/registerFromDoc", async (req, res) => {
 
       const cedulaUSERS = await Queries.getPacienteCedula(cedula);
 
+      console.log('hola1');
+
       if (Array.isArray(cedulaUSERS) && cedulaUSERS.length > 0) {
         return res.status(409).json({ message: "La cédula de usuario ya está en uso" });
       }      
+
+      console.log('hola');
 
       await Queries.addPacienteInfo(Names, SurNames, cedula, fecha_nac, email, null);
       
@@ -181,6 +185,8 @@ app.post("/api/agendarPaciente", async (req, res) => {
       }
       patientId = patient.id_pac;
     }
+
+    console.log(patientId);
 
     await Queries.addCita(nombre_paciente_cita, apellido_paciente_cita, cedula_paciente_cita, asunto_cita, fecha_registro_cita, fecha_realizar_cita, hora_cita, valor_cita, null, comentario_pac_cita,"pendiente", id_doc, patientId);
 

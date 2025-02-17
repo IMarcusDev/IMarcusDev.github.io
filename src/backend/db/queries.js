@@ -67,9 +67,6 @@ async function getPacienteCedulaId(cedula) {
 async function getPacienteCedula(cedula) {
     try {
         const [rows] = await pool.execute('SELECT id_pac FROM PACIENTES WHERE cedula_pac = ?;', [cedula]);
-        if (rows.length === 0) {
-            throw new Error('No patient found with the given cedula');
-        }
         return rows[0];
     } catch (error) {
         console.error('Error while retrieving patient by cedula:', error);
