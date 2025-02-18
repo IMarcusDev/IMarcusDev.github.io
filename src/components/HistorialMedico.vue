@@ -5,7 +5,6 @@
             <div class="busqueda">
                 <input type="text" v-model="busquedaCedula" placeholder="Buscar por número de cédula" />
                 <input type="date" v-model="busquedaFecha"/>
-                <button @click="filtrarCitas">Buscar</button>
             </div>
             <div v-if="citas.length > 0" class="tabla-citas">
                 <table>
@@ -14,6 +13,7 @@
                             <th>Fecha</th>
                             <th>Hora</th>
                             <th>Tipo de Cita</th>
+                            <th>Paciente</th>
                             <th>Número de Cédula</th>
                             <th>Estado</th>
                             <th>Comentario del Doctor</th>
@@ -25,6 +25,7 @@
                             <td>{{ cita.fecha }}</td>
                             <td>{{ cita.hora }}</td>
                             <td>{{ cita.tipoCita }}</td>
+                            <td>{{ cita.nombre_pac }}</td>
                             <td>{{ cita.cedula }}</td>
                             <td @mouseover="hoverEstado(cita)" @mouseleave="leaveEstado">{{ cita.estado }}
                                 <button v-if="citaHover === cita && cita.estado === 'pendiente'" @click="abrirModal(cita)">Cambiar estado</button>
@@ -68,46 +69,73 @@ export default {
             busquedaCedula: '',
             busquedaFecha: '',
             citas: [],
+            citasOriginal: [],
             mostrarModal: false,
             citaSeleccionada: null,
             nuevoEstado: '',
             comentarioDoc: '',
-            cita: {
-                id: 0,
-                fecha: '',
-                hora: '',
-                tipoCita: '',
-                cedula: '',
-                estado: '',
-                comentario: '',
-                valor: ''
-            },
             citaHover: null,
         };
     },
+    computed: {
+        currentUser() {
+            const userStore = useUserStore();
+            return userStore.currentUser;
+        },
+        currentState() {
+            const stateStore = useStateStore();
+            return stateStore.currentUserType;
+        }
+    },
     methods: {
-        async buscarCitasTodos() {
-            try{
-                const response = await axios.post('/historialCitasTodos');
-
-                this.citas = response.data.data.map(cita => ({
-                    id: cita.id_cita,
-                    fecha: cita.fecha_realizar_cita.slice(0,-14),
-                    hora: cita.hora_cita,
-                    tipoCita: cita.asunto_cita,
-                    cedula: cita.cedula_paciente_cita,
-                    estado: cita.estado_cita,
-                    comentario: cita.comentario_doc_cita,
-                    valor: cita.valor_cita
-                }));
-
-                if (response.status !== 200) {
-                    alert('Error al cargar las citas');
-                }
-            }catch (error) {
+        async buscarCitas() {
+            const user = this.currentUser;
+            try {
+                const response = await axios.post('/historialCitas', {
+                    user
+                });
+                this.procesarCitas(response);
+            } catch (error) {
                 console.error('Error al buscar citas:', error);
                 this.citas = [];
             }
+        },
+        async buscarCitasTodos() {
+            try {
+                const response = await axios.post('/historialCitasTodos');
+                this.procesarCitas(response);
+            } catch (error) {
+                console.error('Error al buscar citas:', error);
+                this.citas = [];
+            }
+        },
+        procesarCitas(response) {
+            if (response.status !== 200) {
+                alert('Error al cargar las citas');
+                return;
+            }
+            this.citasOriginal = response.data.data.map(cita => ({
+                id: cita.id_cita,
+                fecha: cita.fecha_realizar_cita.slice(0, -14),
+                hora: cita.hora_cita,
+                tipoCita: cita.asunto_cita,
+                nombre_pac: cita.nombre_paciente_cita + ' ' + cita.apellido_paciente_cita,
+                cedula: cita.cedula_paciente_cita,
+                estado: cita.estado_cita,
+                comentario: cita.comentario_doc_cita,
+                valor: cita.valor_cita
+            }));
+            this.citas = [...this.citasOriginal];
+        },
+        filtrarCitas() {
+            if (!this.busquedaCedula && !this.busquedaFecha) {
+                this.citas = [...this.citasOriginal];
+                return;
+            }
+            this.citas = this.citasOriginal.filter(cita =>
+                (!this.busquedaCedula || cita.cedula.includes(this.busquedaCedula)) &&
+                (!this.busquedaFecha || cita.fecha === this.busquedaFecha)
+            );
         },
         abrirModal(cita) {
             this.citaSeleccionada = cita;
@@ -142,12 +170,6 @@ export default {
                 }
             }
         },
-        filtrarCitas(){
-            this.citas = this.citas.filter(cita =>
-                (this.busquedaCedula ? cita.cedula.includes(this.busquedaCedula) : true) &&
-                (this.busquedaFecha ? cita.fecha === this.busquedaFecha : true)
-            );
-        },
         hoverEstado(cita) {
             this.citaHover = cita;
         },
@@ -155,15 +177,28 @@ export default {
             this.citaHover = null;
         }
     },
+    watch: {
+        busquedaCedula() {
+            this.filtrarCitas();
+        },
+        busquedaFecha() {
+            this.filtrarCitas();
+        }
+    },
     async created() {
-        await this.buscarCitasTodos();
+        const state = this.currentState;
+        if (state === 'administrador') {
+            await this.buscarCitasTodos();
+        } else if (state === 'medico') {
+            await this.buscarCitas();
+        }
     }
 };
 </script>
 
 <style scoped>
 .historial {
-    width: 80%;
+    width: 90%;
     margin: 20px auto;
     font-family: Arial, sans-serif;
     background-color: white;
@@ -178,17 +213,6 @@ export default {
 h2 {
     margin-bottom: 20px;
     color: #333;
-}
-
-.content {
-    width: 90%;
-    background-color: #a6bddc;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .busqueda {
@@ -234,11 +258,9 @@ h2 {
 .tabla-citas {
     width: 100%;
     border-collapse: collapse;
-    margin-left: 30px;
 }
 
 .tabla-citas table{
-    width: 90%;
     border-color: black
 }
 
