@@ -434,7 +434,7 @@ async function getSecretarios() {
 
 async function getDoctores() {
     try {
-        const [rows] = await pool.execute('SELECT cedula_doc AS cedula, nombres_doc AS nombre, apellidos_doc AS apellido FROM DOCTORES;');
+        const [rows] = await pool.execute('SELECT id_doc, cedula_doc AS cedula, nombres_doc AS nombre, apellidos_doc AS apellido FROM DOCTORES;');
         return rows;
     } catch (error) {
         throw new Error('Error al obtener información: ' + error);
