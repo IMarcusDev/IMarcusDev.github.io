@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [
     vue(),
   ],
+  base: 'https://IMarcusDev.github.io/ProjectConsultorio',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
