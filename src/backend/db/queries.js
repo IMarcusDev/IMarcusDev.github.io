@@ -412,6 +412,26 @@ async function updateIdUserPac(Names, SurNames, cedula, fecha_nac, email, id_use
     }
 }
 
+async function verifyUserDetails(Names, SurNames, cedula, email, username) {
+    try {
+        const [rows] = await pool.execute(
+            'SELECT * FROM USERS u JOIN PACIENTES p ON u.id_user = p.id_user WHERE p.nombres_pac = ? AND p.apellidos_pac = ? AND p.cedula_pac = ? AND p.email_pac = ? AND u.username_user = ?;',
+            [Names, SurNames, cedula, email, username]
+        );
+        return rows.length > 0;
+    } catch (error) {
+        throw new Error('Error al verificar los datos: ' + error);
+    }
+}
+
+async function updateUserPassword(username, newPassword) {
+    try {
+        await pool.execute('UPDATE USERS SET password_user = ? WHERE username_user = ?;', [newPassword, username]);
+    } catch (error) {
+        throw new Error('Error al actualizar la contraseña: ' + error);
+    }
+}
+
 export {
     getPacienteCedulaId,
     updateIdUserPac,
@@ -453,6 +473,8 @@ export {
     getCitaForIdOfDoc,
     getBookedSlots,
     getUserByEmail,
-    getUserByCedula
+    getUserByCedula,
+    verifyUserDetails,
+    updateUserPassword
 }
 

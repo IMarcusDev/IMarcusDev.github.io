@@ -159,7 +159,6 @@
             <h1>Testimonios de nuestros pacientes</h1>
             <div class="testimonios-carrusel">
                 <div class="testimonio" v-for="(testimonio, index) in testimonios" :key="index">
-                    <img :src="testimonio.foto" alt="Foto de {{ testimonio.nombre }}" class="testimonio-foto">
                     <p>"{{ testimonio.texto }}"</p>
                     <p><strong>- {{ testimonio.nombre }}</strong></p>
                 </div>

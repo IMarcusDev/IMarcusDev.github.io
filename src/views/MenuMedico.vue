@@ -61,7 +61,8 @@ export default {
 <style scoped>
 .content {
     display: flex;
-    width: 100%;   
+    width: 100%;
+    height: calc(100vh - 20px);
     font-family: 'Arial', sans-serif;
 }
 
@@ -69,10 +70,11 @@ export default {
     display: flex;
     align-items: center;
     width: 20%;
+    height: 100%;
 }
 
 .menu-lateral {
-    height: 95vh;
+    height: 100%;
     width: 250px;
     background-color: #007bff;
     color: #ffffff;
@@ -83,6 +85,7 @@ export default {
     padding: 20px;
     justify-content: space-between;
     border-radius: 8px 0 0 8px;
+    overflow: hidden;
 }
 
 .logo {

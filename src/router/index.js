@@ -13,6 +13,7 @@ import MenuAdmin from '../views/MenuAdmin.vue';
 import registrarDoctor from '../components/registrarDoctor.vue';
 import registrarSecretario from '../components/registrarSecretario.vue';
 import registrarPaciente from '../components/registrarPaciente.vue';
+import ForgotPassword from '../views/ForgotPassword.vue';
 
 const routes = [
     {
@@ -105,6 +106,11 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: Login
+    },
+    {
+        path: '/forgot-password',
+        name: 'ForgotPassword',
+        component: ForgotPassword
     },
 ];
 

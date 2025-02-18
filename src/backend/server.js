@@ -63,13 +63,11 @@ app.post("/api/register", async (req, res) => {
       const id_users = await Queries.addUser(username, password);
 
       if ((Array.isArray(cedulaUSERS) && cedulaUSERS.length > 0) && (validate_id_user.length > 0 && validate_id_user[0].id_user === null)) {
-        console.log('HOLA');
         await Queries.updateIdUserPac(Names, SurNames, cedula, fecha_nac, email, id_users);
       } else if (validate_id_user.length === 0) {
         if (Array.isArray(existeEMAILUSERS) && existeEMAILUSERS.length > 0) {
           return res.status(409).json({ message: "El email de usuario ya está en uso" });
         }
-        console.log('Adios');
         await Queries.addPacienteInfo(Names, SurNames, cedula, fecha_nac, email, id_users);
       }
 
@@ -498,6 +496,30 @@ app.post("/api/checkDuplicate", async (req, res) => {
     res.status(200).json({ isDuplicate });
   } catch (error) {
     res.status(500).json({ message: "Error al verificar duplicados: " + error.message });
+  }
+});
+
+app.post("/api/verifyUser", async (req, res) => {
+  try {
+    const { Names, SurNames, cedula, email, username } = req.body;
+    const user = await Queries.verifyUserDetails(Names, SurNames, cedula, email, username);
+    if (user) {
+      res.json({ success: true });
+    } else {
+      res.json({ success: false });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error al verificar los datos: " + error.message });
+  }
+});
+
+app.post("/api/updatePassword", async (req, res) => {
+  try {
+    const { username, newPassword } = req.body;
+    await Queries.updateUserPassword(username, newPassword);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ message: "Error al actualizar la contraseña: " + error.message });
   }
 });
 
