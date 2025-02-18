@@ -16,11 +16,10 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:5000",
+        target: "backend-production-225f.up.railway.app",
         changeOrigin: true,
         secure: false
       }
     },
-    allowedHosts: ["susan-core-b-viewing.trycloudflare.com"] // <-- Agregado aquí
   }
 });
