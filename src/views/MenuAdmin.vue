@@ -10,6 +10,7 @@
                     <li><router-link to="/MenuAdmin/historialAdmin">Historial de citas</router-link></li>
                     <li><router-link to="/MenuAdmin/registrarMedico">Registrar Medico</router-link></li>
                     <li><router-link to="/MenuAdmin/registrarSecretario">Registrar Secretario</router-link></li>
+                    <li><router-link to="/MenuAdmin/listaDoctoresSecretarios">Lista de Doctores y Secretarios</router-link></li>
                 </ul>
                 <router-link to="/">
                     <button class="btnCerrarSesion" @click="logout">Cerrar Sesión <ArrowRightStartOnRectangleIcon class="arrowIcon" /></button>
@@ -44,12 +45,20 @@ export default {
             return stateStore;
         }
     },
+    mounted() {
+        const userStore = useUserStore();
+        const stateStore = useStateStore();
+        userStore.currentUser = sessionStorage.getItem('currentUser');
+        stateStore.currentUserType = sessionStorage.getItem('currentUserType');
+    },
     methods: {
         logout () {
+            sessionStorage.clear();
             let logoutUser = this.currentUser;
             logoutUser.logout();
             let logoutState = this.currentState;
             logoutState.logout();
+            this.$router.push('/');
         }
     }
 };

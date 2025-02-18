@@ -35,7 +35,7 @@
                     <span v-if="errors.loginUsername">{{ errors.loginUsername }}</span>
                     <input type="password" ref="loginPassword" placeholder="Contraseña" v-model="loginForm.password" @input="validateLoginPassword">
                     <span v-if="errors.loginPassword">{{ errors.loginPassword }}</span>
-                    <a href="#">¿Olvidaste tu contraseña?</a>
+                    <a href="#" @click.prevent="$router.push('/forgot-password')">¿Olvidaste tu contraseña?</a>
                     <button>Iniciar Sesión</button>
                     <router-link to="/">
                         <button>Cancelar</button>
@@ -248,7 +248,7 @@ export default {
 
                 if (response.status === 201) {
                     alert('Usuario registrado exitosamente');
-                    this.$router.push('/login'); // Redirect to login page
+                    this.$router.push('/login');
                     this.registerForm = {
                         Names: '',
                         SurNames: '',
@@ -259,7 +259,8 @@ export default {
                         password: '',
                         confirmPassword: ''
                     };
-                    
+                    const container = document.getElementById('container');
+                    container.classList.remove("active"); // Switch to login form
                 } else {
                     alert('Error al registrar usuario');
                 }

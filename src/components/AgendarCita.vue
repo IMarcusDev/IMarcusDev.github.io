@@ -187,7 +187,7 @@ export default {
                 }
                 return acc + digit;
             }, 0);
-            const validator = 10 - (sum % 10);
+            const validator = (10 - (sum % 10)) % 10;
             this.errors.cedula = validator === lastDigit ? '' : 'Cédula no válida';
         },
         validateAsunto() {
@@ -249,7 +249,15 @@ export default {
 
                 if (response.status === 201) {
                     alert('La cita fue registrada exitosamente');
-                    // Refresh booked slots after registering the appointment
+                    this.tipoCita = 'Consulta/tratamiento';
+                    this.cedula = '';
+                    this.asunto = '';
+                    this.valorCita = '40 USD';
+                    this.metodoPago = 'Credito';
+                    this.nombre = '';
+                    this.apellido = '';
+                    this.medico = '';
+                    this.$refs.descripcionPac.value = '';
                     const calendarComponent = this.$refs.calendarComponent;
                     if (calendarComponent) {
                         await calendarComponent.fetchBookedSlots(this.selectedDate);

@@ -523,6 +523,26 @@ app.post("/api/updatePassword", async (req, res) => {
   }
 });
 
+app.post("/api/ListaDoctoresSecretarios", async (req, res) => {
+  try {
+    const doctores = await Queries.getDoctores();
+    const secretarios = await Queries.getSecretarios();
+
+    const personas = [
+      ...doctores.map(doc => ({ ...doc, tipo: 'doctor' })),
+      ...secretarios.map(sec => ({ ...sec, tipo: 'secretario' }))
+    ];
+
+    return res.status(200).json({
+      success: true,
+      message: personas.length > 0 ? "Datos obtenidos exitosamente." : "No hay datos registrados.",
+      data: personas
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener los datos: " + error.message });
+  }
+});
+
 // Servir el frontend en producción
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

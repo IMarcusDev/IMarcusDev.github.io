@@ -2,14 +2,16 @@ import { defineStore } from "pinia";
 
 export const useStateStore = defineStore('estado', {
     state: () => ({
-        currentUserType: null,
+        currentUserType: sessionStorage.getItem('currentUserType') || null,
     }),
     actions: {
-        login(estado) {
-            this.currentUserType = estado;
+        login(userType) {
+            this.currentUserType = userType;
+            sessionStorage.setItem('currentUserType', userType);
         },
         logout() {
             this.currentUserType = null;
+            sessionStorage.clear();
         }
     }
 });

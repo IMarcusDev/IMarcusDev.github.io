@@ -132,6 +132,13 @@ export default {
         } else if (this.currentState === 'paciente') {
             await this.buscarCitas();
         }
+    },
+    mounted() {
+        if (this.currentState === 'secretario') {
+            this.buscarCitasTodos();
+        } else if (this.currentState === 'paciente') {
+            this.buscarCitas();
+        }
     }
 };
 </script>

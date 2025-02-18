@@ -83,15 +83,6 @@ async function getDoctorCedula(cedula) {
     }
 };
 
-async function getDoctores(){
-    try{
-        const [rows] = await pool.execute('SELECT id_doc, nombres_doc, apellidos_doc FROM DOCTORES')
-        return rows;
-    }catch(error){
-        throw new Error('Error al obtener información: ' + error);
-    }
-}
-
 async function getSecretarioCedula(cedula) {
     try {
         const [rows] = await pool.execute('SELECT * FROM SECRETARIOS WHERE cedula_sec = ?;', [cedula]);
@@ -432,6 +423,24 @@ async function updateUserPassword(username, newPassword) {
     }
 }
 
+async function getSecretarios() {
+    try {
+        const [rows] = await pool.execute('SELECT cedula_sec AS cedula, nombres_sec AS nombre, apellidos_sec AS apellido FROM SECRETARIOS;');
+        return rows;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+}
+
+async function getDoctores() {
+    try {
+        const [rows] = await pool.execute('SELECT cedula_doc AS cedula, nombres_doc AS nombre, apellidos_doc AS apellido FROM DOCTORES;');
+        return rows;
+    } catch (error) {
+        throw new Error('Error al obtener información: ' + error);
+    }
+}
+
 export {
     getPacienteCedulaId,
     updateIdUserPac,
@@ -475,6 +484,7 @@ export {
     getUserByEmail,
     getUserByCedula,
     verifyUserDetails,
-    updateUserPassword
+    updateUserPassword,
+    getSecretarios
 }
 

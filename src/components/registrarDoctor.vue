@@ -162,7 +162,7 @@ export default {
                 }
                 return acc + digit;
             }, 0);
-            const validator = 10 - (sum % 10);
+            const validator = (10 - (sum % 10)) % 10;
             this.errors.cedula = validator === lastDigit ? '' : 'Cédula no válida';
         },
         validateNombre() {

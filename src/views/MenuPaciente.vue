@@ -44,12 +44,20 @@ export default {
             return stateStore;
         }
     },
+    mounted() {
+        const userStore = useUserStore();
+        const stateStore = useStateStore();
+        userStore.currentUser = sessionStorage.getItem('currentUser');
+        stateStore.currentUserType = sessionStorage.getItem('currentUserType');
+    },
     methods: {
         logout () {
+            sessionStorage.clear();
             let logoutUser = this.currentUser;
             logoutUser.logout();
             let logoutState = this.currentState;
             logoutState.logout();
+            this.$router.push('/');
         }
     }
 };

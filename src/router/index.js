@@ -14,6 +14,7 @@ import registrarDoctor from '../components/registrarDoctor.vue';
 import registrarSecretario from '../components/registrarSecretario.vue';
 import registrarPaciente from '../components/registrarPaciente.vue';
 import ForgotPassword from '../views/ForgotPassword.vue';
+import ListaDoctoresSecretarios from '../components/ListaDoctoresSecretarios.vue';
 
 const routes = [
     {
@@ -99,6 +100,11 @@ const routes = [
                 path: 'registrarSecretario',
                 name: 'RegistrarSecretario',
                 component: registrarSecretario
+            },
+            {
+                path: 'listaDoctoresSecretarios',
+                name: 'ListaDoctoresSecretarios',
+                component: ListaDoctoresSecretarios
             }
         ]
     },

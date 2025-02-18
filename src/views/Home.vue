@@ -232,8 +232,8 @@
 </template>
 
 <script>
-import { ArrowLongRightIcon } from '@heroicons/vue/24/solid'
-import { RouterLink } from 'vue-router';
+import { ArrowLongRightIcon } from '@heroicons/vue/24/solid';
+import { useUserStore } from '../store/userStore';
 import { useLoginStore } from '../store/loginStore';
 
 export default {
@@ -265,14 +265,9 @@ export default {
             }
         };
     },
-    computed: {
-        isLoggedIn() {
-            return localStorage.getItem('userType') !== null;
-        }
-    },
     mounted() {
         this.startAutoSlide();
-        localStorage.removeItem('userType');
+        sessionStorage.clear();
     },
     methods: {
         startAutoSlide() {
@@ -918,7 +913,7 @@ nav h2{
     text-align: center;
     padding: 50px 20px;
     background-color: var(--white-color);
-    color: var(--text-color);
+    color: var (--text-color);
     margin-bottom: 40px;
     box-shadow: var(--box-shadow);
     border-radius: var(--border-radius);

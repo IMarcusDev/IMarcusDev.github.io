@@ -89,7 +89,8 @@ export default {
     },
     methods: {
         async buscarCitas() {
-            const user = this.currentUser;
+            const user = this.currentUser; 
+            
             try {
                 const response = await axios.post('/historialCitas', {
                     user
@@ -191,6 +192,14 @@ export default {
             await this.buscarCitasTodos();
         } else if (state === 'medico') {
             await this.buscarCitas();
+        }
+    },
+    mounted() {
+        const state = this.currentState;
+        if (state === 'administrador') {
+            this.buscarCitasTodos();
+        } else if (state === 'medico') {
+            this.buscarCitas();
         }
     }
 };

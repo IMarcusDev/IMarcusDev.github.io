@@ -192,7 +192,15 @@ export default {
 
                 if (response.status === 201) {
                     alert('La cita fue registrada exitosamente');
-                    // Refresh booked slots after registering the appointment
+                    this.tipoCita = 'Consulta/tratamiento';
+                    this.cedula = '';
+                    this.asunto = '';
+                    this.valorCita = '40 USD';
+                    this.metodoPago = 'Credito';
+                    this.medico = '';
+                    this.paciente = 'Mi persona';
+                    this.$refs.descripcionPac.value = '';
+
                     const calendarComponent = this.$refs.calendarComponent;
                     if (calendarComponent) {
                         await calendarComponent.fetchBookedSlots(this.selectedDate);
