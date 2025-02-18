@@ -19,6 +19,8 @@
                     <span v-if="errors.username">{{ errors.username }}</span>
                     <input type="password" ref="password" placeholder="Contraseña" v-model="registerForm.password" @input="validatePassword">
                     <span v-if="errors.password">{{ errors.password }}</span>
+                    <input type="password" ref="confirmPassword" placeholder="Confirmar Contraseña" v-model="registerForm.confirmPassword" @input="validateConfirmPassword">
+                    <span v-if="errors.confirmPassword">{{ errors.confirmPassword }}</span>
                     <button type="submit">Registrarse</button>
                     <router-link to="/">
                         <button>Cancelar</button>
@@ -33,7 +35,7 @@
                     <span v-if="errors.loginUsername">{{ errors.loginUsername }}</span>
                     <input type="password" ref="loginPassword" placeholder="Contraseña" v-model="loginForm.password" @input="validateLoginPassword">
                     <span v-if="errors.loginPassword">{{ errors.loginPassword }}</span>
-                    <a href="#">¿Olvidaste tu contraseña?</a>
+                    <a href="#" @click.prevent="$router.push('/forgot-password')">¿Olvidaste tu contraseña?</a>
                     <button>Iniciar Sesión</button>
                     <router-link to="/">
                         <button>Cancelar</button>
@@ -75,7 +77,8 @@ export default {
                 age: '',
                 email: '',
                 username: '',
-                password: ''
+                password: '',
+                confirmPassword: ''
             },
             loginForm: {
                 username: '',
@@ -156,6 +159,9 @@ export default {
         validatePassword() {
             this.errors.password = this.registerForm.password.length < 8 ? 'La contraseña debe tener al menos 8 caracteres' : '';
         },
+        validateConfirmPassword() {
+            this.errors.confirmPassword = this.registerForm.password !== this.registerForm.confirmPassword ? 'Las contraseñas no coinciden' : '';
+        },
         validateLoginUsername() {
             const regex = /^[a-zA-Z0-9_]*$/;
             this.errors.loginUsername = !regex.test(this.loginForm.username) ? 'El nombre de usuario solo puede contener letras, números y guiones bajos' : '';
@@ -216,8 +222,9 @@ export default {
             this.validateEmail();
             this.validateUsername();
             this.validatePassword();
+            this.validateConfirmPassword();
 
-            if (this.errors.Names || this.errors.SurNames || this.errors.cedula || this.errors.age || this.errors.email || this.errors.username || this.errors.password) {
+            if (this.errors.Names || this.errors.SurNames || this.errors.cedula || this.errors.age || this.errors.email || this.errors.username || this.errors.password || this.errors.confirmPassword) {
                 return;
             }
 
@@ -249,8 +256,11 @@ export default {
                         age: '',
                         email: '',
                         username: '',
-                        password: ''
+                        password: '',
+                        confirmPassword: ''
                     };
+                    const container = document.getElementById('container');
+                    container.classList.remove("active"); // Switch to login form
                 } else {
                     alert('Error al registrar usuario');
                 }
@@ -296,9 +306,9 @@ body{
     position: absolute;
     overflow: hidden;
     width: 768px;
-    height: 600px;
+    height: 700px;
     max-width: 100%;
-    min-height: 480px;
+    min-width: 480px;
 }    
 
 
@@ -347,7 +357,6 @@ body{
     justify-content: center;
     flex-direction: column;
     padding: 0 40px;
-    height: 100%;
 }
 
 .container form h2{
@@ -368,7 +377,7 @@ body{
 .form-container{
     position: absolute;
     top: 0;
-    height: 100%;
+    height: auto;
     transition: all 0.6s ease-in-out;
 }
 
@@ -376,6 +385,7 @@ body{
     left: 0;
     width: 50%;
     z-index: 2;
+    top: 30%;
 }
 
 .container.active .sign-in{
