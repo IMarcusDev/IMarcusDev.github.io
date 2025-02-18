@@ -89,6 +89,7 @@ export default {
                 });
                 if (response.status === 201) {
                     alert('El dependiente fue registrado exitosamente');
+                    this.clearForm();
                 } else {
                     alert('Error al registrar el dependiente');
                 }
@@ -96,6 +97,13 @@ export default {
                 console.log('Error durante el registro:', error);
                 alert('Error al registrar el dependiente');
             }
+        },
+        clearForm() {
+            this.cedula_dep = '';
+            this.nombre_dep = '';
+            this.apellido_dep = '';
+            this.fecha_nac_dep = '';
+            this.errors = {};
         },
         async checkDuplicate(cedula, email, username) {
             try {

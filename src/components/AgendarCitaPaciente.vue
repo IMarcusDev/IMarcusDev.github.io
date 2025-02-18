@@ -239,11 +239,11 @@ export default {
         async llenarCamposDoctores(){
             try{
                 const response = await axios.post('/ListaDoctores');
-
+                console.log(response);
                 this.doctores = response.data.data.map(doctor => ({
                     id_doc: doctor.id_doc,
-                    nombres_doc: doctor.nombres_doc,
-                    apellidos_doc: doctor.apellidos_doc
+                    nombres_doc: doctor.nombre,
+                    apellidos_doc: doctor.apellido
                 }));
 
                 if (response.status !== 200) {
