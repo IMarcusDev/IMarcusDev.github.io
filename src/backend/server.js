@@ -58,19 +58,18 @@ app.post("/api/register", async (req, res) => {
       }
 
       const existeEMAILUSERS = await Queries.getPacienteEmail(email);
-
       const cedulaUSERS = await Queries.getPacienteCedulaId(cedula);
-
       const validate_id_user = await Queries.getIdUserPac(cedula);
-
       const id_users = await Queries.addUser(username, password);
 
-      if ((Array.isArray(cedulaUSERS) && cedulaUSERS.length > 0) & validate_id_user[0].id_user === null) {
+      if ((Array.isArray(cedulaUSERS) && cedulaUSERS.length > 0) && (validate_id_user.length > 0 && validate_id_user[0].id_user === null)) {
+        console.log('HOLA');
         await Queries.updateIdUserPac(Names, SurNames, cedula, fecha_nac, email, id_users);
-      }else{
+      } else if (validate_id_user.length === 0) {
         if (Array.isArray(existeEMAILUSERS) && existeEMAILUSERS.length > 0) {
           return res.status(409).json({ message: "El email de usuario ya está en uso" });
         }
+        console.log('Adios');
         await Queries.addPacienteInfo(Names, SurNames, cedula, fecha_nac, email, id_users);
       }
 
