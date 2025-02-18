@@ -12,12 +12,10 @@ Esto instalará todas las dependencias utilizadas:
 - Axios
 - Concurrently
 - Cors
-- DaisyUI
 - Express
 - MySQL
 - NoDemon
 - pinia
-- Tailwind
 - Vue
 - Vite
 
@@ -145,3 +143,6 @@ npm start
 Esto iniciará los servicios y podrá hacer llamadas desde `localhost:5000/api`. Para verificar si el servidor MySQL está corriendo, revise el [estado](localhost:5000/api/status) del servidor.
 
 Si desea cerrar el servidor, ejecute la combinación de teclas `Ctrl + C` en la consola donde se ejecutó `npm start`.
+
+## Manual de usuario
+[Manual](https://drive.google.com/file/d/1c8ZZAz13TNwoinQJ3Ke0f38D22xGErKu/view?usp=drive_link)
