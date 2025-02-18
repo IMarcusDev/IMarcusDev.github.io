@@ -17,6 +17,7 @@
                             <th>Número de Cédula</th>
                             <th>Estado</th>
                             <th>Comentario del Doctor</th>
+                            <th>Comentario de la cita</th>
                             <th>Valor</th>
                         </tr>
                     </thead>
@@ -31,6 +32,7 @@
                                 <button v-if="citaHover === cita && cita.estado === 'pendiente'" @click="abrirModal(cita)">Cambiar estado</button>
                             </td>
                             <td>{{ cita.comentario }}</td>
+                            <td>{{ cita.comentario_pac }}</td>
                             <td>{{ cita.valor }}</td>
                         </tr>
                     </tbody>
@@ -124,6 +126,7 @@ export default {
                 cedula: cita.cedula_paciente_cita,
                 estado: cita.estado_cita,
                 comentario: cita.comentario_doc_cita,
+                comentario_pac: cita.comentario_pac_cita,
                 valor: cita.valor_cita
             }));
             this.citas = [...this.citasOriginal];

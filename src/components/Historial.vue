@@ -17,6 +17,7 @@
                             <th>Número de Cédula</th>
                             <th>Estado</th>
                             <th>Comentario del Doctor</th>
+                            <th>Comentario de la cita</th>
                             <th>Valor</th>
                             <th>Doctor</th>
                         </tr>
@@ -30,6 +31,7 @@
                             <td>{{ cita.cedula }}</td>
                             <td>{{ cita.estado }}</td>
                             <td>{{ cita.comentario }}</td>
+                            <td>{{ cita.comentario_pac }}</td>
                             <td>{{ cita.valor }}</td>
                             <td>{{ cita.nombre_doc }}</td>
                         </tr>
@@ -102,6 +104,7 @@ export default {
                 cedula: cita.cedula_paciente_cita,
                 estado: cita.estado_cita,
                 comentario: cita.comentario_doc_cita,
+                comentario_pac: cita.comentario_pac_cita,
                 valor: cita.valor_cita,
                 nombre_doc: cita.nombres_doc + ' ' + cita.apellidos_doc
             }));
