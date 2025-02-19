@@ -7,8 +7,8 @@ WORKDIR /app
 # Copiar package.json y package-lock.json
 COPY package.json package-lock.json /app/
 
-# Instalar dependencias necesarias
-RUN npm install --production
+# Instalar todas las dependencias (de desarrollo y producción)
+RUN npm install
 
 # Copiar todo el código fuente de tu proyecto
 COPY . /app/
@@ -19,8 +19,5 @@ RUN npm run build
 # Instalar el servidor estático 'serve' para servir los archivos
 RUN npm install -g serve
 
-# Exponer el puerto 5000 (o el que desees)
-EXPOSE 5000
-
 # Comando para iniciar el servidor estático
-CMD ["serve", "-s", "dist", "-l", "5000"]
+CMD ["serve", "-s", "dist"]
