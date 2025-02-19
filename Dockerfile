@@ -20,4 +20,4 @@ RUN npm run build
 RUN npm install -g serve
 
 # Comando para iniciar el servidor estático
-CMD ["serve", "-s", "dist", "-l", "$PORT"]
+CMD ["serve", "-s", "dist"]
