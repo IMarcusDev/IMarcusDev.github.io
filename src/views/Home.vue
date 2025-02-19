@@ -241,9 +241,9 @@ export default {
     data() {
         return {
             sliderImgs: [
-                { title: "Bienvenido a Nuestro Consultorio", src: require('@/assets/imgSlider/sliderImg1.webp') },
-                { title: "Cuidamos Tu Sonrisa", src: require('@/assets/imgSlider/sliderImg2.webp') },
-                { title: "Profesionales a Tu Servicio", src: require('@/assets/imgSlider/sliderImg3.jpg') }
+                { title: "Bienvenido a Nuestro Consultorio", src: "../assets/imgSlider/sliderImg1.webp" },
+                { title: "Cuidamos Tu Sonrisa", src: "../assets/imgSlider/sliderImg2.webp" },
+                { title: "Profesionales a Tu Servicio", src: "../assets/imgSlider/sliderImg3.jpg" }
             ],
             itemIndex: 0,
             isPaused: false,
@@ -863,7 +863,7 @@ nav h2{
     color: var(--text-color);
     margin-bottom: 40px;
     box-shadow: var(--box-shadow);
-    border-radius: var (--border-radius);
+    border-radius: var(--border-radius);
 }
 
 .promociones {
