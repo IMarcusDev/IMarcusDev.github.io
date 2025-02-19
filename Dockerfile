@@ -1,23 +1,24 @@
-# Usa una imagen base de Node.js
-FROM node:18-alpine
+# Usar una imagen base de Node.js para producción
+FROM node:18-slim
 
-# Crea y usa el directorio de trabajo en el contenedor
+# Establecer el directorio de trabajo
 WORKDIR /app
 
-# Copia los archivos del proyecto
-COPY . .
+# Copiar package.json y package-lock.json
+COPY package.json package-lock.json /app/
 
-# Instala las dependencias sin las de desarrollo
-RUN npm install --production
+# Instalar todas las dependencias (de desarrollo y producción)
+RUN npm install
 
-# Construye la aplicación con Vite
+# Copiar todo el código fuente de tu proyecto
+COPY . /app/
+
+# Crear el build de Vite
 RUN npm run build
 
-# Instala 'serve' para servir los archivos estáticos
+# Instalar el servidor estático 'serve' para servir los archivos
 RUN npm install -g serve
-
-# Expone el puerto que usará la aplicación
-EXPOSE 8080
 
 # Comando para iniciar el servidor estático
 CMD serve -s dist -l $PORT
+
