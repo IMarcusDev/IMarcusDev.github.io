@@ -6,7 +6,6 @@ export default defineConfig({
   plugins: [
     vue(),
   ],
-  base: 'https://IMarcusDev.github.io/ProjectConsultorio',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
@@ -16,10 +15,10 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "backend-production-225f.up.railway.app",
+        target: "https://backend-production-225f.up.railway.app", // URL del backend en Railway
         changeOrigin: true,
-        secure: false
-      }
+        secure: false,
+      },
     },
-  }
+  },
 });
