@@ -2,7 +2,7 @@
     <header>
         <section class="pageInfo">
             <div class="logo">
-                <img src="@/assets/logo.png">
+                <img src="@/assets/Logo.png">
             </div>
             <div class="pageTitle"><h1>VitaDent</h1></div>
             <div>
