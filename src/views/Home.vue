@@ -2,7 +2,7 @@
     <header>
         <section class="pageInfo">
             <div class="logo">
-                <img src="/logo.png">
+                <img src="@/assets/logo.png">
             </div>
             <div class="pageTitle"><h1>VitaDent</h1></div>
             <div>
@@ -122,21 +122,21 @@
             <h1>Promociones</h1>
             <section class="promociones">
                 <div class="prom-card">
-                    <img src="/imgSlider/prom1.webp" alt="Promoción Ortodoncia">
+                    <img src="@/assets/imgSlider/prom1.webp" alt="Promoción Ortodoncia">
                     <div class="prom-info">
                         <h2>Descuento en Ortodoncia</h2>
                         <p>Aprovecha un 20% de descuento en tratamientos de ortodoncia.</p>
                     </div>
                 </div>
                 <div class="prom-card">
-                    <img src="/imgSlider/prom2.webp" alt="Promoción Blanqueamiento">
+                    <img src="@/assets/imgSlider/prom2.webp" alt="Promoción Blanqueamiento">
                     <div class="prom-info">
                         <h2>Blanqueamiento Dental</h2>
                         <p>Obtén un blanqueamiento dental a mitad de precio.</p>
                     </div>
                 </div>
                 <div class="prom-card">
-                    <img src="/imgSlider/prom3.webp" alt="Promoción Endodoncia">
+                    <img src="@/assets/imgSlider/prom3.webp" alt="Promoción Endodoncia">
                     <div class="prom-info">
                         <h2>Descuento en Endodoncia</h2>
                         <p>Recibe un 15% de descuento en tratamientos de endodoncia.</p>
