@@ -216,13 +216,13 @@
     <footer>
         <section class="infoFooter">
             <section class="logoFooter">
-                <h2>DentalMax</h2>
+                <h2>VitaDent</h2>
                 <p> <i class="fa-solid fa-map-pin"></i> Moreno Bellido #200 y Av. Amazonas </p>
                 <p> <i class="fa-solid fa-phone"></i> +593 998765412</p>
-                <p><i clas="fa-solid fa-envelope"></i><a href="mailto:dentalmax@gmai.com">dentalmax@gmai.com</a></p>
+                <p> <i clas="fa-solid fa-envelope"></i><a href="mailto:dentalmax@gmai.com">vitadent@gmail.com</a></p>
             </section>
             <section class="infoDerecha"> 
-                &copy; DentalMax
+                &copy; VitaDent
             </section>
         </section>
     </footer>
@@ -241,9 +241,9 @@ export default {
     data() {
         return {
             sliderImgs: [
-                { title: "Bienvenido a Nuestro Consultorio", src: "./src/assets/imgSlider/sliderImg1.webp" },
-                { title: "Cuidamos Tu Sonrisa", src: "./src/assets/imgSlider/sliderImg2.webp" },
-                { title: "Profesionales a Tu Servicio", src: "./src/assets/imgSlider/sliderImg3.jpg" }
+                { title: "Bienvenido a Nuestro Consultorio", src: "@/assets/imgSlider/sliderImg1.webp" },
+                { title: "Cuidamos Tu Sonrisa", src: "@/assets/imgSlider/sliderImg2.webp" },
+                { title: "Profesionales a Tu Servicio", src: "@/assets/imgSlider/sliderImg3.jpg" }
             ],
             itemIndex: 0,
             isPaused: false,
