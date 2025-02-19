@@ -241,9 +241,9 @@ export default {
     data() {
         return {
             sliderImgs: [
-                { title: "Bienvenido a Nuestro Consultorio", src: "../assets/imgSlider/sliderImg1.webp" },
-                { title: "Cuidamos Tu Sonrisa", src: "../assets/imgSlider/sliderImg2.webp" },
-                { title: "Profesionales a Tu Servicio", src: "../assets/imgSlider/sliderImg3.jpg" }
+                { title: "Bienvenido a Nuestro Consultorio", src: "/sliderImg1.webp" },
+                { title: "Cuidamos Tu Sonrisa", src: "/sliderImg2.webp" },
+                { title: "Profesionales a Tu Servicio", src: "/sliderImg3.jpg" }
             ],
             itemIndex: 0,
             isPaused: false,
