@@ -6,7 +6,7 @@
             </div>
             <div class="pageTitle"><h1>VitaDent</h1></div>
             <div>
-                <div v-if="!isLoggedIn"  class="login-container">
+                <div class="login-container">
                     <div class="login">
                         <router-link to="/Login">
                             <button type="button" id="btnLogin" @click="optionClicked">Iniciar Sesion</button>
@@ -17,9 +17,6 @@
                             <button type="button" id="btnRegister" @click="optionClicked">Registrarse</button>
                         </router-link>
                     </div>
-                </div>
-                <div v-else>
-                    <p>Está logeado</p>
                 </div>
             </div>
         </section>
@@ -222,7 +219,7 @@
                 <h2>DentalMax</h2>
                 <p> <i class="fa-solid fa-map-pin"></i> Moreno Bellido #200 y Av. Amazonas </p>
                 <p> <i class="fa-solid fa-phone"></i> +593 998765412</p>
-                <p><i class="fa-solid fa-envelope"></i><a href="mailto:dentalmax@gmai.com">dentalmax@gmai.com</a></p>
+                <p><i clas="fa-solid fa-envelope"></i><a href="mailto:dentalmax@gmai.com">dentalmax@gmai.com</a></p>
             </section>
             <section class="infoDerecha"> 
                 &copy; DentalMax
@@ -244,9 +241,9 @@ export default {
     data() {
         return {
             sliderImgs: [
-                { title: "Bienvenido a Nuestro Consultorio", src: "/imgSlider/sliderImg1.webp" },
-                { title: "Cuidamos Tu Sonrisa", src: "/imgSlider/sliderImg2.webp" },
-                { title: "Profesionales a Tu Servicio", src: "/imgSlider/sliderImg3.jpg" }
+                { title: "Bienvenido a Nuestro Consultorio", src: "./src/assets/imgSlider/sliderImg1.webp" },
+                { title: "Cuidamos Tu Sonrisa", src: "./src/assets/imgSlider/sliderImg2.webp" },
+                { title: "Profesionales a Tu Servicio", src: "./src/assets/imgSlider/sliderImg3.jpg" }
             ],
             itemIndex: 0,
             isPaused: false,
