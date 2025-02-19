@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "concurrently \"npm run dev:frontend\"",
     "dev:frontend": "vite --config vite.config.js",
-    "build": "npm run build:frontend",
-    "build:frontend": "vite build",
-    "deploy": "npm run build"
+    "build": "npm run build:frontend",  
+    "build:frontend": "vite build",  
+    "start": "vite preview"  
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
