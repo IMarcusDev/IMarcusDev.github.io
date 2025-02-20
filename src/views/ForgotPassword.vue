@@ -14,6 +14,7 @@
                 <input type="text" v-model="form.username" placeholder="Nombre de Usuario" @input="validateUsername" required>
                 <span v-if="errors.username">{{ errors.username }}</span>
                 <button type="submit">Verificar</button>
+                <button type="button" @click="handleCancel">Cancelar</button>
             </form>
             <form @submit.prevent="handleUpdatePassword" v-if="verified">
                 <h2>Nueva Contraseña</h2>
@@ -137,6 +138,9 @@ export default {
             } catch (error) {
                 alert('Error al actualizar la contraseña');
             }
+        },
+        handleCancel() {
+            this.$router.push('/login');
         }
     }
 };
@@ -203,5 +207,14 @@ body {
   text-transform: uppercase;
   margin-top: 10px;
   cursor: pointer;
+}
+
+#forgot-password button[type="button"] {
+  background-color: transparent;
+  color: black;
+}
+
+#forgot-password button[type="button"]:hover {
+  background-color: #f0f0f0;
 }
 </style>

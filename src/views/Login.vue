@@ -9,9 +9,10 @@
                     <span v-if="errors.Names">{{ errors.Names }}</span>
                     <input type="text" ref="SurNames" placeholder="Apellidos" v-model="registerForm.SurNames" @input="validateSurNames">
                     <span v-if="errors.SurNames">{{ errors.SurNames }}</span>
-                    <input type="text" ref="cedula" placeholder="Cedula" v-model="registerForm.cedula" @input="validateCedula">
+                    <input type="text" ref="cedula" placeholder="Cédula" v-model="registerForm.cedula" @input="validateCedula">
                     <span v-if="errors.cedula">{{ errors.cedula }}</span>
-                    <input type="date" ref="age" v-model="registerForm.age" @input="validateAge">
+                    <label for="age" class="labelFechaNac">Fecha de Nacimiento:</label>
+                    <input type="date" ref="age" id="age" v-model="registerForm.age" @input="validateAge">
                     <span v-if="errors.age">{{ errors.age }}</span>
                     <input type="email" ref="email" placeholder="Correo Electrónico" v-model="registerForm.email" @input="validateEmail">
                     <span v-if="errors.email">{{ errors.email }}</span>
@@ -291,6 +292,17 @@ body{
     margin: 0;
 }
 
+#age{
+    text-align: right;
+}
+
+.labelFechaNac{
+    position: absolute;
+    top: 36.5%;
+    font-size: 13px;
+    right: 50%;
+}
+
 #backgroundLogin{
     width: 100%;
     height: 100%;
@@ -306,7 +318,7 @@ body{
     position: absolute;
     overflow: hidden;
     width: 768px;
-    height: 700px;
+    height: 730px;
     max-width: 100%;
     min-width: 480px;
 }    
@@ -374,6 +386,11 @@ body{
     outline: none;
 }
 
+input::placeholder {
+    color: #333;
+    opacity: 1;
+}
+
 .form-container{
     position: absolute;
     top: 0;
@@ -393,6 +410,7 @@ body{
 }
 
 .sign-up{
+    top: 20px;
     left: 0;
     width: 50%;
     opacity: 0;

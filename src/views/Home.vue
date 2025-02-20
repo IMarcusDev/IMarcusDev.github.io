@@ -321,10 +321,25 @@ header {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.logo img {
-    width: 150px;
-    border-radius: 50%;
+#btnQuickAgend{
+    font-size: 25px;
+}
+
+.logo{
+    max-width: 150px;
+    max-height: 150px;
+    margin-bottom: 20px;
     margin-left: 30px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.logo img {
+    position: relative;
+    width: 150%;
+    border-radius: 50%;
+    right: 35px;
+    bottom: 35px;
 }
 
 .pageInfo {
@@ -349,6 +364,7 @@ header {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+    font-size: 20px;
 }
 
 .login button:hover, .register button:hover {
@@ -375,6 +391,15 @@ nav {
     justify-content: space-between;
     border-radius: 10px;
     border: 2px solid #2a5d9e;
+    text-align: center;
+}
+
+nav h2{
+    font-size: 30px;
+    margin: 0;
+    padding: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 nav ul {
