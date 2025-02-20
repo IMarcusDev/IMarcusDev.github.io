@@ -151,9 +151,15 @@ export default {
         async fetchBookedSlots(date) {
             try {
                 const response = await axios.get(`/api/bookedSlots/${date}`);
-                this.bookedSlots = response.data.map(slot => slot.hora_cita.slice(0, 5)); // Convert HH:MM:SS to HH:MM
+                if (Array.isArray(response.data)) {
+                    this.bookedSlots = response.data.map(slot => slot.hora_cita.slice(0, 5)); // Convert HH:MM:SS to HH:MM
+                } else {
+                    console.error("Unexpected response format:", response.data);
+                    this.bookedSlots = [];
+                }
             } catch (error) {
                 console.error("Error al obtener los horarios reservados: ", error);
+                this.bookedSlots = [];
             }
         }
     }
