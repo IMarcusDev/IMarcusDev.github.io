@@ -271,8 +271,8 @@ export default {
                         password: '',
                         confirmPassword: ''
                     };
-                    const container = document.getElementById('container');
-                    container.classList.remove("active"); // Switch to login form
+                    const container = this.$refs.container;
+                    container.classList.remove("active");
                 } else {
                     alert('Error al registrar usuario');
                 }
