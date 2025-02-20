@@ -372,4 +372,48 @@ h2 {
 .tabla-citas td:hover button {
     display: block;
 }
+
+@media (max-width: 768px) {
+    .historial {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .busqueda {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .busqueda input[type="text"],
+    .busqueda input[type="date"] {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .tabla-citas th, .tabla-citas td {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .modal-content {
+        width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    .busqueda input[type="text"],
+    .busqueda input[type="date"] {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .tabla-citas th, .tabla-citas td {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    .modal-content {
+        padding: 10px;
+    }
+}
 </style>

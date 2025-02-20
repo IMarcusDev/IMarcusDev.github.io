@@ -171,4 +171,59 @@ export default {
     background-color: #ecf0f1;
     border-radius: 0 8px 8px 0;
 }
+
+@media (max-width: 768px) {
+    .content {
+        flex-direction: column;
+    }
+
+    .menu-lateral-container {
+        width: 100%;
+    }
+
+    .menu-lateral {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 10px;
+    }
+
+    .menu-lateral ul {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .menu-lateral li {
+        width: auto;
+        margin: 5px;
+    }
+
+    .screen-content {
+        width: 100%;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-lateral {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .menu-lateral ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .menu-lateral li {
+        width: 100%;
+        text-align: center;
+    }
+
+    .btnCerrarSesion {
+        width: 100%;
+        text-align: center;
+    }
+}
 </style>

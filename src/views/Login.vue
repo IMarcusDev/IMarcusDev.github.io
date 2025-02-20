@@ -516,4 +516,53 @@ input::placeholder {
     transform: translateX(200%);
 }
 
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+        height: auto;
+        min-width: 100%;
+    }
+
+    .form-container {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .toggle-container {
+        display: none;
+    }
+
+    .sign-in, .sign-up {
+        width: 100%;
+        left: 0;
+        top: 0;
+        transform: none;
+        opacity: 1;
+        z-index: 5;
+    }
+
+    .container.active .sign-in, .container.active .sign-up {
+        transform: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
+    .form-container form {
+        padding: 0 20px;
+    }
+
+    .container button {
+        padding: 10px 20px;
+        font-size: 10px;
+    }
+
+    .container input {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+}
 </style>

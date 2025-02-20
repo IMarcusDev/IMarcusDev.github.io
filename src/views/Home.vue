@@ -818,7 +818,7 @@ nav h2{
     color: var(--text-color);
     margin-bottom: 40px;
     box-shadow: var(--box-shadow);
-    border-radius: var(--border-radius);
+    border-radius: var (--border-radius);
     text-align: center;
 }
 
@@ -1043,5 +1043,117 @@ iframe {
 
 .contacto-container {
     padding-left: 20px;
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .pageInfo {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .login-container {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .menu-container {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .navMenu {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .directCita {
+        width: 100%;
+        text-align: center;
+    }
+
+    .directCita button {
+        width: 80%;
+    }
+
+    .slider-container {
+        height: 300px;
+    }
+
+    .servicios, .promociones {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .servicio-card, .prom-card {
+        width: 80%;
+        margin-bottom: 20px;
+    }
+
+    .btnAgendar {
+        width: 100%;
+        text-align: center;
+    }
+
+    .btnAgendar button {
+        width: 80%;
+    }
+
+    .faq-contact-container {
+        flex-direction: column;
+    }
+
+    .faq-section, .contacto-container {
+        width: 100%;
+        padding: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .login button, .register button {
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+
+    .navMenu nav h2 {
+        font-size: 20px;
+    }
+
+    .slider-container {
+        height: 200px;
+    }
+
+    .item-title__title {
+        font-size: 18px;
+    }
+
+    .servicio-card, .prom-card {
+        width: 90%;
+    }
+
+    .btnAgendar button {
+        font-size: 16px;
+    }
+
+    .faq-item h2 {
+        font-size: 18px;
+    }
+
+    .faq-item p {
+        font-size: 14px;
+    }
+
+    .contacto-container button {
+        font-size: 14px;
+    }
 }
 </style>

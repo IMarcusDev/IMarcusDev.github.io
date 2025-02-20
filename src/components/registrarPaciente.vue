@@ -165,4 +165,27 @@ export default {
     cursor: pointer;
     width: 100%;
 }
+
+@media (max-width: 768px) {
+    .form-container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .form-container input {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-container input {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .form-container button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
 </style>

@@ -164,4 +164,40 @@ export default {
 .table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
+
+@media (max-width: 768px) {
+    .lista-content {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .busqueda {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .busqueda input[type="text"],
+    .busqueda select {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .table th, .table td {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .busqueda input[type="text"],
+    .busqueda select {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .table th, .table td {
+        font-size: 12px;
+        padding: 6px;
+    }
+}
 </style>

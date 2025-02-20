@@ -296,4 +296,41 @@ export default {
         background-color: #e9ecef;
         cursor: not-allowed;
     }
+
+    @media (max-width: 768px) {
+        .calendario {
+            width: 100%;
+            padding: 10px;
+        }
+
+        .encabezado span {
+            font-size: 16px;
+        }
+
+        .dias-semana div,
+        .dia {
+            font-size: 14px;
+            padding: 10px;
+        }
+
+        .detalles-dia table {
+            font-size: 14px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .encabezado span {
+            font-size: 14px;
+        }
+
+        .dias-semana div,
+        .dia {
+            font-size: 12px;
+            padding: 8px;
+        }
+
+        .detalles-dia table {
+            font-size: 12px;
+        }
+    }
 </style>

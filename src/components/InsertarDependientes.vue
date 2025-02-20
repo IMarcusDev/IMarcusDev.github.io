@@ -224,4 +224,27 @@ export default {
 .btn-submit:hover {
     background-color: #0056b3;
 }
+
+@media (max-width: 768px) {
+    .form-content {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .form-group input {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-group input {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .btn-submit {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
 </style>

@@ -498,4 +498,40 @@ export default {
         padding: 0 10px;
         color: #666;
     }
+
+    @media (max-width: 768px) {
+        .agendar-content {
+            flex-direction: column;
+        }
+
+        .calendar-content,
+        .form-content {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .form-content {
+            padding: 10px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            font-size: 14px;
+            padding: 8px;
+        }
+
+        button {
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+    }
 </style>
