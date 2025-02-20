@@ -151,6 +151,7 @@ export default {
         async fetchBookedSlots(date) {
             try {
                 const response = await axios.get(`/bookedSlots/${date}`);
+                console.log("Booked slots:", response);
                 if (Array.isArray(response.data)) {
                     this.bookedSlots = response.data.map(slot => slot.hora_cita.slice(0, 5)); // Convert HH:MM:SS to HH:MM
                 } else {
