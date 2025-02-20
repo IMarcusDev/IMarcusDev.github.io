@@ -1,7 +1,7 @@
 <template>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <div id="backgroundLogin">
-        <div class="container" :class="{ active: !isLogin }">
+        <div ref="container" class="container" :class="{ active: !isLogin }">
             <div class="form-container sign-in" :class="{ hidden: !isLogin }">
                 <form @submit.prevent="handleLogin">
                     <h2>Iniciar Sesión</h2>
@@ -93,7 +93,7 @@ export default {
         };
     },
     mounted() {
-        const container = document.getElementById('container');
+        const container = this.$refs.container;
         const registerBtn = document.getElementById('register');
         const loginBtn = document.getElementById('login');
 
@@ -119,7 +119,7 @@ export default {
     methods: {
         toggleForm() {
             this.isLogin = !this.isLogin;
-            const container = document.getElementById('container');
+            const container = this.$refs.container;
             if (this.isLogin) {
                 container.classList.remove("active");
             } else {
