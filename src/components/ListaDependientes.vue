@@ -90,7 +90,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
 }
 
 .lista-content {
