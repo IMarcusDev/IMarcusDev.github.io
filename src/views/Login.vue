@@ -273,6 +273,7 @@ export default {
                     };
                     const container = this.$refs.container;
                     container.classList.remove("active");
+                    this.isLogin = true;
                 } else {
                     alert('Error al registrar usuario');
                 }
