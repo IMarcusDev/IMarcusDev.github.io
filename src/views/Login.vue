@@ -1,8 +1,23 @@
 <template>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <div id="backgroundLogin">
-        <div class="container" id="container">
-            <div class="form-container sign-up">
+        <div class="container" :class="{ active: !isLogin }">
+            <div class="form-container sign-in" :class="{ hidden: !isLogin }">
+                <form @submit.prevent="handleLogin">
+                    <h2>Iniciar Sesión</h2>
+                    <span>o usa tu cedula y contraseña</span>
+                    <input type="text" ref="loginUsername" placeholder="Nombre de usuario" v-model="loginForm.username" @input="validateLoginUsername">
+                    <span v-if="errors.loginUsername">{{ errors.loginUsername }}</span>
+                    <input type="password" ref="loginPassword" placeholder="Contraseña" v-model="loginForm.password" @input="validateLoginPassword">
+                    <span v-if="errors.loginPassword">{{ errors.loginPassword }}</span>
+                    <a href="#" @click.prevent="$router.push('/forgot-password')">¿Olvidaste tu contraseña?</a>
+                    <button>Iniciar Sesión</button>
+                    <router-link to="/">
+                        <button>Cancelar</button>
+                    </router-link>
+                </form>
+            </div>
+            <div class="form-container sign-up" :class="{ hidden: isLogin }">
                 <form @submit.prevent="handleRegister">
                     <h2>Crear una cuenta</h2>
                     <input type="text" ref="Names" placeholder="Nombres" v-model="registerForm.Names" @input="validateNames">
@@ -28,35 +43,23 @@
                     </router-link>
                 </form>
             </div>
-            <div class="form-container sign-in">
-                <form @submit.prevent="handleLogin">
-                    <h2>Iniciar Sesión</h2>
-                    <span>o usa tu cedula y contraseña</span>
-                    <input type="text" ref="loginUsername" placeholder="Nombre de usuario" v-model="loginForm.username" @input="validateLoginUsername">
-                    <span v-if="errors.loginUsername">{{ errors.loginUsername }}</span>
-                    <input type="password" ref="loginPassword" placeholder="Contraseña" v-model="loginForm.password" @input="validateLoginPassword">
-                    <span v-if="errors.loginPassword">{{ errors.loginPassword }}</span>
-                    <a href="#" @click.prevent="$router.push('/forgot-password')">¿Olvidaste tu contraseña?</a>
-                    <button>Iniciar Sesión</button>
-                    <router-link to="/">
-                        <button>Cancelar</button>
-                    </router-link>
-                </form>
-            </div>
             <div class="toggle-container">
                 <div class="toggle">
                     <div class="toggle-panel toggle-left">
                         <h1>¡Bienvenido de nuevo!</h1>
                         <p>Ingresa tus datos personales para acceder a todas las funciones del sitio</p>
-                        <button class="hidden" id="login">Iniciar Sesión</button>
+                        <button class="hidden" id="login" @click="toggleForm">Iniciar Sesión</button>
                     </div>
                     <div class="toggle-panel toggle-right">
                         <h1>¡Hola!</h1>
                         <p>Regístrate con tus datos personales para acceder a todas las funciones del sitio</p>
-                        <button class="hidden" id="register">Registrarse</button>
+                        <button class="hidden" id="register" @click="toggleForm">Registrarse</button>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="mobile-toggle">
+            <button @click="toggleForm">{{ isLogin ? 'Registrarse' : 'Iniciar Sesión' }}</button>
         </div>
     </div>
 </template>
@@ -85,7 +88,8 @@ export default {
                 username: '',
                 password: ''
             },
-            errors: {}
+            errors: {},
+            isLogin: true
         };
     },
     mounted() {
@@ -95,18 +99,16 @@ export default {
 
         registerBtn.addEventListener('click', () => {
             container.classList.add("active");
+            this.isLogin = false;
         });
 
         loginBtn.addEventListener('click', () => {
             container.classList.remove("active");
+            this.isLogin = true;
         });
 
         const option = this.currenOption;
-        if (option === 'registrarse') {
-            container.classList.add("active");
-        } else if (option === 'iniciarSesion') {
-            container.classList.remove("active");
-        }
+        this.isLogin = option !== 'registrarse';
     },
     computed: {
         currenOption(){
@@ -115,6 +117,15 @@ export default {
         }
     },
     methods: {
+        toggleForm() {
+            this.isLogin = !this.isLogin;
+            const container = document.getElementById('container');
+            if (this.isLogin) {
+                container.classList.remove("active");
+            } else {
+                container.classList.add("active");
+            }
+        },
         validateNames() {
             const regex = /^[a-zA-Z\s]*$/;
             this.errors.Names = !regex.test(this.registerForm.Names) ? 'El nombre no puede contener números' : '';
@@ -275,75 +286,66 @@ export default {
 </script>
 
 <style scoped>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
 }
 
-body{
+body {
     background-color: #c9d6ff;
     background: linear-gradient(to right, #e2e2e2, #c9d6ff);
-    height: 50vh;
-    max-height: 50vh;
+    height: 100vh;
     margin: 0;
 }
 
-#age{
-    text-align: right;
-}
-
-.labelFechaNac{
-    position: absolute;
-    top: 36.5%;
-    font-size: 13px;
-    right: 50%;
-}
-
-#backgroundLogin{
+#backgroundLogin {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
-.container{
+.container {
     background-color: #fff;
     border-radius: 30px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
-    position: absolute;
+    position: relative;
     overflow: hidden;
-    width: 768px;
-    height: 730px;
-    max-width: 100%;
-    min-width: 480px;
-}    
+    width: 90%;
+    max-width: 768px;
+    height: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-
-.container p{
+.container p {
     font-size: 14px;
     line-height: 20px;
     letter-spacing: 0.3px;
     margin: 20px 0;
 }
 
-.container span{
+.container span {
     font-size: 12px;
     color: black;
 }
 
-.container a{
+.container a {
     color: #333;
     font-size: 13px;
     text-decoration: none;
     margin: 15px 0 10px;
 }
 
-.container button{
+.container button {
     background-color: #007BFF;
     color: #fff;
     font-size: 12px;
@@ -357,25 +359,26 @@ body{
     cursor: pointer;
 }
 
-.container button.hidden{
+.container button.hidden {
     background-color: transparent;
     border-color: #fff;
 }
 
-.container form{
+.container form {
     background-color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     padding: 0 40px;
+    width: 100%;
 }
 
-.container form h2{
+.container form h2 {
     color: black;
 }
 
-.container input{
+.container input {
     background-color: #eee;
     border: none;
     margin: 8px 0;
@@ -391,178 +394,166 @@ input::placeholder {
     opacity: 1;
 }
 
-.form-container{
-    position: absolute;
-    top: 0;
-    height: auto;
+.form-container {
+    width: 100%;
     transition: all 0.6s ease-in-out;
 }
 
-.sign-in{
-    left: 0;
-    width: 50%;
-    z-index: 2;
-    top: 30%;
-}
-
-.container.active .sign-in{
-    transform: translateX(100%);
-}
-
-.sign-up{
-    top: 20px;
-    left: 0;
-    width: 50%;
-    opacity: 0;
-    z-index: 1;
-}
-
-.container.active .sign-up{
-    transform: translateX(100%);
-    opacity: 1;
-    z-index: 5;
-    animation: move 0.6s;
-}
-
-@keyframes move{
-    0%, 49.99%{
-        opacity: 0;
-        z-index: 1;
-    }
-    50%, 100%{
-        opacity: 1;
-        z-index: 5;
-    }
-}
-
-.social-icons{
-    margin: 20px 0;
-}
-
-.social-icons a{
-    border: 1px solid #ccc;
-    border-radius: 20%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 3px;
-    width: 40px;
-    height: 40px;
-}
-
-.toggle-container{
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 50%;
-    height: 100%;
-    overflow: hidden;
-    transition: all 0.6s ease-in-out;
-    border-radius: 150px 0 0 100px;
-    z-index: 1000;
-}
-
-.container.active .toggle-container{
-    transform: translateX(-100%);
-    border-radius: 0 150px 100px 0;
-}
-
-.toggle{
-    background-color: #007BFF;
-    height: 100%;
-    background: linear-gradient(to right, #357ABD, #007BFF);
-    color: #fff;
-    position: relative;
-    left: -100%;
-    height: 100%;
-    width: 200%;
-    transform: translateX(0);
-    transition: all 0.6s ease-in-out;
-}
-
-.container.active .toggle{
-    transform: translateX(50%);
-}
-
-.toggle-panel{
-    position: absolute;
-    width: 50%;
-    height: 100%;
+.sign-in {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 0 30px;
-    text-align: center;
-    top: 0;
-    transform: translateX(0);
-    transition: all 0.6s ease-in-out;
+    width: 50%;
 }
 
-.toggle-left{
-    transform: translateX(-200%);
+.container.active .sign-in {
+    visibility: hidden;
 }
 
-.container.active .toggle-left{
-    transform: translateX(0);
+.sign-up {
+    display: flex;
+    width: 50%;
 }
 
-.toggle-right{
-    right: 0;
-    transform: translateX(0);
+.toggle-container {
+    display: none;
 }
 
-.container.active .toggle-right{
-    transform: translateX(200%);
+.mobile-toggle {
+    display: none;
 }
 
-@media (max-width: 768px) {
+.form-container.hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 0.5s, opacity 0.5s linear;
+}
+
+.form-container:not(.hidden) {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.5s linear;
+}
+
+@media (min-width: 768px) {
     .container {
-        width: 100%;
+        flex-direction: row;
+        height: 730px;
+    }
+
+    .form-container {
+        width: 50%;
+    }
+
+    .toggle-container {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        transition: all 0.6s ease-in-out;
+        border-radius: 150px 0 0 100px;
+        z-index: 1000;
+    }
+
+    .container.active .toggle-container {
+        transform: translateX(-100%);
+        border-radius: 0 150px 100px 0;
+    }
+
+    .toggle {
+        background-color: #007BFF;
+        height: 100%;
+        background: linear-gradient(to right, #357ABD, #007BFF);
+        color: #fff;
+        position: relative;
+        left: -100%;
+        height: 100%;
+        width: 200%;
+        transform: translateX(0);
+        transition: all 0.6s ease-in-out;
+    }
+
+    .container.active .toggle {
+        transform: translateX(50%);
+    }
+
+    .toggle-panel {
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 30px;
+        text-align: center;
+        top: 0;
+        transform: translateX(0);
+        transition: all 0.6s ease-in-out;
+    }
+
+    .toggle-left {
+        transform: translateX(-200%);
+    }
+
+    .container.active .toggle-left {
+        transform: translateX(0);
+    }
+
+    .toggle-right {
+        right: 0;
+        transform: translateX(0);
+    }
+
+    .container.active .toggle-right {
+        transform: translateX(200%);
+    }
+}
+
+@media (max-width: 767px) {
+    .container {
+        flex-direction: column;
         height: auto;
-        min-width: 100%;
     }
 
     .form-container {
         width: 100%;
-        padding: 20px;
+        display: none;
+    }
+
+    .form-container.sign-in {
+        display: flex;
+    }
+
+    .form-container.sign-up {
+        display: flex;
+    }
+
+    .form-container.hidden {
+        display: none;
     }
 
     .toggle-container {
         display: none;
     }
 
-    .sign-in, .sign-up {
-        width: 100%;
-        left: 0;
-        top: 0;
-        transform: none;
-        opacity: 1;
-        z-index: 5;
+    .mobile-toggle {
+        display: block;
+        margin-top: 20px;
     }
 
-    .container.active .sign-in, .container.active .sign-up {
-        transform: none;
-    }
-}
-
-@media (max-width: 480px) {
-    .container {
-        padding: 10px;
-    }
-
-    .form-container form {
-        padding: 0 20px;
-    }
-
-    .container button {
+    .mobile-toggle button {
+        background-color: #007BFF;
+        color: #fff;
+        font-size: 14px;
         padding: 10px 20px;
-        font-size: 10px;
-    }
-
-    .container input {
-        padding: 8px 10px;
-        font-size: 12px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        cursor: pointer;
     }
 }
 </style>
